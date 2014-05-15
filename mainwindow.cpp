@@ -3,6 +3,7 @@
 #include <QRegExp>
 #include <iostream>
 #include <QFileDialog>
+#include <qpixmap.h>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QRegExp rx("[a-zA-Z0-9_]+");
     ui->username->setValidator(new QRegExpValidator(rx, this ));
     ui->password->setEchoMode(QLineEdit::Password);
+    render_login();
 }
 
 MainWindow::~MainWindow()
@@ -25,6 +27,7 @@ void MainWindow::on_sign_in_clicked()
     string password = ui->password->text().toStdString();
     try {
         api.login(username,password);
+        render_home();
     } catch (Exception e)
     {
         set_status(e.message);
@@ -49,6 +52,15 @@ void MainWindow::render_signup()
     ui->stackedWidget->setCurrentWidget(ui->register_form);
 }
 
+void MainWindow::render_home()
+{
+    QPixmap * mypix = new QPixmap(QString::fromStdString(api.get_avatar_path()));
+    ui->avatar->setPixmap(*mypix);
+    ui->stackedWidget->setCurrentWidget(ui->home_page);
+    ui->tabWidget->setCurrentWidget(ui->tab);
+    //ui->name_under_avatar->setText(QString::fromStdString(api.get_username()));
+}
+
 void MainWindow::on_select_avatar_clicked()
 {
     QString file_name = QFileDialog::getOpenFileName(this);
@@ -64,8 +76,15 @@ void MainWindow::on_register_button_clicked()
     try {
         api.sign_up(username, password, full_name, file_path);
         set_status("Successfully registed!");
+        render_home();
     } catch (Exception e)
     {
         set_status(e.message);
     }
+}
+
+
+void MainWindow::on_register_2_clicked()
+{
+    render_signup();
 }

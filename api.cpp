@@ -45,6 +45,17 @@ void Api::sign_up(string username, string password, string name, string avatar_p
 
 	user = new User(username, password, name,avatar_path);
 	DB::instance()->users.push_back(user);
+	current_user = user;
+}
+
+string Api::get_avatar_path()
+{
+	return current_user->get_avatar_path();
+}
+
+string Api::get_username()
+{
+	return current_user->get_username();
 }
 
 vector<int> Api::get_latest_posts()

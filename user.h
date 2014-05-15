@@ -22,7 +22,7 @@ public:
 	bool is_admin();
 	std::string get_username();
 	std::string get_full_name();
-
+	std::string get_avatar_path();
 private:
 	Post* post_photo(std::string,std::string,std::string, bool = false);
 	std::vector<int> get_latest_posts();

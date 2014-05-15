@@ -36,6 +36,11 @@ bool User::is_admin()
 	return username == "admin";
 }
 
+string User::get_avatar_path()
+{
+	return avatar->get_path();
+}
+
 vector <int> User::get_latest_posts()
 {
 	vector <int> result;

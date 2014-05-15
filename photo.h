@@ -7,7 +7,8 @@ class Photo
 {
 public:
 	Photo();
-Photo(std::string path) : CDN_path(path) {}
+	Photo(std::string path) : CDN_path(path) {}
+	std::string get_path() { return CDN_path; }
 private:
 	std::string CDN_path;
 };

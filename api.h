@@ -31,6 +31,8 @@ public:
 	std::vector <int> get_my_latest_liked_posts();
 	std::vector <std::string> get_friends();
 	void like(int);
+	std::string get_avatar_path();
+	std::string get_username();
 	 private:
 User* current_user;
 static bool compare_time(time_t&, time_t&);

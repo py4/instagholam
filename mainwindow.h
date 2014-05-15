@@ -25,10 +25,13 @@ private slots:
 
     void on_register_button_clicked();
 
+    void on_register_2_clicked();
+
 private:
     void set_status(std::string);
     void render_login();
     void render_signup();
+    void render_home();
     Ui::MainWindow *ui;
     Api api;
 };
