@@ -5,6 +5,7 @@
 #include "post.h"
 #include "friend_request.h"
 #include "user_report.h"
+#include <iostream>
 
 using namespace std;
 
@@ -22,6 +23,7 @@ void Api::login(string username, string password)
 		throw UserNotFound();
 	if(user->password != password)
 		throw WrongCredentials();
+	cerr << "here3" << endl;
 	current_user = user;
 }
 

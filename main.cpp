@@ -1,13 +1,13 @@
 #include <iostream>
 #include "db.h"
 #include "parser.h"
+#include "mainwindow.h"
+#include <qapplication.h>
 using namespace std;
-int main()
+int main(int argc, char* argv[])
 {
-	vector <string> result = get_hashtags("#salam  #tag2      #tag3");
-	for(int i = 0;i < result.size(); i++)
-	{
-		cout << "tag:  " << result[i] << endl;
-	}
-	return 0;
+    QApplication a(argc,argv);
+    MainWindow window;
+    window.show();
+    return a.exec();
 }

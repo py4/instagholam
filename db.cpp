@@ -40,6 +40,7 @@ User* DB::get_user(string username)
 	for(int i = 0; i < users.size(); i++)
 		if(users[i]->username == username)
 			return users[i];
+	return NULL;
 }
 
 HashTag* DB::find_or_create_hashtag(string content)
