@@ -13,11 +13,12 @@ User::User()
 {
 }
 
-User::User(string username, string password, string name)
+User::User(string username, string password, string name, string avatar_path)
 {
 	this->username = username;
 	this->password = password;
 	this->full_name = name;
+	avatar = new Photo(avatar_path);
 }
 
 User::~User()

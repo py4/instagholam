@@ -34,7 +34,7 @@ void Api::logout()
 	current_user = NULL;
 }
 
-void Api::sign_up(string username, string password, string name)
+void Api::sign_up(string username, string password, string name, string avatar_path)
 {
 	if(current_user != NULL)
 		throw AlreadyLoggedIn();
@@ -43,7 +43,7 @@ void Api::sign_up(string username, string password, string name)
 	if(user != NULL)
 		throw UserExists();
 
-	user = new User(username, password, name);
+	user = new User(username, password, name,avatar_path);
 	DB::instance()->users.push_back(user);
 }
 

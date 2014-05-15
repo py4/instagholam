@@ -13,7 +13,7 @@ public:
 	Api();
 	void login(std::string,std::string);
 	void logout();
-	void sign_up(std::string,std::string,std::string);
+	void sign_up(std::string,std::string,std::string,std::string);
 	std::vector <int> get_latest_posts();
 	std::vector <int> get_friend_requests();
 

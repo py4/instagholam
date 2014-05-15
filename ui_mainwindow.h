@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Thu May 15 23:03:27 2014
+** Created: Thu May 15 23:35:52 2014
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -42,7 +42,16 @@ public:
     QHBoxLayout *horizontalLayout;
     QLabel *label_3;
     QPushButton *register_2;
-    QWidget *page_2;
+    QWidget *register_form;
+    QLineEdit *register_full_name;
+    QLineEdit *register_username;
+    QLineEdit *register_password;
+    QPushButton *select_avatar;
+    QLineEdit *avatar_file;
+    QLabel *label_4;
+    QLabel *label_5;
+    QLabel *label_6;
+    QPushButton *register_button;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -90,9 +99,36 @@ public:
         horizontalLayout->addWidget(register_2);
 
         stackedWidget->addWidget(login_form);
-        page_2 = new QWidget();
-        page_2->setObjectName(QString::fromUtf8("page_2"));
-        stackedWidget->addWidget(page_2);
+        register_form = new QWidget();
+        register_form->setObjectName(QString::fromUtf8("register_form"));
+        register_full_name = new QLineEdit(register_form);
+        register_full_name->setObjectName(QString::fromUtf8("register_full_name"));
+        register_full_name->setGeometry(QRect(270, 90, 251, 31));
+        register_username = new QLineEdit(register_form);
+        register_username->setObjectName(QString::fromUtf8("register_username"));
+        register_username->setGeometry(QRect(270, 130, 251, 31));
+        register_password = new QLineEdit(register_form);
+        register_password->setObjectName(QString::fromUtf8("register_password"));
+        register_password->setGeometry(QRect(270, 170, 251, 31));
+        select_avatar = new QPushButton(register_form);
+        select_avatar->setObjectName(QString::fromUtf8("select_avatar"));
+        select_avatar->setGeometry(QRect(170, 210, 71, 27));
+        avatar_file = new QLineEdit(register_form);
+        avatar_file->setObjectName(QString::fromUtf8("avatar_file"));
+        avatar_file->setGeometry(QRect(270, 210, 251, 27));
+        label_4 = new QLabel(register_form);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setGeometry(QRect(170, 90, 71, 21));
+        label_5 = new QLabel(register_form);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+        label_5->setGeometry(QRect(170, 140, 71, 17));
+        label_6 = new QLabel(register_form);
+        label_6->setObjectName(QString::fromUtf8("label_6"));
+        label_6->setGeometry(QRect(170, 180, 67, 17));
+        register_button = new QPushButton(register_form);
+        register_button->setObjectName(QString::fromUtf8("register_button"));
+        register_button->setGeometry(QRect(340, 270, 111, 27));
+        stackedWidget->addWidget(register_form);
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -103,6 +139,9 @@ public:
         MainWindow->setStatusBar(statusbar);
 
         retranslateUi(MainWindow);
+
+        stackedWidget->setCurrentIndex(1);
+
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -115,6 +154,11 @@ public:
         sign_in->setText(QApplication::translate("MainWindow", "Sign in", 0, QApplication::UnicodeUTF8));
         label_3->setText(QApplication::translate("MainWindow", "Not a user?", 0, QApplication::UnicodeUTF8));
         register_2->setText(QApplication::translate("MainWindow", "Register!", 0, QApplication::UnicodeUTF8));
+        select_avatar->setText(QApplication::translate("MainWindow", "Avatar", 0, QApplication::UnicodeUTF8));
+        label_4->setText(QApplication::translate("MainWindow", "Full name", 0, QApplication::UnicodeUTF8));
+        label_5->setText(QApplication::translate("MainWindow", "Username", 0, QApplication::UnicodeUTF8));
+        label_6->setText(QApplication::translate("MainWindow", "Password", 0, QApplication::UnicodeUTF8));
+        register_button->setText(QApplication::translate("MainWindow", "Register me!", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

@@ -18,7 +18,7 @@ class User
 public:
 	User();
 	~User();
-	User(std::string, std::string, std::string);
+	User(std::string, std::string, std::string,std::string);
 	bool is_admin();
 	std::string get_username();
 	std::string get_full_name();
