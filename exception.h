@@ -45,4 +45,47 @@ class AccessDenied : public Exception
 public:
 AccessDenied() : Exception("Access Denied") {}
 };
+
+class FriendWithYourself : public Exception
+{
+public:
+FriendWithYourself() : Exception("You can't befriend with yourself!") {}
+};
+
+class AlreadyRequested : public Exception
+{
+public:
+AlreadyRequested() : Exception("You've already requested for friendship") {}
+};
+
+class AlreadyFriends : public Exception
+{
+public:
+AlreadyFriends() : Exception("You are already friends") {}
+};
+
+class NotFriends : public Exception
+{
+public:
+NotFriends() : Exception("You are not friends") {}
+};
+
+class ReportedBefore : public Exception
+{
+public:
+ReportedBefore() : Exception("You've reported him before") {}
+};
+
+class PostNotFound : public Exception
+{
+public:
+PostNotFound() : Exception("Post not found...") {}
+};
+
+class LikedBefore : public Exception
+{
+public:
+LikedBefore() : Exception("You've liked this post before") {}
+};
+
 #endif

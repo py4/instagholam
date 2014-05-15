@@ -10,6 +10,7 @@ class Comment
 {
 public:
 	Comment();
+	int get_post_id();
 private:
 	int id;
 	Post* post;

@@ -21,6 +21,8 @@ public:
 	void set_title(std::string);
 	void set_current_time();
 	void set_hashtag(std::string);
+	void set_photo(Photo*);
+	int get_id();
 private:
 	void set_id();
 	int id;

@@ -52,3 +52,13 @@ void Post::set_id()
 	id = count + 1;
 	count++;
 }
+
+void Post::set_photo(Photo* photo)
+{
+	this->photo = photo;
+}
+
+int Post::get_id()
+{
+	return id;
+}

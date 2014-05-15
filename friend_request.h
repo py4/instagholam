@@ -5,9 +5,15 @@ class User;
 
 class FriendRequest
 {
+	friend class Api;
 public:
 	FriendRequest();
+	FriendRequest(User*,User*);
+	int get_id();
+	User* get_from();
+	User* get_to();
 private:
+	void set_id();
 	int id;
 	User* from;
 	User* to;

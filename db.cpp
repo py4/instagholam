@@ -4,6 +4,7 @@
 #include "hashtag.h"
 #include <string>
 #include "friend_request.h"
+#include "user_report.h"
 using namespace std;
 
 DB* DB::db = NULL;
@@ -30,6 +31,8 @@ DB::~DB()
 	//delete posts[i];
 	for(int i = 0; i < hashtags.size(); i++)
 		delete hashtags[i];
+	for(int i = 0; i < reports.size(); i++)
+		delete reports[i];
 }
 
 User* DB::get_user(string username)
@@ -47,4 +50,12 @@ HashTag* DB::find_or_create_hashtag(string content)
 	HashTag* hashtag = new HashTag(content);
 	hashtags.push_back(hashtag);
 	return hashtag;
+}
+
+Post* DB::get_post(int id)
+{
+	for(int i = 0; i < posts.size(); i++)
+		if(posts[i]->id == id)
+			return posts[i];
+	return NULL;
 }

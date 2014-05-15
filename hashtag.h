@@ -12,6 +12,7 @@ public:
 	HashTag();
 	HashTag(std::string);
 private:
+	void remove_post_from_list(int);
 	std::vector<Post*> posts;
 	std::string content;
 };
