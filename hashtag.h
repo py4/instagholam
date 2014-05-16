@@ -11,6 +11,7 @@ class HashTag
 public:
 	HashTag();
 	HashTag(std::string);
+	std::string get_content();
 private:
 	void remove_post_from_list(int);
 	std::vector<Post*> posts;

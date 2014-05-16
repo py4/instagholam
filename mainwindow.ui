@@ -86,7 +86,7 @@
        <string>Sign in</string>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>300</x>
@@ -231,17 +231,138 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
         <string>Home</string>
        </attribute>
       </widget>
-      <widget class="QWidget" name="tab_2">
+      <widget class="QWidget" name="share_tab">
+       <attribute name="title">
+        <string>Share</string>
+       </attribute>
+       <widget class="QLabel" name="label_7">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>10</y>
+          <width>341</width>
+          <height>71</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Share your moments with your friends! :)</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="share_pub_checkbox">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>220</y>
+          <width>98</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Public?</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="share_button">
+        <property name="geometry">
+         <rect>
+          <x>310</x>
+          <y>220</y>
+          <width>99</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Share!</string>
+        </property>
+       </widget>
+       <widget class="QWidget" name="">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>90</y>
+          <width>381</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>Title</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="share_title"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>170</y>
+          <width>301</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string>HashTags</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="share_hashtags"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>130</y>
+          <width>331</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QPushButton" name="share_select_file">
+           <property name="text">
+            <string>Select file</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="share_file_name"/>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="profile_tab">
        <attribute name="title">
         <string>Profile</string>
        </attribute>
+       <widget class="QWidget" name="gridLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>20</y>
+          <width>791</width>
+          <height>401</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="profile_post_layout"/>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">

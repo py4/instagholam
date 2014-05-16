@@ -6,7 +6,7 @@
 #include "photo.h"
 #include "comment.h"
 #include "user_report.h"
-
+#include <iostream>
 using namespace std;
 
 User::User()
@@ -44,29 +44,26 @@ string User::get_avatar_path()
 vector <int> User::get_latest_posts()
 {
 	vector <int> result;
-	
-	for(int i = posts.size() - 1 - latest_count; i < posts.size() and i > 0; i++)
+	for(int i = posts.size() - 1; posts.size() - i <= latest_count and i >= 0; i--)
 		result.push_back(posts[i]->get_id());
-	
 	return result;
 }
 
 vector <int> User::get_latest_liked_posts()
 {
 	vector <int> result;
-	for(int i = liked_posts.size() - 1 - latest_count; i < liked_posts.size() and i > 0; i++)
+	for(int i = liked_posts.size() - 1; liked_posts.size() - i < latest_count and i > 0; i++)
 		result.push_back(liked_posts[i]->get_id());
 	return result;
 }
 
 Post* User::post_photo(string title, string CDN_path, string hashtags, bool publicity)
 {
-	Post* new_post = new Post(title,publicity);
-	new_post->set_hashtag(hashtags);
 	Photo* photo = new Photo(CDN_path);
-	new_post->set_photo(photo);
+	Post* new_post = new Post(title,publicity,hashtags,photo,this);
+	posts.push_back(new_post);
+	cout << "pushed back!" << endl;
 	return new_post;
-	//DB::posts.push_back(photo);
 }
 
 string User::get_username()
@@ -103,6 +100,18 @@ bool User::is_friend_with(User* user)
 			return true;
 	return false;
 }
+
+bool User::able_to_see(Post* post)
+{
+	if(post->is_pub())
+		return true;
+
+	User* user = post->get_user();
+	if(user != this and !user->is_friend_with(this))
+		return false;
+	return true;
+}
+
 
 /*void User::remove_friend(User* user)
 {

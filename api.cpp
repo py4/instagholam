@@ -6,6 +6,8 @@
 #include "friend_request.h"
 #include "user_report.h"
 #include <iostream>
+#include "comment.h"
+#include "hashtag.h"
 
 using namespace std;
 
@@ -38,6 +40,10 @@ void Api::sign_up(string username, string password, string name, string avatar_p
 {
 	if(current_user != NULL)
 		throw AlreadyLoggedIn();
+	if(username == "")
+		throw EmptyUsername();
+	if(password.length() < 5)
+		throw BadPassword();
 
 	User* user = DB::instance()->get_user(username);
 	if(user != NULL)
@@ -92,9 +98,15 @@ bool Api::compare_post_time(Post* post1, Post* post2)
 {
 	return compare_time(post1->created_at, post2->created_at);
 }
-
+//TODO: copying files into cache
+//TODO: check image existence/validity
 void Api::post_photo(string title,string CDN_path, string hashtags, bool publicity)
 {
+	if(title == "")
+		throw EmptyTitle();
+	if(CDN_path == "")
+		throw EmptyPhoto();
+
 	bool pub = publicity;
 	if(current_user->is_admin())
 		pub = true;
@@ -111,6 +123,69 @@ vector<int> Api::get_my_latest_posts()
 vector<int> Api::get_my_latest_liked_posts()
 {
 	return current_user->get_latest_liked_posts();
+}
+
+// bool Api::get_publicity(int id)
+// {
+// 	Post* post = DB::instance()->get_post(id);
+// 	if(!current_user->able_to_see(post))
+// 		throw AccessDenied();
+// 	return post->pub;
+// }
+
+// string Api::get_photo_url(int id)
+// {
+// 	Post* post = DB::instance()->get_post(id);
+// 	if(!current_user->able_to_see(post))
+// 		throw AccessDenied();
+// 	return post->CDN_path;
+// }
+
+// string Api::get_photo_username(int id)
+// {
+// 	Post* post = DB::instance()->get_post(id);
+// 	if(!current_user->able_to_see(post))
+// 		throw AccessDenied();
+// 	return post->user->username;
+// }
+
+// string Api::get_photo_title(int id)
+// {
+// 	Post* post = DB::instance()->get_post(id);
+// 	if(!current_user->able_to_see(post))
+// 		throw AccessDenied();
+// 	return post->user->username;
+// }
+XML* Api::get_post(int id)
+{
+	Post* post = DB::instance()->get_post(id);
+ 	if(!current_user->able_to_see(post))
+ 		throw AccessDenied();
+	XML* xml = new XML;
+	Node* publicity = xml->current_node->add_node("publicity");
+	if(post->pub == true)
+		publicity->set_value("true");
+	else
+		publicity->set_value("false");
+
+	xml->current_node->add_node("username",post->user->username);
+	xml->current_node->add_node("title",post->title);
+	Node* comments = xml->current_node->add_node("comments");
+	for(int i = 0; i < post->comments.size(); i++)
+	{
+		Node* comment = comments->add_node("comment");
+		comment->add_node("user",post->comments[i]->get_user());
+		comments->add_node("content", post->comments[i]->get_content());
+	}
+	Node* hashtags = xml->current_node->add_node("hashtags");
+	for(int i = 0; i < post->hashtags.size(); i++)
+		hashtags->add_node("hashtag",post->hashtags[i]->get_content());
+	Node* liked_by = xml->current_node->add_node("liked_by");
+	for(int i = 0; i < post->liked_by.size(); i++)
+		liked_by->add_node("user",post->liked_by[i]->get_username());
+	xml->current_node->add_node("created_at", post->get_created_at());
+	xml->current_node->add_node("photo_path",post->get_path());
+	return xml;
 }
 
 vector<string> Api::get_friends()

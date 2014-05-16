@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Fri May 16 00:04:40 2014
+** Created: Fri May 16 23:54:37 2014
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -14,6 +14,8 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QCheckBox>
+#include <QtGui/QGridLayout>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
@@ -39,7 +41,7 @@ public:
     QLabel *label;
     QLabel *label_2;
     QPushButton *sign_in;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout;
     QLabel *label_3;
     QPushButton *register_2;
@@ -56,7 +58,29 @@ public:
     QWidget *home_page;
     QTabWidget *tabWidget;
     QWidget *tab;
-    QWidget *tab_2;
+    QWidget *share_tab;
+    QLabel *label_7;
+    QCheckBox *share_pub_checkbox;
+    QPushButton *share_button;
+    QWidget *widget;
+    QHBoxLayout *horizontalLayout_2;
+    QLabel *label_8;
+    QLineEdit *share_title;
+    QWidget *widget1;
+    QHBoxLayout *horizontalLayout_4;
+    QLabel *label_10;
+    QLineEdit *share_hashtags;
+    QWidget *widget2;
+    QHBoxLayout *horizontalLayout_3;
+    QPushButton *share_select_file;
+    QLineEdit *share_file_name;
+    QWidget *profile_tab;
+    QWidget *gridLayoutWidget;
+    QGridLayout *profile_post_layout;
+    QWidget *tab_3;
+    QWidget *tab_4;
+    QWidget *tab_5;
+    QWidget *tab_6;
     QLabel *avatar;
     QMenuBar *menubar;
     QStatusBar *statusbar;
@@ -88,18 +112,18 @@ public:
         sign_in = new QPushButton(login_form);
         sign_in->setObjectName(QString::fromUtf8("sign_in"));
         sign_in->setGeometry(QRect(350, 200, 99, 27));
-        widget = new QWidget(login_form);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(300, 250, 182, 29));
-        horizontalLayout = new QHBoxLayout(widget);
+        layoutWidget = new QWidget(login_form);
+        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
+        layoutWidget->setGeometry(QRect(300, 250, 182, 29));
+        horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        label_3 = new QLabel(widget);
+        label_3 = new QLabel(layoutWidget);
         label_3->setObjectName(QString::fromUtf8("label_3"));
 
         horizontalLayout->addWidget(label_3);
 
-        register_2 = new QPushButton(widget);
+        register_2 = new QPushButton(layoutWidget);
         register_2->setObjectName(QString::fromUtf8("register_2"));
 
         horizontalLayout->addWidget(register_2);
@@ -139,13 +163,91 @@ public:
         home_page->setObjectName(QString::fromUtf8("home_page"));
         tabWidget = new QTabWidget(home_page);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(0, 0, 721, 451));
+        tabWidget->setGeometry(QRect(0, 0, 801, 551));
         tab = new QWidget();
         tab->setObjectName(QString::fromUtf8("tab"));
         tabWidget->addTab(tab, QString());
-        tab_2 = new QWidget();
-        tab_2->setObjectName(QString::fromUtf8("tab_2"));
-        tabWidget->addTab(tab_2, QString());
+        share_tab = new QWidget();
+        share_tab->setObjectName(QString::fromUtf8("share_tab"));
+        label_7 = new QLabel(share_tab);
+        label_7->setObjectName(QString::fromUtf8("label_7"));
+        label_7->setGeometry(QRect(230, 10, 341, 71));
+        share_pub_checkbox = new QCheckBox(share_tab);
+        share_pub_checkbox->setObjectName(QString::fromUtf8("share_pub_checkbox"));
+        share_pub_checkbox->setGeometry(QRect(410, 220, 98, 22));
+        share_button = new QPushButton(share_tab);
+        share_button->setObjectName(QString::fromUtf8("share_button"));
+        share_button->setGeometry(QRect(310, 220, 99, 27));
+        widget = new QWidget(share_tab);
+        widget->setObjectName(QString::fromUtf8("widget"));
+        widget->setGeometry(QRect(190, 90, 381, 29));
+        horizontalLayout_2 = new QHBoxLayout(widget);
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
+        label_8 = new QLabel(widget);
+        label_8->setObjectName(QString::fromUtf8("label_8"));
+
+        horizontalLayout_2->addWidget(label_8);
+
+        share_title = new QLineEdit(widget);
+        share_title->setObjectName(QString::fromUtf8("share_title"));
+
+        horizontalLayout_2->addWidget(share_title);
+
+        widget1 = new QWidget(share_tab);
+        widget1->setObjectName(QString::fromUtf8("widget1"));
+        widget1->setGeometry(QRect(190, 170, 301, 29));
+        horizontalLayout_4 = new QHBoxLayout(widget1);
+        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
+        label_10 = new QLabel(widget1);
+        label_10->setObjectName(QString::fromUtf8("label_10"));
+
+        horizontalLayout_4->addWidget(label_10);
+
+        share_hashtags = new QLineEdit(widget1);
+        share_hashtags->setObjectName(QString::fromUtf8("share_hashtags"));
+
+        horizontalLayout_4->addWidget(share_hashtags);
+
+        widget2 = new QWidget(share_tab);
+        widget2->setObjectName(QString::fromUtf8("widget2"));
+        widget2->setGeometry(QRect(180, 130, 331, 29));
+        horizontalLayout_3 = new QHBoxLayout(widget2);
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
+        share_select_file = new QPushButton(widget2);
+        share_select_file->setObjectName(QString::fromUtf8("share_select_file"));
+
+        horizontalLayout_3->addWidget(share_select_file);
+
+        share_file_name = new QLineEdit(widget2);
+        share_file_name->setObjectName(QString::fromUtf8("share_file_name"));
+
+        horizontalLayout_3->addWidget(share_file_name);
+
+        tabWidget->addTab(share_tab, QString());
+        profile_tab = new QWidget();
+        profile_tab->setObjectName(QString::fromUtf8("profile_tab"));
+        gridLayoutWidget = new QWidget(profile_tab);
+        gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
+        gridLayoutWidget->setGeometry(QRect(0, 20, 791, 401));
+        profile_post_layout = new QGridLayout(gridLayoutWidget);
+        profile_post_layout->setObjectName(QString::fromUtf8("profile_post_layout"));
+        profile_post_layout->setContentsMargins(0, 0, 0, 0);
+        tabWidget->addTab(profile_tab, QString());
+        tab_3 = new QWidget();
+        tab_3->setObjectName(QString::fromUtf8("tab_3"));
+        tabWidget->addTab(tab_3, QString());
+        tab_4 = new QWidget();
+        tab_4->setObjectName(QString::fromUtf8("tab_4"));
+        tabWidget->addTab(tab_4, QString());
+        tab_5 = new QWidget();
+        tab_5->setObjectName(QString::fromUtf8("tab_5"));
+        tabWidget->addTab(tab_5, QString());
+        tab_6 = new QWidget();
+        tab_6->setObjectName(QString::fromUtf8("tab_6"));
+        tabWidget->addTab(tab_6, QString());
         avatar = new QLabel(home_page);
         avatar->setObjectName(QString::fromUtf8("avatar"));
         avatar->setGeometry(QRect(720, 0, 71, 71));
@@ -162,7 +264,7 @@ public:
         retranslateUi(MainWindow);
 
         stackedWidget->setCurrentIndex(2);
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -182,7 +284,18 @@ public:
         label_6->setText(QApplication::translate("MainWindow", "Password", 0, QApplication::UnicodeUTF8));
         register_button->setText(QApplication::translate("MainWindow", "Register me!", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Home", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Profile", 0, QApplication::UnicodeUTF8));
+        label_7->setText(QApplication::translate("MainWindow", "Share your moments with your friends! :)", 0, QApplication::UnicodeUTF8));
+        share_pub_checkbox->setText(QApplication::translate("MainWindow", "Public?", 0, QApplication::UnicodeUTF8));
+        share_button->setText(QApplication::translate("MainWindow", "Share!", 0, QApplication::UnicodeUTF8));
+        label_8->setText(QApplication::translate("MainWindow", "Title", 0, QApplication::UnicodeUTF8));
+        label_10->setText(QApplication::translate("MainWindow", "HashTags", 0, QApplication::UnicodeUTF8));
+        share_select_file->setText(QApplication::translate("MainWindow", "Select file", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(share_tab), QApplication::translate("MainWindow", "Share", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(profile_tab), QApplication::translate("MainWindow", "Profile", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Friends", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("MainWindow", "Requests", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab_5), QApplication::translate("MainWindow", "People", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab_6), QApplication::translate("MainWindow", "Explore", 0, QApplication::UnicodeUTF8));
         avatar->setText(QApplication::translate("MainWindow", "TextLabel", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 

@@ -1,7 +1,7 @@
 #include "post.h"
 #include "parser.h"
 #include "db.h"
-
+#include "photo.h"
 using namespace std;
 int Post::count = 0;
 
@@ -10,6 +10,7 @@ Post::Post(bool publicity)
 	pub = publicity;
 	set_current_time();
 	set_id();
+	user = NULL;
 }
 
 Post::Post(string title, bool publicity)
@@ -18,6 +19,18 @@ Post::Post(string title, bool publicity)
 	set_current_time();
 	set_id();
 	this->title = title;
+	user = NULL;
+}
+
+Post::Post(string title, bool publicity, string hashtags, Photo* photo, User* user)
+{
+	pub = publicity;
+	set_current_time();
+	set_id();
+	this->title = title;
+	set_hashtag(hashtags);
+	this->photo = photo;
+	this->user = user;
 }
 
 void Post::set_time(time_t& time)
@@ -61,4 +74,18 @@ void Post::set_photo(Photo* photo)
 int Post::get_id()
 {
 	return id;
+}
+
+string Post::get_created_at()
+{
+	struct tm * ptr;
+    char buf [20];
+    ptr = localtime(&created_at);
+    strftime (buf,20,"%x",ptr);
+    return buf;
+}
+
+string Post::get_path()
+{
+	return photo->get_path();
 }

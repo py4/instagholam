@@ -5,6 +5,8 @@
 #include "db.h"
 #include <ctime>
 #include <vector>
+#include "parser/XML.h"
+
 class User;
 class UserReport;
 class Api
@@ -33,6 +35,7 @@ public:
 	void like(int);
 	std::string get_avatar_path();
 	std::string get_username();
+	XML* get_post(int id);
 	 private:
 User* current_user;
 static bool compare_time(time_t&, time_t&);

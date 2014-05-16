@@ -19,3 +19,8 @@ void HashTag::remove_post_from_list(int id)
 			break;
 		}
 }
+
+string HashTag::get_content()
+{
+	return content;
+}

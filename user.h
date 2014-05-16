@@ -30,6 +30,8 @@ private:
 	std::vector<std::string> get_friends();
 	bool has_requested_to(User*);
 	bool is_friend_with(User*);
+	bool able_to_see(int);
+	bool able_to_see(Post*);
 	void request_to_friend(User*);
 	void approve_friend_request(int);
 	void disapprove_friend_request(int);

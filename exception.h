@@ -88,4 +88,28 @@ public:
 LikedBefore() : Exception("You've liked this post before") {}
 };
 
+class EmptyTitle: public Exception
+{
+public:
+	EmptyTitle() : Exception("Title shouldn't be empty") {}
+};
+
+class EmptyPhoto : public Exception
+{
+public:
+	EmptyPhoto() : Exception("There is no photo to upload") {}
+};
+
+class EmptyUsername: public Exception
+{
+public:
+	EmptyUsername() : Exception("Username cannot be empty") {}
+};
+
+class BadPassword : public Exception
+{
+public:
+	BadPassword() : Exception("Password length should at least be 5 characters") {}
+};
+
 #endif
