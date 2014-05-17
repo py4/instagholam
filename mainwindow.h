@@ -34,6 +34,8 @@ private slots:
 
     void on_tabWidget_currentChanged(int index);
 
+    void show_clicked_post();
+
 private:
     void set_status(std::string);
     void render_login();

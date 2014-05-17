@@ -44,7 +44,8 @@ string User::get_avatar_path()
 vector <int> User::get_latest_posts()
 {
 	vector <int> result;
-	for(int i = posts.size() - 1; posts.size() - i <= latest_count and i >= 0; i--)
+	//for(int i = posts.size() - 1; posts.size() - i <= latest_count and i >= 0; i--)
+	for(int i = posts.size() - 1; i >= 0; i--)
 		result.push_back(posts[i]->get_id());
 	return result;
 }
@@ -62,7 +63,6 @@ Post* User::post_photo(string title, string CDN_path, string hashtags, bool publ
 	Photo* photo = new Photo(CDN_path);
 	Post* new_post = new Post(title,publicity,hashtags,photo,this);
 	posts.push_back(new_post);
-	cout << "pushed back!" << endl;
 	return new_post;
 }
 

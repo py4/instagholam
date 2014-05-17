@@ -12,7 +12,7 @@ XML::XML()
 
 XML::~XML()
 {
-	cout << "destructor of XML" << endl;
+//	cout << "destructor of XML" << endl;
 	delete_node(root_node);
 }
 

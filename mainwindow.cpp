@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <qpixmap.h>
 #include <QVBoxLayout>
+#include "clickableimage.h"
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -74,10 +75,21 @@ void MainWindow::render_share()
 
 void MainWindow::render_profile()
 {
+    if ( ui->gridLayout != NULL )
+    {
+        QLayoutItem* item;
+        while ( ( item = ui->gridLayout->takeAt( 0 ) ) != NULL )
+        {
+            delete item->widget();
+            delete item;
+        }
+        delete ui->gridLayout;
+    }
+    //delete ui->gridLayout;
+    ui->gridLayout = new QGridLayout(ui->profile_tab);
     vector <int> posts = api.get_my_latest_posts();
     try {
-    int j = 0;
-    ui->profile_post_layout->setContentsMargins(0,0,0,0);
+    cout << "post size:  " << posts.size() << endl;
     for(int i = 0; i < posts.size(); i++)
     {
         XML* xml = api.get_post(posts[i]);
@@ -86,24 +98,18 @@ void MainWindow::render_profile()
         string title = (*xml)["title"]->get_value();
 
         QPixmap * pic = new QPixmap(QString::fromStdString(url));
-        QPixmap* mypix = new QPixmap(pic->scaled(QSize(50,50),  Qt::KeepAspectRatio));
-        QLabel* photo = new QLabel;
+        QPixmap* mypix = new QPixmap(pic->scaled(QSize(100,100),  Qt::KeepAspectRatio));
+        ClickableImage* photo = new ClickableImage(posts[i]);
         photo->setPixmap(*mypix);
-        QLabel* label = new QLabel(QString::fromStdString(title));
-        QVBoxLayout* layout = new QVBoxLayout;
-        layout->addWidget(photo);
-        layout->addWidget(label);
-        layout->setContentsMargins(0,0,0,0);
-        ui->profile_post_layout->addLayout(layout,j,i);
-        if(i % 4 == 0)
-            j++;
+        //connect(photo,SIGNAL(mousePressEvent()),this,SLOT(show_clicked_post()));
+        //photo->property("id").va
+        //photo->property("id").valu
+        ui->gridLayout->addWidget(photo,i / 4, i % 4);
         delete xml;
-        cout << url;
     }
     } catch (Exception e) {
         set_status(e.message);
     }
-
     ui->tabWidget->setCurrentWidget(ui->profile_tab);
 }
 
@@ -160,4 +166,9 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 {
     if(index == 2)
         render_profile();
+}
+
+void MainWindow::show_clicked_post()
+{
+    cout << "fuck that!!!" << endl;
 }

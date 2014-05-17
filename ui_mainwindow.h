@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Fri May 16 23:54:37 2014
+** Created: Sat May 17 20:20:48 2014
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -76,7 +76,7 @@ public:
     QLineEdit *share_file_name;
     QWidget *profile_tab;
     QWidget *gridLayoutWidget;
-    QGridLayout *profile_post_layout;
+    QGridLayout *gridLayout;
     QWidget *tab_3;
     QWidget *tab_4;
     QWidget *tab_5;
@@ -231,10 +231,10 @@ public:
         profile_tab->setObjectName(QString::fromUtf8("profile_tab"));
         gridLayoutWidget = new QWidget(profile_tab);
         gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(0, 20, 791, 401));
-        profile_post_layout = new QGridLayout(gridLayoutWidget);
-        profile_post_layout->setObjectName(QString::fromUtf8("profile_post_layout"));
-        profile_post_layout->setContentsMargins(0, 0, 0, 0);
+        gridLayoutWidget->setGeometry(QRect(0, 0, 791, 421));
+        gridLayout = new QGridLayout(gridLayoutWidget);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        gridLayout->setContentsMargins(0, 0, 0, 0);
         tabWidget->addTab(profile_tab, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QString::fromUtf8("tab_3"));
