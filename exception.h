@@ -130,4 +130,10 @@ public:
 	CommentNotFound() : Exception("Comment not found") {}
 };
 
+class FriendRequestNotFound : public Exception
+{
+public:
+	FriendRequestNotFound() : Exception("Friend request not found") {}
+};
+
 #endif

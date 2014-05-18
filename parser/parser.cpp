@@ -85,6 +85,9 @@ void set_params(map<string,string>& params, string command)
 	} else if(temp == "request_to_friend") {
 		keys[1] = "username";
 		set_hash_params(params,keys,2,command);
+	} else if(temp == "disapprove_friend_request") {
+		keys[1] = "id";
+		set_hash_params(params,keys,2,command);
 	}
 }
 
@@ -173,6 +176,14 @@ vector <string> get_hashtags(string line)
 			result.push_back(temp);
 		i++;
 	}
+	return result;
+}
+
+int to_int(string line)
+{
+	stringstream stream(line);
+	int result;
+	stream >> result;
 	return result;
 }
 

@@ -361,9 +361,11 @@ void Api::disapprove_friend_request(int id)
 			User* user = current_user->received_requests[i]->from;
 			user->friend_request_disapproved(id);
 			current_user->disapprove_friend_request(id);
-			break;
+			cout << "disapproved successfully" << endl;
+			return;
 		}
 	}
+	throw FriendRequestNotFound();
 }
 
 void Api::remove_friend(string username)
