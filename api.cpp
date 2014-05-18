@@ -348,8 +348,10 @@ void Api::approve_friend_request(int id)
 			User* user = current_user->received_requests[i]->from;
 			user->friend_request_approved(id);
 			current_user->approve_friend_request(id);
-			break;
+			cout << "friend request successfully approved" << endl;
+			return;
 		}
+	throw FriendRequestNotFound();
 }
 
 void Api::disapprove_friend_request(int id)

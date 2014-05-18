@@ -59,6 +59,8 @@ void CLI::start()
 				show_users();
 			else if(params["command"] == "disapprove_friend_request")
 				api->disapprove_friend_request(to_int(params["id"]));
+			else if(params["command"] == "approve_friend_request")
+				api->approve_friend_request(to_int(params["id"]));
 			else if(params["command"] == "quit")
 				break;
 			else {

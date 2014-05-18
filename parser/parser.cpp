@@ -85,7 +85,7 @@ void set_params(map<string,string>& params, string command)
 	} else if(temp == "request_to_friend") {
 		keys[1] = "username";
 		set_hash_params(params,keys,2,command);
-	} else if(temp == "disapprove_friend_request") {
+	} else if(temp == "disapprove_friend_request" or temp == "approve_friend_request") {
 		keys[1] = "id";
 		set_hash_params(params,keys,2,command);
 	}
