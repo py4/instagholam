@@ -54,7 +54,7 @@ vector <int> User::get_latest_liked_posts()
 {
 	vector <int> result;
 	//for(int i = liked_posts.size() - 1; liked_posts.size() - i < latest_count and i > 0; i++)
-	for(int i = posts.size() - 1; i >= 0; i--)
+	for(int i = liked_posts.size() - 1; i >= 0; i--)
 		result.push_back(liked_posts[i]->get_id());
 	return result;
 }

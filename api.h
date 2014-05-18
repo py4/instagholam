@@ -47,6 +47,9 @@ public:
 	map<string,string> get_comment(int, int);
 	map<int,string> get_sent_requests();
 	map<int,string> get_received_requests();
+	std::vector<int> get_friend_latest_liked_posts(std::string);
+	std::vector<int> get_friend_latest_posts(std::string);
+	std::vector<string> get_friend_friends(std::string);
 
 	 private:
 User* current_user;

@@ -58,6 +58,12 @@ public:
 AlreadyRequested() : Exception("You've already requested for friendship") {}
 };
 
+class HeRequested : public Exception
+{
+public:
+	HeRequested() : Exception("He's already requested for friendship") {}
+};
+
 class AlreadyFriends : public Exception
 {
 public:

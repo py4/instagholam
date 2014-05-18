@@ -122,12 +122,52 @@ void Api::post_photo(string title,string CDN_path, string hashtags, bool publici
 
 vector<int> Api::get_my_latest_posts()
 {
+	if(current_user == NULL)
+		throw NotLoggedIn();
 	return current_user->get_latest_posts();
+}
+
+vector<int> Api::get_friend_latest_posts(string username)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	User* user = DB::instance()->get_user(username);
+	if(user == NULL)
+		throw UserNotFound();
+	if(!current_user->is_friend_with(user))
+		throw AccessDenied();
+	return user->get_latest_posts();
 }
 
 vector<int> Api::get_my_latest_liked_posts()
 {
+	if(current_user == NULL)
+		throw NotLoggedIn();
 	return current_user->get_latest_liked_posts();
+}
+
+vector<int> Api::get_friend_latest_liked_posts(string username)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	User* user = DB::instance()->get_user(username);
+	if(user == NULL)
+		throw UserNotFound();
+	if(!current_user->is_friend_with(user))
+		throw AccessDenied();
+	return user->get_latest_liked_posts();
+}
+
+vector<string> Api::get_friend_friends(string username)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	User* user = DB::instance()->get_user(username);
+	if(user == NULL)
+		throw UserNotFound();
+	if(!current_user->is_friend_with(user))
+		throw AccessDenied();
+	return user->get_friends();	
 }
 
 // bool Api::get_publicity(int id)
@@ -273,11 +313,15 @@ map<int,string> Api::get_received_requests()
 
 vector<string> Api::get_friends()
 {
+	if(current_user == NULL)
+		throw NotLoggedIn();
 	return current_user->get_friends();
 }
 
 void Api::request_to_friend(string username)
 {
+	if(current_user == NULL)
+		throw NotLoggedIn();
 	User* user = DB::instance()->get_user(username);
 	if(user == current_user)
 		throw FriendWithYourself();
@@ -285,12 +329,15 @@ void Api::request_to_friend(string username)
 		throw UserNotFound();
 	if(current_user->has_requested_to(user))
 		throw AlreadyRequested();
+	if(user->has_requested_to(current_user))
+		throw HeRequested();
 	if(current_user->is_friend_with(user))
 		throw AlreadyFriends();
 
 	FriendRequest* request = new FriendRequest(current_user,user);
 	current_user->send_requests.push_back(request);
 	user->received_requests.push_back(request);
+	cout << "Successfully requested to him/her" << endl;
 }
 
 void Api::approve_friend_request(int id)

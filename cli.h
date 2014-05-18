@@ -17,6 +17,10 @@ private:
 	map<string,string> params;
 	void ensure_user();
 	void ensure_no_user();
+	void show_post(int);
+	void show_my_profile();
+	void show_friend_profile(std::string);
+	void show_users();
 	Api* api;
 };
 
