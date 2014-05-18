@@ -53,7 +53,8 @@ vector <int> User::get_latest_posts()
 vector <int> User::get_latest_liked_posts()
 {
 	vector <int> result;
-	for(int i = liked_posts.size() - 1; liked_posts.size() - i < latest_count and i > 0; i++)
+	//for(int i = liked_posts.size() - 1; liked_posts.size() - i < latest_count and i > 0; i++)
+	for(int i = posts.size() - 1; i >= 0; i--)
 		result.push_back(liked_posts[i]->get_id());
 	return result;
 }
@@ -213,6 +214,14 @@ bool User::has_liked(Post* post)
 		if(liked_posts[i] == post)
 			return true;
 	return false;
+}
+
+Comment* User::get_comment(int id)
+{
+	for(int i = 0; i < comments.size(); i++)
+		if(comments[i]->get_id() == id)
+			return comments[i];
+	return NULL;
 }
 
 

@@ -6,6 +6,7 @@
 #include <ctime>
 #include <vector>
 #include "parser/XML.h"
+#include <map>
 
 class User;
 class UserReport;
@@ -32,10 +33,21 @@ public:
 	std::vector <int> get_my_latest_posts();
 	std::vector <int> get_my_latest_liked_posts();
 	std::vector <std::string> get_friends();
+	std::vector <std::string> get_users();
+	std::string get_user_avatar(std::string);
 	void like(int);
 	std::string get_avatar_path();
 	std::string get_username();
-	XML* get_post(int id);
+	std::string get_post(int id);
+	bool is_friend_with(std::string);
+
+	//GETTER
+	std::map<std::string,std::string> get_post_info(int);
+	std::vector<int> get_post_comments(int);
+	map<string,string> get_comment(int, int);
+	map<int,string> get_sent_requests();
+	map<int,string> get_received_requests();
+
 	 private:
 User* current_user;
 static bool compare_time(time_t&, time_t&);

@@ -90,7 +90,7 @@ void MainWindow::render_profile()
     vector <int> posts = api.get_my_latest_posts();
     try {
     cout << "post size:  " << posts.size() << endl;
-    for(int i = 0; i < posts.size(); i++)
+    /*for(int i = 0; i < posts.size(); i++)
     {
         XML* xml = api.get_post(posts[i]);
         xml->dump();
@@ -106,11 +106,34 @@ void MainWindow::render_profile()
         //photo->property("id").valu
         ui->gridLayout->addWidget(photo,i / 4, i % 4);
         delete xml;
-    }
+    }*/
     } catch (Exception e) {
         set_status(e.message);
     }
     ui->tabWidget->setCurrentWidget(ui->profile_tab);
+}
+
+void MainWindow::render_people()
+{
+    vector <string> users = api.get_users();
+    for(int i = 0; i < users.size(); i++)
+    {
+        string avatar = api.get_user_avatar(users[i]);
+        QHBoxLayout* layout = new QHBoxLayout;
+        QPixmap * pic = new QPixmap(QString::fromStdString(avatar));
+        QPixmap* mypix = new QPixmap(pic->scaled(QSize(100,100),  Qt::KeepAspectRatio));
+        QLabel* photo = new QLabel;
+        photo->setPixmap(*mypix);
+        layout->addWidget(photo);
+        QLabel* username = new QLabel(QString::fromStdString(users[i]));
+        layout->addWidget(username);
+        if(!api.is_friend_with(users[i]))
+        {
+            QPushButton* request = new QPushButton(QString::fromStdString("Request"));
+            layout->addWidget(request);
+        }
+        ui->people_layout->addLayout(layout);
+    }
 }
 
 void MainWindow::on_select_avatar_clicked()
@@ -166,6 +189,8 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 {
     if(index == 2)
         render_profile();
+    if(index == 5)
+        render_people();
 }
 
 void MainWindow::show_clicked_post()

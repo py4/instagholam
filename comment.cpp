@@ -40,3 +40,12 @@ int Comment::get_post_id()
 	return post->get_id();
 }
 
+string Comment::get_created_at()
+{
+	struct tm * ptr;
+    char buf [20];
+    ptr = localtime(&created_at);
+    strftime (buf,20,"%x",ptr);
+    return buf;
+}
+

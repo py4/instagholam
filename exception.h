@@ -112,4 +112,16 @@ public:
 	BadPassword() : Exception("Password length should at least be 5 characters") {}
 };
 
+class BadInput : public Exception
+{
+public:
+	BadInput() : Exception("Bad input") {}
+};
+
+class CommentNotFound : public Exception
+{
+public:
+	CommentNotFound() : Exception("Comment not found") {}
+};
+
 #endif

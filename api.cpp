@@ -25,8 +25,8 @@ void Api::login(string username, string password)
 		throw UserNotFound();
 	if(user->password != password)
 		throw WrongCredentials();
-	cerr << "here3" << endl;
 	current_user = user;
+	cout << "logged in successfully" << endl;
 }
 
 void Api::logout()
@@ -34,6 +34,7 @@ void Api::logout()
 	if(current_user == NULL)
 		throw NotLoggedIn();
 	current_user = NULL;
+	cout << "logged out successfully" << endl;
 }
 
 void Api::sign_up(string username, string password, string name, string avatar_path)
@@ -52,6 +53,7 @@ void Api::sign_up(string username, string password, string name, string avatar_p
 	user = new User(username, password, name,avatar_path);
 	DB::instance()->users.push_back(user);
 	current_user = user;
+	cout << "signed up successfully" << endl;
 }
 
 string Api::get_avatar_path()
@@ -102,6 +104,8 @@ bool Api::compare_post_time(Post* post1, Post* post2)
 //TODO: check image existence/validity
 void Api::post_photo(string title,string CDN_path, string hashtags, bool publicity)
 {
+	if(current_user == NULL)
+		throw NotLoggedIn();
 	if(title == "")
 		throw EmptyTitle();
 	if(CDN_path == "")
@@ -113,6 +117,7 @@ void Api::post_photo(string title,string CDN_path, string hashtags, bool publici
 	
 	Post* post = current_user->post_photo(title,CDN_path,hashtags,pub);
 	DB::instance()->posts.push_back(post);
+	cout << "photo posted successfully" << endl;
 }
 
 vector<int> Api::get_my_latest_posts()
@@ -156,7 +161,7 @@ vector<int> Api::get_my_latest_liked_posts()
 // 		throw AccessDenied();
 // 	return post->user->username;
 // }
-XML* Api::get_post(int id)
+string Api::get_post(int id)
 {
 	Post* post = DB::instance()->get_post(id);
  	if(!current_user->able_to_see(post))
@@ -185,7 +190,85 @@ XML* Api::get_post(int id)
 		liked_by->add_node("user",post->liked_by[i]->get_username());
 	xml->current_node->add_node("created_at", post->get_created_at());
 	xml->current_node->add_node("photo_path",post->get_path());
-	return xml;
+	return xml->dump();
+}
+
+map<string,string> Api::get_post_info(int id)
+{
+	Post* post = DB::instance()->get_post(id);
+	if(post == NULL)
+		throw PostNotFound();
+	if(!current_user->able_to_see(post))
+		throw AccessDenied();
+	map<string,string> result;
+	if(post->pub == true)
+		result["publicity"] = "true";
+	else
+		result["publicity"] = "false";
+	result["username"] = post->user->username;
+	result["title"] = post->title;
+	result["created_at"] = post->get_created_at();
+	result["photo_path"] = post->get_path();
+	return result;
+}
+
+vector<int> Api::get_post_comments(int id)
+{
+	Post* post = DB::instance()->get_post(id);
+	if(post == NULL)
+		throw PostNotFound();
+	if(!current_user->able_to_see(post))
+		throw AccessDenied();
+	vector<int> result;
+	for(int i = 0; i < post->comments.size(); i++)
+		result.push_back(post->comments[i]->id);
+	return result;
+}
+
+map<string,string> Api::get_comment(int post_id, int comment_id)
+{
+	Post* post = DB::instance()->get_post(post_id);
+	if(post == NULL)
+		throw PostNotFound();
+	if(!current_user->able_to_see(post))
+		throw AccessDenied();
+	Comment* comment = current_user->get_comment(comment_id);
+	if(comment == NULL)
+		throw CommentNotFound();
+	map<string,string> result;
+
+	result["username"] = comment->user->username;
+	result["created_at"] = comment->get_created_at();
+	result["content"] = comment->content;
+	return result;
+}
+
+map<int,string> Api::get_sent_requests()
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	map<int,string> result;
+	for(int i = 0; i < current_user->send_requests.size(); i++)
+	{
+		int id = current_user->send_requests[i]->id;
+		string from = current_user->send_requests[i]->to->username;
+		result[id] = from;
+	}
+	return result;
+}
+
+map<int,string> Api::get_received_requests()
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	map<int,string> result;
+	for(int i = 0; i < current_user->received_requests.size(); i++)
+	{
+		int id = current_user->received_requests[i]->id;
+		string to = current_user->received_requests[i]->from->username;
+		result[id] = to;
+	}
+	return result;
 }
 
 vector<string> Api::get_friends()
@@ -286,6 +369,27 @@ void Api::like(int id)
 	current_user->liked_posts.push_back(post);
 	post->liked_by.push_back(current_user);
 }
+
+vector<string> Api::get_users()
+{
+	vector<string> result;
+	for(int i = 0; i < DB::instance()->users.size(); i++)
+		result.push_back(DB::instance()->users[i]->get_username());
+	return result;
+}
+
+string Api::get_user_avatar(string username)
+{
+	User* user = DB::instance()->get_user(username);
+	return user->get_avatar_path();
+}
+
+bool Api::is_friend_with(string username)
+{
+	User* user = DB::instance()->get_user(username);
+	return current_user->is_friend_with(user);
+}
+
 
 
 

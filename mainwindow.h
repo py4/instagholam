@@ -43,6 +43,7 @@ private:
     void render_home();
     void render_share();
     void render_profile();
+    void render_people();
     Ui::MainWindow *ui;
     Api api;
 };

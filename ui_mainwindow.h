@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Sat May 17 20:20:48 2014
+** Created: Sun May 18 19:15:13 2014
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -26,6 +26,7 @@
 #include <QtGui/QStackedWidget>
 #include <QtGui/QStatusBar>
 #include <QtGui/QTabWidget>
+#include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -79,7 +80,9 @@ public:
     QGridLayout *gridLayout;
     QWidget *tab_3;
     QWidget *tab_4;
-    QWidget *tab_5;
+    QWidget *people_tab;
+    QWidget *verticalLayoutWidget;
+    QVBoxLayout *people_layout;
     QWidget *tab_6;
     QLabel *avatar;
     QMenuBar *menubar;
@@ -242,9 +245,15 @@ public:
         tab_4 = new QWidget();
         tab_4->setObjectName(QString::fromUtf8("tab_4"));
         tabWidget->addTab(tab_4, QString());
-        tab_5 = new QWidget();
-        tab_5->setObjectName(QString::fromUtf8("tab_5"));
-        tabWidget->addTab(tab_5, QString());
+        people_tab = new QWidget();
+        people_tab->setObjectName(QString::fromUtf8("people_tab"));
+        verticalLayoutWidget = new QWidget(people_tab);
+        verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
+        verticalLayoutWidget->setGeometry(QRect(0, 0, 791, 411));
+        people_layout = new QVBoxLayout(verticalLayoutWidget);
+        people_layout->setObjectName(QString::fromUtf8("people_layout"));
+        people_layout->setContentsMargins(0, 0, 0, 0);
+        tabWidget->addTab(people_tab, QString());
         tab_6 = new QWidget();
         tab_6->setObjectName(QString::fromUtf8("tab_6"));
         tabWidget->addTab(tab_6, QString());
@@ -264,7 +273,7 @@ public:
         retranslateUi(MainWindow);
 
         stackedWidget->setCurrentIndex(2);
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(5);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -294,7 +303,7 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(profile_tab), QApplication::translate("MainWindow", "Profile", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Friends", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("MainWindow", "Requests", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_5), QApplication::translate("MainWindow", "People", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(people_tab), QApplication::translate("MainWindow", "People", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_6), QApplication::translate("MainWindow", "Explore", 0, QApplication::UnicodeUTF8));
         avatar->setText(QApplication::translate("MainWindow", "TextLabel", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

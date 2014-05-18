@@ -23,6 +23,7 @@ public:
 	std::string get_username();
 	std::string get_full_name();
 	std::string get_avatar_path();
+
 private:
 	Post* post_photo(std::string,std::string,std::string, bool = false);
 	std::vector<int> get_latest_posts();
@@ -38,14 +39,13 @@ private:
 	void friend_request_approved(int);
 	void friend_request_disapproved(int);
 	void remove_friend(User*);
-	bool reported_before(User*);
-	
+	bool reported_before(User*);	
 	void report(std::string);
-	
 	void remove_comment_on_post(int);
 	void remove_liked_post(int);
 	void like(Post*);
 	bool has_liked(Post*);
+	Comment* get_comment(int);
 		
 	std::string username;
 	std::string password;

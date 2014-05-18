@@ -25,7 +25,7 @@ void XML::delete_node(Node* node)
 	delete node;
 }
 
-bool XML::load(string file_name)
+/*bool XML::load(string file_name)
 {
 	cout << "file_name:  " << file_name << endl;
 	delete_node(root_node);
@@ -38,6 +38,18 @@ bool XML::load(string file_name)
 		return true;
 	else
 		return false;
+}*/
+
+void XML::load(string line)
+{
+	delete_node(root_node);
+	root_node = new Node("root");
+	root_node->parent = root_node;
+	current_node = root_node;
+	raw_data.clear();
+	raw_data.str(line);
+	parse();
+	//raw_data = stream;
 }
 
 void XML::parse()

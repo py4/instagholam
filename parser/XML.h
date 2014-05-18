@@ -5,14 +5,15 @@
 #include <string>
 #include "parser.h"
 #include "node.h"
-
+#include <sstream>
 
 class XML
 {
 public:
 	XML();
 	~XML();
-	bool load(std::string);
+	//bool load(std::string);
+	void load(std::string);
 	void parse();
 	string dump();
 
@@ -24,7 +25,8 @@ public:
 	Node* root_node;
 	Node* current_node;
 private:
-	std::ifstream raw_data;
+	//std::ifstream raw_data;
+	std::stringstream raw_data;
 
 	void delete_node(Node*);
 

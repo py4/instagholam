@@ -1,6 +1,7 @@
 #include "parser.h"
 #include <sstream>
 #include <iostream>
+#include "exception.h"
 using namespace std;
 
 /* http://codereview.stackexchange.com/a/40158 */
@@ -44,20 +45,41 @@ string get_value_of_tag(string line)
 		return line;
 }
 
-string get_shelf_name(string line)
+void set_hash_params(map<string,string>& params, string keys[], int count, string line)
 {
-	string name;
-	if(line.substr(0,6) == "<shelf")
+	stringstream in(line);
+	string temp;
+	for(int i = 0; getline(in,temp,' '); i++)
 	{
-		for(int i = 13; i < line.length(); i++)
-		{
-			if(line[i] == '"')
-				break;
-			name += line[i];
-		}
+		if(i >= count)
+			throw BadInput();
+		params[keys[i]] = temp;
 	}
+}
 
-	return name;
+void set_params(map<string,string>& params, string command)
+{
+	params.clear();
+	stringstream in(command);
+	string temp;
+
+	getline(in,temp,' ');
+	params["command"] = temp;
+	string keys[5];
+	keys[0] = "command";
+
+	if(temp == "register") {
+		keys[1] = "username"; keys[2] = "password"; keys[3] = "name"; keys[4] = "avatar_path";
+		set_hash_params(params,keys,5,command);
+	}
+	else if(temp == "login") {
+		keys[1] = "username"; keys[2] = "password";
+		set_hash_params(params,keys,3,command);
+	}
+	else if(temp == "post_photo") {
+		keys[1] = "title"; keys[2] = "CDN_path"; keys[3] = "hashtags", keys[4] = "publicity";
+		set_hash_params(params,keys,5,command);
+	}
 }
 
 bool is_tag(string line)
