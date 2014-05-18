@@ -61,6 +61,8 @@ void CLI::start()
 				api->disapprove_friend_request(to_int(params["id"]));
 			else if(params["command"] == "approve_friend_request")
 				api->approve_friend_request(to_int(params["id"]));
+			else if(params["command"] == "remove_friend")
+				api->remove_friend(params["username"]);
 			else if(params["command"] == "quit")
 				break;
 			else {

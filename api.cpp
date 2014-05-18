@@ -342,6 +342,8 @@ void Api::request_to_friend(string username)
 
 void Api::approve_friend_request(int id)
 {
+	if(current_user == NULL)
+		throw NotLoggedIn();
 	for(int i = 0; i < current_user->received_requests.size(); i++)
 		if(current_user->received_requests[i]->id == id)
 		{
@@ -356,6 +358,8 @@ void Api::approve_friend_request(int id)
 
 void Api::disapprove_friend_request(int id)
 {
+	if(current_user == NULL)
+		throw NotLoggedIn();
 	for(int i = 0; i < current_user->received_requests.size(); i++)
 	{
 		if(current_user->received_requests[i]->id == id)
@@ -380,6 +384,8 @@ void Api::remove_friend(string username)
 
 	user->remove_friend(current_user);
 	current_user->remove_friend(user);
+
+	cout << "removed successfully" << endl;
 }
 
 void Api::report(string username)
@@ -414,11 +420,17 @@ void Api::like(int id)
 	Post* post = DB::instance()->get_post(id);
 	if(post == NULL)
 		throw PostNotFound();
+	if(!current_user->able_to_see(post))
+		throw AccessDenied();
+	if(current_user == NULL)
+		throw NotLoggedIn();
 	if(current_user->has_liked(post))
 		throw LikedBefore();
 	
 	current_user->liked_posts.push_back(post);
 	post->liked_by.push_back(current_user);
+
+	cout << "success fully liked" << endl;
 }
 
 vector<string> Api::get_users()
