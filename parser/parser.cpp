@@ -56,7 +56,7 @@ void set_hash_params(map<string,string>& params, string keys[], int count, strin
 		params[keys[i]] = temp;
 	}
 }
-
+//TODO: freeing memory memory after quit
 void set_params(map<string,string>& params, string command)
 {
 	params.clear();
@@ -83,7 +83,7 @@ void set_params(map<string,string>& params, string command)
 		keys[1] = "username";
 		set_hash_params(params,keys,2,command);
 	} else if(temp == "disapprove_friend_request" or temp == "approve_friend_request" or temp == "like_post" or
-		temp == "unlike_post") {
+		temp == "unlike_post" or temp == "remove_comment") {
 		keys[1] = "id";
 		set_hash_params(params,keys,2,command);
 	} else if(temp == "comment") {

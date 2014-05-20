@@ -530,6 +530,22 @@ void Api::add_comment(int post_id, string content)
 	cout << "successfully submited" << endl;
 }
 
+void Api::remove_comment(int comment_id)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	Comment* comment = current_user->get_comment(comment_id);
+	if(comment == NULL)
+		throw CommentNotFound();
+	Post* post = comment->post;
+	vector <Comment*>& comments = current_user->comments;
+	comments.erase(std::remove(comments.begin(), comments.end(), comment), comments.end());
+	vector <Comment*>& p_comments = post->comments;
+	p_comments.erase(std::remove(p_comments.begin(), p_comments.end(), comment), p_comments.end());
+	delete comment;
+	cout << "removed successfully" << endl;
+}
+
 
 
 
