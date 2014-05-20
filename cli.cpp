@@ -69,6 +69,8 @@ void CLI::start()
 				api->unlike(to_int(params["id"]));
 			else if(params["command"] == "show_timelog")
 				show_timelog();
+			else if(params["command"] == "comment")
+				api->add_comment(to_int(params["id"]), params["content"]);
 			else if(params["command"] == "quit")
 				break;
 			else {

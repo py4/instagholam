@@ -29,6 +29,7 @@ public:
 	User* get_user() { return user; }
 	std::string get_path();
 private:
+	Comment* get_comment(int);
 	void set_id();
 	int id;
 	bool pub;

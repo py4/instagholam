@@ -2,6 +2,7 @@
 #include "post.h"
 #include <string>
 #include "user.h"
+#include <iostream>
 using namespace std;
 int Comment::count = 0;
 
@@ -23,6 +24,8 @@ Comment::Comment(User* user,Post* post,string content)
 	this->user = user;
 	this->post = post;
 	this->content = content;
+	id = count + 1;
+	count++;
 }
 
 string Comment::get_user()

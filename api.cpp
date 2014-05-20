@@ -312,7 +312,7 @@ map<string,string> Api::get_comment(int post_id, int comment_id)
 		throw PostNotFound();
 	if(!current_user->able_to_see(post))
 		throw AccessDenied();
-	Comment* comment = current_user->get_comment(comment_id);
+	Comment* comment = post->get_comment(comment_id);
 	if(comment == NULL)
 		throw CommentNotFound();
 	map<string,string> result;
@@ -511,6 +511,23 @@ bool Api::is_friend_with(string username)
 {
 	User* user = DB::instance()->get_user(username);
 	return current_user->is_friend_with(user);
+}
+
+void Api::add_comment(int post_id, string content)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	Post* post = DB::instance()->get_post(post_id);
+	if(post == NULL)
+		throw PostNotFound();
+	if(!current_user->able_to_see(post))
+		throw AccessDenied();
+
+	Comment* comment = new Comment(current_user, post, content);
+	current_user->comments.push_back(comment);
+	post->comments.push_back(comment);
+
+	cout << "successfully submited" << endl;
 }
 
 

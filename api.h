@@ -42,6 +42,10 @@ public:
 	std::string get_post(int id);
 	bool is_friend_with(std::string);
 
+	//SETTER
+	void add_comment(int,std::string);
+	void remove_comment(int);
+
 	//GETTER
 	std::map<std::string,std::string> get_post_info(int);
 	std::vector<int> get_post_comments(int);

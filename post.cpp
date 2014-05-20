@@ -2,6 +2,7 @@
 #include "parser.h"
 #include "db.h"
 #include "photo.h"
+#include "comment.h"
 using namespace std;
 int Post::count = 0;
 
@@ -88,4 +89,12 @@ string Post::get_created_at()
 string Post::get_path()
 {
 	return photo->get_path();
+}
+
+Comment* Post::get_comment(int id)
+{
+	for(int i = 0; i < comments.size(); i++)
+		if(comments[i]->get_id() == id)
+			return comments[i];
+	return NULL;
 }

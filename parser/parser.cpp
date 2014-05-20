@@ -86,6 +86,9 @@ void set_params(map<string,string>& params, string command)
 		temp == "unlike_post") {
 		keys[1] = "id";
 		set_hash_params(params,keys,2,command);
+	} else if(temp == "comment") {
+		keys[1] = "id"; keys[2] = "content";
+		set_hash_params(params,keys,3,command);
 	}
 }
 
