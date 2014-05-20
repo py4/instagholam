@@ -13,7 +13,8 @@ class UserReport;
 class Api
 {
 public:
-	Api();
+	//Api();
+	static Api* instance();
 	void login(std::string,std::string);
 	void logout();
 	void sign_up(std::string,std::string,std::string,std::string);
@@ -26,7 +27,7 @@ public:
 	void remove_friend(std::string);
 	void report(std::string);
 	void delete_user(std::string);
-		
+
 	void post_photo(std::string, std::string);
 	void remove_user(std::string);
 	void post_photo(std::string, std::string, std::string, bool = false);
@@ -59,9 +60,15 @@ public:
 	std::vector<string> get_friend_friends(std::string);
 	std::vector<int> show_timelog();
 
-	 private:
-User* current_user;
-static bool compare_time(time_t&, time_t&);
-static bool compare_post_time(Post*,Post*);
+private:
+	User* current_user;
+	static bool compare_time(time_t&, time_t&);
+	static bool compare_post_time(Post*,Post*);
+
+	Api();
+	Api(Api const&);
+	~Api();
+	void operator=(Api const&);
+	static Api* api;
 };
 #endif

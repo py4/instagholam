@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QTableWidget>
 #include "clickableimage.h"
+#include "postwindow.h"
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -31,7 +32,7 @@ void MainWindow::on_sign_in_clicked()
     string username = ui->username->text().toStdString();
     string password = ui->password->text().toStdString();
     try {
-        api.login(username,password);
+        Api::instance()->login(username,password);
         render_home();
     } catch (Exception e)
     {
@@ -59,11 +60,11 @@ void MainWindow::render_signup()
 
 void MainWindow::render_home()
 {
-    QPixmap * mypix = new QPixmap(QString::fromStdString(api.get_avatar_path()));
+    QPixmap * mypix = new QPixmap(QString::fromStdString(Api::instance()->get_avatar_path()));
     ui->avatar->setPixmap(*mypix);
     ui->stackedWidget->setCurrentWidget(ui->home_page);
     ui->tabWidget->setCurrentWidget(ui->tab);
-    //ui->name_under_avatar->setText(QString::fromStdString(api.get_username()));
+    //ui->name_under_avatar->setText(QString::fromStdString(Api::instance()->get_username()));
 }
 
 void MainWindow::render_share()
@@ -104,7 +105,7 @@ void MainWindow::render_profile()
     delete ui->profile_table;
     ui->profile_table = new QTableWidget(ui->profile_tab);
     ui->profile_table->show();
-    vector <int> posts = api.get_my_latest_posts();
+    vector <int> posts = Api::instance()->get_my_latest_posts();
     try {
     cout << "post size:  " << posts.size() << endl;
     ui->profile_table->setRowCount(posts.size());
@@ -137,7 +138,7 @@ void MainWindow::render_profile()
             if(i >= posts.size())
                 break;
 
-        map<string,string> post_info = api.get_post_info(posts[i]);
+        map<string,string> post_info = Api::instance()->get_post_info(posts[i]);
         string title = post_info["title"];
         string url = post_info["photo_path"];
         string created_at = post_info["created_at"];
@@ -148,6 +149,8 @@ void MainWindow::render_profile()
         //photo->setPixmap(*mypix);
         ClickableImage* photo = new ClickableImage(posts[i]);
         photo->setPixmap(*mypix);
+
+        connect(photo,SIGNAL(leftButtonPressed(ClickableImage*)), this, SLOT(show_post()));
 
 
         QPushButton* view = new QPushButton(QString::fromStdString("View"));
@@ -164,7 +167,7 @@ void MainWindow::render_profile()
     }
     /*for(int i = 0 ; i < posts.size(); i++)
     {
-        map<string,string> post_info = api.get_post_info(posts[i]);
+        map<string,string> post_info = Api::instance()->get_post_info(posts[i]);
         string title = post_info["title"];
         string url = post_info["photo_path"];
         string created_at = post_info["created_at"];
@@ -190,7 +193,7 @@ void MainWindow::render_profile()
     }*/
     /*for(int i = 0; i < posts.size(); i++)
     {
-        XML* xml = api.get_post(posts[i]);
+        XML* xml = Api::instance()->get_post(posts[i]);
         xml->dump();
         string url = (*xml)["photo_path"]->get_value();
         string title = (*xml)["title"]->get_value();
@@ -213,10 +216,10 @@ void MainWindow::render_profile()
 
 void MainWindow::render_people()
 {
-    vector <string> users = api.get_users();
+    vector <string> users = Api::instance()->get_users();
     for(int i = 0; i < users.size(); i++)
     {
-        string avatar = api.get_user_avatar(users[i]);
+        string avatar = Api::instance()->get_user_avatar(users[i]);
         QHBoxLayout* layout = new QHBoxLayout;
         QPixmap * pic = new QPixmap(QString::fromStdString(avatar));
         QPixmap* mypix = new QPixmap(pic->scaled(QSize(100,100),  Qt::KeepAspectRatio));
@@ -225,7 +228,7 @@ void MainWindow::render_people()
         layout->addWidget(photo);
         QLabel* username = new QLabel(QString::fromStdString(users[i]));
         layout->addWidget(username);
-        if(!api.is_friend_with(users[i]))
+        if(!Api::instance()->is_friend_with(users[i]))
         {
             QPushButton* request = new QPushButton(QString::fromStdString("Request"));
             layout->addWidget(request);
@@ -247,7 +250,7 @@ void MainWindow::on_register_button_clicked()
     string password = ui->register_password->text().toStdString();
     string file_path = ui->avatar_file->text().toStdString();
     try {
-        api.sign_up(username, password, full_name, file_path);
+        Api::instance()->sign_up(username, password, full_name, file_path);
         set_status("Successfully registed!");
         render_home();
     } catch (Exception e)
@@ -269,7 +272,7 @@ void MainWindow::on_share_button_clicked()
     bool publicity = ui->share_pub_checkbox->isChecked();
     string hashtags = ui->share_hashtags->text().toStdString();
     try {
-        api.post_photo(title,file,hashtags,publicity);
+        Api::instance()->post_photo(title,file,hashtags,publicity);
         set_status("Successfully posted!");
         render_share();
     } catch (Exception e) {
@@ -294,4 +297,17 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 void MainWindow::show_clicked_post()
 {
     cout << "fuck that!!!" << endl;
+}
+
+void MainWindow::show_post()
+{
+    cout << "show_post" << endl;
+    ClickableImage* p = dynamic_cast<ClickableImage*>(sender());
+    int post_id = p->id;
+    map<string,string> info = Api::instance()->get_post_info(post_id);
+    PostWindow* post_window = new PostWindow(post_id,info["title"],info["photo_path"],info["username"],info["created_at"]);
+    vector<string> hashtags = Api::instance()->get_post_hashtags(post_id);
+    post_window->set_hashtags(hashtags);
+
+    post_window->show();
 }

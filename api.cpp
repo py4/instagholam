@@ -11,10 +11,23 @@
 
 using namespace std;
 
+Api* Api::api = NULL;
+
 Api::Api()
 {
 	current_user = NULL;
 }
+
+Api* Api::instance()
+{
+	if(api == NULL)
+	{
+		api = new Api;
+		return api;
+	}
+	return api;
+}
+
 
 void Api::login(string username, string password)
 {

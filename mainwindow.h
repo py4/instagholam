@@ -36,6 +36,8 @@ private slots:
 
     void show_clicked_post();
 
+    void show_post();
+
 private:
     void set_status(std::string);
     void render_login();
@@ -45,7 +47,7 @@ private:
     void render_profile();
     void render_people();
     Ui::MainWindow *ui;
-    Api api;
+    //Api api;
 };
 
 #endif // MAINWINDOW_H
