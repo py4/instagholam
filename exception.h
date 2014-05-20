@@ -136,4 +136,11 @@ public:
 	FriendRequestNotFound() : Exception("Friend request not found") {}
 };
 
+class NotLikedBefore : public Exception
+{
+public:
+	NotLikedBefore() : Exception("You've not liked this before") {}
+};
+
+
 #endif

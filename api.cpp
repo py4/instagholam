@@ -265,6 +265,36 @@ vector<int> Api::get_post_comments(int id)
 	return result;
 }
 
+vector<string> Api::get_post_hashtags(int id)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	Post* post = DB::instance()->get_post(id);
+	if(post == NULL)
+		throw PostNotFound();
+	if(!current_user->able_to_see(post))
+		throw AccessDenied();
+	vector<string> result;
+	for(int i = 0; i < post->hashtags.size(); i++)
+		result.push_back(post->hashtags[i]->get_content());
+	return result;
+}
+
+vector<string> Api::get_post_liked_by(int id)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	Post* post = DB::instance()->get_post(id);
+	if(post == NULL)
+		throw PostNotFound();
+	if(!current_user->able_to_see(post))
+		throw AccessDenied();
+	vector<string> result;
+	for(int i = 0; i < post->liked_by.size(); i++)
+		result.push_back(post->liked_by[i]->username);
+	return result;
+}
+
 map<string,string> Api::get_comment(int post_id, int comment_id)
 {
 	Post* post = DB::instance()->get_post(post_id);
@@ -418,12 +448,12 @@ void Api::delete_user(string username)
 void Api::like(int id)
 {
 	Post* post = DB::instance()->get_post(id);
+	if(current_user == NULL)
+		throw NotLoggedIn();
 	if(post == NULL)
 		throw PostNotFound();
 	if(!current_user->able_to_see(post))
 		throw AccessDenied();
-	if(current_user == NULL)
-		throw NotLoggedIn();
 	if(current_user->has_liked(post))
 		throw LikedBefore();
 	
@@ -431,6 +461,26 @@ void Api::like(int id)
 	post->liked_by.push_back(current_user);
 
 	cout << "success fully liked" << endl;
+}
+
+void Api::unlike(int id)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	Post* post = DB::instance()->get_post(id);
+	if(post == NULL)
+		throw PostNotFound();
+	if(!current_user->able_to_see(post))
+		throw AccessDenied();
+	if(!current_user->has_liked(post))
+		throw NotLikedBefore();
+
+	vector <Post*>& posts = current_user->liked_posts;
+	posts.erase(std::remove(posts.begin(), posts.end(), post), posts.end());
+	vector <User*>& by = post->liked_by;
+	by.erase(std::remove(by.begin(), by.end(), current_user), by.end());
+
+	cout << "unliked successfully" << endl;
 }
 
 vector<string> Api::get_users()

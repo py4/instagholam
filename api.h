@@ -36,6 +36,7 @@ public:
 	std::vector <std::string> get_users();
 	std::string get_user_avatar(std::string);
 	void like(int);
+	void unlike(int);
 	std::string get_avatar_path();
 	std::string get_username();
 	std::string get_post(int id);
@@ -44,6 +45,8 @@ public:
 	//GETTER
 	std::map<std::string,std::string> get_post_info(int);
 	std::vector<int> get_post_comments(int);
+	std::vector<std::string> get_post_hashtags(int);
+	std::vector<std::string> get_post_liked_by(int);
 	map<string,string> get_comment(int, int);
 	map<int,string> get_sent_requests();
 	map<int,string> get_received_requests();

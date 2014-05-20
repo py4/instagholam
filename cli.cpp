@@ -63,6 +63,10 @@ void CLI::start()
 				api->approve_friend_request(to_int(params["id"]));
 			else if(params["command"] == "remove_friend")
 				api->remove_friend(params["username"]);
+			else if(params["command"] == "like_post")
+				api->like(to_int(params["id"]));
+			else if(params["command"] == "unlike_post")
+				api->unlike(to_int(params["id"]));
 			else if(params["command"] == "quit")
 				break;
 			else {
@@ -84,14 +88,22 @@ void CLI::show_post(int id)
 	cout << "created_at:  " << post_info["created_at"] << endl;
 	cout << "publicity:  " << post_info["publicity"] << endl;
 	vector<int> comment_ids = api->get_post_comments(id);
-	cout << ">> comments <<" << endl;
+	cout << "\t >> comments <<" << endl;
 	for(int i = 0; i < comment_ids.size(); i++)
 	{
 		map<string,string> comment_info = api->get_comment(id, comment_ids[i]);
-		cout << "by:  " << comment_info["username"] << endl;
-		cout << "content:  " << comment_info["content"] << endl;
-		cout << "created_at:  " << comment_info["created_at"] << endl;
+		cout << "\t by:  " << comment_info["username"] << endl;
+		cout << "\t content:  " << comment_info["content"] << endl;
+		cout << "\t created_at:  " << comment_info["created_at"] << endl;
 	}
+	cout << "\t >> hashtags << " << endl;
+	vector<string> hashtags = api->get_post_hashtags(id);
+	for(int i = 0; i < hashtags.size(); i++)
+		cout << "\t " << hashtags[i] << endl;
+	cout << "\t >> liked_by <<" << endl;
+	vector<string> liked_by = api->get_post_liked_by(id);
+	for(int i = 0; i < liked_by.size(); i++)
+		cout << "\t " << liked_by[i] << endl;
 }
 
 void CLI::show_my_profile()
