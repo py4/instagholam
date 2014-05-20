@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Sun May 18 19:15:13 2014
+** Created: Tue May 20 22:32:01 2014
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -15,7 +15,6 @@
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QCheckBox>
-#include <QtGui/QGridLayout>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
@@ -26,6 +25,7 @@
 #include <QtGui/QStackedWidget>
 #include <QtGui/QStatusBar>
 #include <QtGui/QTabWidget>
+#include <QtGui/QTableWidget>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 
@@ -63,21 +63,20 @@ public:
     QLabel *label_7;
     QCheckBox *share_pub_checkbox;
     QPushButton *share_button;
-    QWidget *widget;
+    QWidget *layoutWidget1;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_8;
     QLineEdit *share_title;
-    QWidget *widget1;
+    QWidget *layoutWidget2;
     QHBoxLayout *horizontalLayout_4;
     QLabel *label_10;
     QLineEdit *share_hashtags;
-    QWidget *widget2;
+    QWidget *layoutWidget3;
     QHBoxLayout *horizontalLayout_3;
     QPushButton *share_select_file;
     QLineEdit *share_file_name;
     QWidget *profile_tab;
-    QWidget *gridLayoutWidget;
-    QGridLayout *gridLayout;
+    QTableWidget *profile_table;
     QWidget *tab_3;
     QWidget *tab_4;
     QWidget *people_tab;
@@ -181,50 +180,50 @@ public:
         share_button = new QPushButton(share_tab);
         share_button->setObjectName(QString::fromUtf8("share_button"));
         share_button->setGeometry(QRect(310, 220, 99, 27));
-        widget = new QWidget(share_tab);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(190, 90, 381, 29));
-        horizontalLayout_2 = new QHBoxLayout(widget);
+        layoutWidget1 = new QWidget(share_tab);
+        layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(190, 90, 381, 29));
+        horizontalLayout_2 = new QHBoxLayout(layoutWidget1);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
-        label_8 = new QLabel(widget);
+        label_8 = new QLabel(layoutWidget1);
         label_8->setObjectName(QString::fromUtf8("label_8"));
 
         horizontalLayout_2->addWidget(label_8);
 
-        share_title = new QLineEdit(widget);
+        share_title = new QLineEdit(layoutWidget1);
         share_title->setObjectName(QString::fromUtf8("share_title"));
 
         horizontalLayout_2->addWidget(share_title);
 
-        widget1 = new QWidget(share_tab);
-        widget1->setObjectName(QString::fromUtf8("widget1"));
-        widget1->setGeometry(QRect(190, 170, 301, 29));
-        horizontalLayout_4 = new QHBoxLayout(widget1);
+        layoutWidget2 = new QWidget(share_tab);
+        layoutWidget2->setObjectName(QString::fromUtf8("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(190, 170, 301, 29));
+        horizontalLayout_4 = new QHBoxLayout(layoutWidget2);
         horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
         horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
-        label_10 = new QLabel(widget1);
+        label_10 = new QLabel(layoutWidget2);
         label_10->setObjectName(QString::fromUtf8("label_10"));
 
         horizontalLayout_4->addWidget(label_10);
 
-        share_hashtags = new QLineEdit(widget1);
+        share_hashtags = new QLineEdit(layoutWidget2);
         share_hashtags->setObjectName(QString::fromUtf8("share_hashtags"));
 
         horizontalLayout_4->addWidget(share_hashtags);
 
-        widget2 = new QWidget(share_tab);
-        widget2->setObjectName(QString::fromUtf8("widget2"));
-        widget2->setGeometry(QRect(180, 130, 331, 29));
-        horizontalLayout_3 = new QHBoxLayout(widget2);
+        layoutWidget3 = new QWidget(share_tab);
+        layoutWidget3->setObjectName(QString::fromUtf8("layoutWidget3"));
+        layoutWidget3->setGeometry(QRect(180, 130, 331, 29));
+        horizontalLayout_3 = new QHBoxLayout(layoutWidget3);
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
-        share_select_file = new QPushButton(widget2);
+        share_select_file = new QPushButton(layoutWidget3);
         share_select_file->setObjectName(QString::fromUtf8("share_select_file"));
 
         horizontalLayout_3->addWidget(share_select_file);
 
-        share_file_name = new QLineEdit(widget2);
+        share_file_name = new QLineEdit(layoutWidget3);
         share_file_name->setObjectName(QString::fromUtf8("share_file_name"));
 
         horizontalLayout_3->addWidget(share_file_name);
@@ -232,12 +231,9 @@ public:
         tabWidget->addTab(share_tab, QString());
         profile_tab = new QWidget();
         profile_tab->setObjectName(QString::fromUtf8("profile_tab"));
-        gridLayoutWidget = new QWidget(profile_tab);
-        gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(0, 0, 791, 421));
-        gridLayout = new QGridLayout(gridLayoutWidget);
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        gridLayout->setContentsMargins(0, 0, 0, 0);
+        profile_table = new QTableWidget(profile_tab);
+        profile_table->setObjectName(QString::fromUtf8("profile_table"));
+        profile_table->setGeometry(QRect(0, 0, 801, 421));
         tabWidget->addTab(profile_tab, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QString::fromUtf8("tab_3"));
@@ -249,7 +245,7 @@ public:
         people_tab->setObjectName(QString::fromUtf8("people_tab"));
         verticalLayoutWidget = new QWidget(people_tab);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(0, 0, 791, 411));
+        verticalLayoutWidget->setGeometry(QRect(0, 0, 851, 611));
         people_layout = new QVBoxLayout(verticalLayoutWidget);
         people_layout->setObjectName(QString::fromUtf8("people_layout"));
         people_layout->setContentsMargins(0, 0, 0, 0);
@@ -273,7 +269,7 @@ public:
         retranslateUi(MainWindow);
 
         stackedWidget->setCurrentIndex(2);
-        tabWidget->setCurrentIndex(5);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);

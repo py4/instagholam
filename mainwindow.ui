@@ -231,7 +231,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -281,7 +281,7 @@
          <string>Share!</string>
         </property>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>190</x>
@@ -303,7 +303,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>190</x>
@@ -325,7 +325,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>180</x>
@@ -352,16 +352,15 @@
        <attribute name="title">
         <string>Profile</string>
        </attribute>
-       <widget class="QWidget" name="gridLayoutWidget">
+       <widget class="QTableWidget" name="profile_table">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>791</width>
+          <width>801</width>
           <height>421</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="gridLayout"/>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_3">
@@ -383,8 +382,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>791</width>
-          <height>411</height>
+          <width>851</width>
+          <height>611</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="people_layout"/>

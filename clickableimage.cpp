@@ -11,13 +11,13 @@ ClickableImage::ClickableImage(int id, QWidget *parent) : QLabel(parent)
 
 void ClickableImage::mousePressEvent(QMouseEvent *eve )
 {
-	// if ( eve->button() == Qt::LeftButton )
- //    	emit leftButtonPressed(this);
-	// else if ( eve->button() == Qt::RightButton )
-	// 	emit rightButtonPressed(this);
-	// else if ( eve->button() == Qt::MidButton )
-	// 	emit middleButtonPressed(this);	
-	// /cout << "photo id:  " << id << endl;
+     if ( eve->button() == Qt::LeftButton )
+        emit leftButtonPressed(this);
+     else if ( eve->button() == Qt::RightButton )
+        emit rightButtonPressed(this);
+     else if ( eve->button() == Qt::MidButton )
+        emit middleButtonPressed(this);
+     cout << "photo id:  " << id << endl;
 }
 
 void ClickableImage::mouseReleaseEvent(QMouseEvent *eve )

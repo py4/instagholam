@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <qpixmap.h>
 #include <QVBoxLayout>
+#include <QTableWidget>
 #include "clickableimage.h"
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
@@ -75,7 +76,10 @@ void MainWindow::render_share()
 
 void MainWindow::render_profile()
 {
-    if ( ui->gridLayout != NULL )
+    //ui->profile_table->clearContents();
+    //ui->profile_table->clear();
+
+    /*if ( ui->gridLayout != NULL )
     {
         QLayoutItem* item;
         while ( ( item = ui->gridLayout->takeAt( 0 ) ) != NULL )
@@ -84,12 +88,106 @@ void MainWindow::render_profile()
             delete item;
         }
         delete ui->gridLayout;
-    }
+    }*/
+    /*if (ui->profile_layout != NULL )
+        {
+            QLayoutItem* item;
+            while ( ( item = ui->profile_layout->takeAt( 0 ) ) != NULL )
+            {
+                delete item->widget();
+                delete item;
+            }
+            delete ui->profile_layout;
+        }*/
     //delete ui->gridLayout;
-    ui->gridLayout = new QGridLayout(ui->profile_tab);
+    //ui->profile_layout = new QVBoxLayout(ui->profile_tab);
+    delete ui->profile_table;
+    ui->profile_table = new QTableWidget(ui->profile_tab);
+    ui->profile_table->show();
     vector <int> posts = api.get_my_latest_posts();
     try {
     cout << "post size:  " << posts.size() << endl;
+    ui->profile_table->setRowCount(posts.size());
+    ui->profile_table->setColumnCount(3);
+    QStringList m_TableHeader;
+    //m_TableHeader<<"Pic"<<"Title"<<"Created_at" << "Action";
+    //ui->profile_table->setHorizontalHeaderLabels(m_TableHeader);
+    ui->profile_table->resizeColumnsToContents();
+    ui->profile_table->resizeRowsToContents();
+    //ui->profile_table->horizontalHeader()->setStretchLastSection(true);
+    ui->profile_table->horizontalHeader()->hide();
+    ui->profile_table->verticalHeader()->hide();
+    ui->profile_table->resize(800,420);
+    //ui->profile_table->resizeRowsToContents();
+    //ui->profile_table->verticalHeader()->hide();
+    cout << "setting header resize mode..." << endl;
+    ui->profile_table->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    //ui->profile_table->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    ui->profile_table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    ui->profile_table->setShowGrid(false);
+    ui->profile_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->profile_table->setSelectionBehavior(QAbstractItemView::SelectRows);
+    //ui->profile_table->setSelectionBehavior(QAbstractItemView::NoSelection);
+    ui->profile_table->setSelectionMode(QAbstractItemView::NoSelection);
+    ui->profile_table->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    for(int i = 0; i < posts.size(); i++)
+    {
+        //for(int j = 0; j < 3; i++ and j++)
+        //{
+            if(i >= posts.size())
+                break;
+
+        map<string,string> post_info = api.get_post_info(posts[i]);
+        string title = post_info["title"];
+        string url = post_info["photo_path"];
+        string created_at = post_info["created_at"];
+
+        QPixmap * pic = new QPixmap(QString::fromStdString(url));
+        QPixmap* mypix = new QPixmap(pic->scaled(QSize(200,200),  Qt::KeepAspectRatio));
+        //QLabel* photo = new QLabel;
+        //photo->setPixmap(*mypix);
+        ClickableImage* photo = new ClickableImage(posts[i]);
+        photo->setPixmap(*mypix);
+
+
+        QPushButton* view = new QPushButton(QString::fromStdString("View"));
+        view->setFixedSize(50,50);
+
+        ui->profile_table->setItem(i / 3,i % 3,new QTableWidgetItem(""));
+        //ui->profile_table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(title)));
+        //ui->profile_table->setItem(i,2,new QTableWidgetItem(QString::fromStdString(created_at)));
+        //ui->profile_table->setItem(i,3,new QTableWidgetItem(""));
+
+        ui->profile_table->setCellWidget(i / 3,i % 3,photo);
+        //}
+        //ui->profile_table->setCellWidget(i,3,view);
+    }
+    /*for(int i = 0 ; i < posts.size(); i++)
+    {
+        map<string,string> post_info = api.get_post_info(posts[i]);
+        string title = post_info["title"];
+        string url = post_info["photo_path"];
+        string created_at = post_info["created_at"];
+
+        QHBoxLayout* layout = new QHBoxLayout;
+
+        QPixmap * pic = new QPixmap(QString::fromStdString(url));
+        QPixmap* mypix = new QPixmap(pic->scaled(QSize(100,100),  Qt::KeepAspectRatio));
+        QLabel* photo = new QLabel;
+        photo->setPixmap(*mypix);
+
+        layout->addWidget(photo);
+        QLabel* l_title = new QLabel(QString::fromStdString(title));
+        layout->addWidget(l_title);
+        QLabel* l_created_at = new QLabel(QString::fromStdString(created_at));
+        layout->addWidget(l_created_at);
+
+        QPushButton* show = new QPushButton(QString::fromStdString("Show"));
+        layout->addWidget(show);
+
+        ui->profile_layout->addLayout(layout);
+        //ui->profile_layout->addWidget(layout);
+    }*/
     /*for(int i = 0; i < posts.size(); i++)
     {
         XML* xml = api.get_post(posts[i]);
