@@ -68,27 +68,37 @@ string Api::get_username()
 
 vector<int> Api::get_latest_posts()
 {
+	if(current_user == NULL)
+		throw NotLoggedIn();
 	vector<int> result;
-	vector <Post*> all;
+	vector <Post*> all = current_user->get_latest_posts_full();
 	for(int i = 0; i < current_user->friends.size(); i++)
 	{
 		vector <int> posts = current_user->friends[i]->get_latest_posts();
 		for(int j = 0; j < posts.size(); j++)
 		{
 			Post* post = DB::instance()->get_post(posts[j]);
+			if(post == NULL)
+				cerr << "bug!" << endl;
 			all.push_back(post);
 		}
 	}
 	sort(all.begin(), all.end(), compare_post_time);
-
 	for(int i = 0; i < 5; i++)
 	{
+		if(i >= all.size())
+			break;
 		if(all.size() - 1 - i >= 0)
-			result.push_back(all[i]->id);
+			result.push_back(all[all.size() - 1 - i]->id);
 		else
 			break;
 	}
 	return result;
+}
+
+vector<int> Api::show_timelog()
+{
+	return get_latest_posts();
 }
 
 bool Api::compare_time(time_t& first, time_t& second)

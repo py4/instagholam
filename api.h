@@ -53,6 +53,7 @@ public:
 	std::vector<int> get_friend_latest_liked_posts(std::string);
 	std::vector<int> get_friend_latest_posts(std::string);
 	std::vector<string> get_friend_friends(std::string);
+	std::vector<int> show_timelog();
 
 	 private:
 User* current_user;

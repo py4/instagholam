@@ -21,6 +21,7 @@ private:
 	void show_my_profile();
 	void show_friend_profile(std::string);
 	void show_users();
+	void show_timelog();
 	Api* api;
 };
 

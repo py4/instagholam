@@ -50,6 +50,14 @@ vector <int> User::get_latest_posts()
 	return result;
 }
 
+vector <Post*> User::get_latest_posts_full()
+{
+	vector <Post*> result;
+	for(int i = posts.size() - 1; i >= 0; i--)
+		result.push_back(posts[i]);
+	return result;
+}
+
 vector <int> User::get_latest_liked_posts()
 {
 	vector <int> result;

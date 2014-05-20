@@ -67,6 +67,8 @@ void CLI::start()
 				api->like(to_int(params["id"]));
 			else if(params["command"] == "unlike_post")
 				api->unlike(to_int(params["id"]));
+			else if(params["command"] == "show_timelog")
+				show_timelog();
 			else if(params["command"] == "quit")
 				break;
 			else {
@@ -83,6 +85,7 @@ void CLI::start()
 void CLI::show_post(int id)
 {
 	map<string,string> post_info = api->get_post_info(id);
+	cout << "username:  " << post_info["username"] << endl;
 	cout << "title:  " << post_info["title"] << endl;
 	cout << "photo_path:  " << post_info["photo_path"] << endl;
 	cout << "created_at:  " << post_info["created_at"] << endl;
@@ -169,4 +172,11 @@ void CLI::show_users()
 	vector<string> users = api->get_users();
 	for(int i = 0; i < users.size(); i++)
 		cout << users[i] << endl;
+}
+
+void CLI::show_timelog()
+{
+	vector<int> posts = api->get_latest_posts();
+	for(int i = 0; i < posts.size(); i++)
+		show_post(posts[i]);
 }
