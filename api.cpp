@@ -486,6 +486,20 @@ void Api::like(int id)
 	cout << "success fully liked" << endl;
 }
 
+bool Api::is_likable(int id)
+{
+	Post* post = DB::instance()->get_post(id);
+	if(current_user == NULL)
+		return false;
+	if(post == NULL)
+		return false;
+	if(!current_user->able_to_see(post))
+		return false;
+	if(current_user->has_liked(post))
+		return false;
+	return true;
+}
+
 void Api::unlike(int id)
 {
 	if(current_user == NULL)

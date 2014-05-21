@@ -18,7 +18,7 @@ public:
     explicit PostWindow(int,std::string,std::string,std::string,std::string,QWidget *parent = 0);
     ~PostWindow();
     void set_hashtags(std::vector<std::string>&);
-    
+
 private:
     Ui::PostWindow *ui;
     int id;
@@ -26,10 +26,13 @@ private:
     std::string username;
     std::string created_at;
     std::string url;
-
-private slots:
     void show_comments();
+    void show_favorites();
+private slots:
+
     void on_show_comment_button_clicked();
+    void on_show_favorites_button_clicked();
+    void on_liked_button_clicked();
 };
 
 #endif // POSTWINDOW_H

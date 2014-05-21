@@ -38,6 +38,7 @@ public:
 	std::string get_user_avatar(std::string);
 	void like(int);
 	void unlike(int);
+	bool is_likable(int);
 	std::string get_avatar_path();
 	std::string get_username();
 	std::string get_post(int id);

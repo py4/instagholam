@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'postwindow.ui'
 **
-** Created: Wed May 21 01:48:31 2014
+** Created: Wed May 21 16:58:59 2014
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -37,6 +37,7 @@ public:
     QHBoxLayout *hashtags;
     QPushButton *show_comment_button;
     QPushButton *show_favorites_button;
+    QPushButton *liked_button;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -49,19 +50,19 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         photo = new QLabel(centralwidget);
         photo->setObjectName(QString::fromUtf8("photo"));
-        photo->setGeometry(QRect(220, 70, 321, 241));
+        photo->setGeometry(QRect(190, 30, 321, 241));
         title = new QLabel(centralwidget);
         title->setObjectName(QString::fromUtf8("title"));
-        title->setGeometry(QRect(330, 40, 67, 17));
+        title->setGeometry(QRect(330, 10, 67, 17));
         username = new QLabel(centralwidget);
         username->setObjectName(QString::fromUtf8("username"));
-        username->setGeometry(QRect(340, 330, 91, 17));
+        username->setGeometry(QRect(300, 280, 91, 17));
         created_at = new QLabel(centralwidget);
         created_at->setObjectName(QString::fromUtf8("created_at"));
-        created_at->setGeometry(QRect(340, 350, 67, 17));
+        created_at->setGeometry(QRect(310, 300, 67, 17));
         horizontalLayoutWidget = new QWidget(centralwidget);
         horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(20, 420, 751, 31));
+        horizontalLayoutWidget->setGeometry(QRect(20, 340, 751, 31));
         hashtags = new QHBoxLayout(horizontalLayoutWidget);
         hashtags->setObjectName(QString::fromUtf8("hashtags"));
         hashtags->setContentsMargins(0, 0, 0, 0);
@@ -71,6 +72,9 @@ public:
         show_favorites_button = new QPushButton(centralwidget);
         show_favorites_button->setObjectName(QString::fromUtf8("show_favorites_button"));
         show_favorites_button->setGeometry(QRect(380, 480, 121, 41));
+        liked_button = new QPushButton(centralwidget);
+        liked_button->setObjectName(QString::fromUtf8("liked_button"));
+        liked_button->setGeometry(QRect(310, 410, 99, 27));
         PostWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(PostWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -94,6 +98,7 @@ public:
         created_at->setText(QApplication::translate("PostWindow", "created_at", 0, QApplication::UnicodeUTF8));
         show_comment_button->setText(QApplication::translate("PostWindow", "Comments", 0, QApplication::UnicodeUTF8));
         show_favorites_button->setText(QApplication::translate("PostWindow", "Favorites", 0, QApplication::UnicodeUTF8));
+        liked_button->setText(QApplication::translate("PostWindow", "Like", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

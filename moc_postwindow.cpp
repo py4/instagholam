@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'postwindow.h'
 **
-** Created: Wed May 21 02:07:11 2014
+** Created: Wed May 21 16:59:15 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_PostWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -32,14 +32,16 @@ static const uint qt_meta_data_PostWindow[] = {
 
  // slots: signature, parameters, type, tag, flags
       12,   11,   11,   11, 0x08,
-      28,   11,   11,   11, 0x08,
+      45,   11,   11,   11, 0x08,
+      80,   11,   11,   11, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_PostWindow[] = {
-    "PostWindow\0\0show_comments()\0"
-    "on_show_comment_button_clicked()\0"
+    "PostWindow\0\0on_show_comment_button_clicked()\0"
+    "on_show_favorites_button_clicked()\0"
+    "on_liked_button_clicked()\0"
 };
 
 void PostWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -48,8 +50,9 @@ void PostWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         Q_ASSERT(staticMetaObject.cast(_o));
         PostWindow *_t = static_cast<PostWindow *>(_o);
         switch (_id) {
-        case 0: _t->show_comments(); break;
-        case 1: _t->on_show_comment_button_clicked(); break;
+        case 0: _t->on_show_comment_button_clicked(); break;
+        case 1: _t->on_show_favorites_button_clicked(); break;
+        case 2: _t->on_liked_button_clicked(); break;
         default: ;
         }
     }
@@ -88,9 +91,9 @@ int PostWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 3;
     }
     return _id;
 }
