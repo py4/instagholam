@@ -5,12 +5,24 @@
 #include <string>
 #include "friend_request.h"
 #include "user_report.h"
+#include <iostream>
 using namespace std;
 
 DB* DB::db = NULL;
 
 DB::DB()
 {
+}
+
+void DB::free_db()
+{
+	cout << "freeing database" << endl;
+	for(int i = 0; i < users.size(); i++)
+		delete users[i];
+	for(int i = 0; i < hashtags.size(); i++)
+		delete hashtags[i];
+	for(int i = 0; i < reports.size(); i++)
+		delete reports[i];
 }
 
 DB* DB::instance()

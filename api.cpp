@@ -137,7 +137,7 @@ void Api::post_photo(string title,string CDN_path, string hashtags, bool publici
 	bool pub = publicity;
 	if(current_user->is_admin())
 		pub = true;
-	
+	cout << "publicity:  " << pub << endl;
 	Post* post = current_user->post_photo(title,CDN_path,hashtags,pub);
 	DB::instance()->posts.push_back(post);
 	cout << "photo posted successfully" << endl;

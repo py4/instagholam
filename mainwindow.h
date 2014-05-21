@@ -44,6 +44,8 @@ private slots:
     void approve_request();
     void disapprove_request();
     
+    void on_refresh_button_clicked();
+
 private:
     void set_status(std::string);
     void render_login();

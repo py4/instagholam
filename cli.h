@@ -11,6 +11,7 @@ class CLI
 
 public:
 	CLI();
+	~CLI();
 	void start();
 private:
 	std::string command;

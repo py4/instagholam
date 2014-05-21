@@ -38,7 +38,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    cout << "main window freeing db" << endl;
     delete ui;
+    DB::instance()->free_db();
 }
 
 void MainWindow::on_sign_in_clicked()
@@ -67,6 +69,8 @@ void MainWindow::set_status(string status)
 void MainWindow::render_login()
 {
     ui->stackedWidget->setCurrentWidget(ui->login_form);
+    ui->username->clear();
+    ui->password->clear();
 }
 
 void MainWindow::render_signup()
@@ -87,6 +91,17 @@ void MainWindow::render_home()
     ui->avatar->setPixmap(*mypix);
     ui->stackedWidget->setCurrentWidget(ui->home_page);
     ui->tabWidget->setCurrentWidget(ui->home_tab);
+
+    delete ui->home_table;
+    vector<int> posts = Api::instance()->get_latest_posts();
+    ui->home_table = new ProfileTable(posts.size(), 3, ui->home_tab);
+    ui->home_table->show();
+    try {
+        ProfileTable* p = dynamic_cast<ProfileTable*>(ui->home_table);
+        p->add_posts(posts);
+    } catch (Exception e) {
+        set_status(e.message);
+    }
     refresh["home_tab"] = false;
     //ui->name_under_avatar->setText(QString::fromStdString(Api::instance()->get_username()));
 }
@@ -348,4 +363,16 @@ void MainWindow::on_actionLogout_triggered()
     Api::instance()->logout();
     render_login();
     ui->menubar->clear();
+}
+
+void MainWindow::on_refresh_button_clicked()
+{
+    refresh["home_tab"] = true;
+    refresh["share_tab"] = true;
+    refresh["profile_tab"] = true;
+    refresh["friends_tab"] = true;
+    refresh["requests_tab"] = true;
+    refresh["people_tab"] = true;
+    refresh["explore_tab"] = true;
+    render_home();
 }

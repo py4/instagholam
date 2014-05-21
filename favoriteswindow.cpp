@@ -14,9 +14,10 @@ favoriteswindow::favoriteswindow(vector<string>& usernames, QWidget *parent) :
 {
     ui->setupUi(this);
      QWidget *window = new QWidget();
-     ui->favorited_by_table = new UsersTable(usernames);
-     //window->setLayout(new UsersLayout(usernames));
-     //setCentralWidget(window);
+     ui->favorited_by_table = new UsersTable(usernames,this);
+     ui->favorited_by_table->show();
+     UsersTable* p =dynamic_cast<UsersTable*>(ui->favorited_by_table); 
+     p->add_users(usernames);
 }
 
 void favoriteswindow::add_item(string url, string username)

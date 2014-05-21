@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>791</width>
-      <height>471</height>
+      <height>531</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -231,12 +231,35 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="home_tab">
        <attribute name="title">
         <string>Home</string>
        </attribute>
+       <widget class="QTableWidget" name="home_table">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>791</width>
+          <height>441</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="refresh_button">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>450</y>
+          <width>99</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Refresh</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="share_tab">
        <attribute name="title">

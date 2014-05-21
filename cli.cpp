@@ -11,6 +11,11 @@ CLI::CLI()
 	//api = new Api;
 }
 
+CLI::~CLI()
+{
+	DB::instance()->free_db();
+}
+
 void CLI::start()
 {
 	string command_name;

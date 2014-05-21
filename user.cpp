@@ -29,6 +29,7 @@ User::~User()
 		delete comments[i];
 	for(int i = 0; i < send_requests.size(); i++)
 		delete send_requests[i];
+	delete avatar;
 }
 
 bool User::is_admin()
@@ -55,9 +56,9 @@ vector <int> User::get_public_posts()
 	vector<int> result;
 	for(int i = posts.size() - 1; i >= 0; i--)
 		if(posts[i]->is_pub())
-			continue;
-		else
 			result.push_back(posts[i]->get_id());
+		else
+			continue;
 	return result;
 }
 

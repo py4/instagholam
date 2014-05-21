@@ -16,6 +16,7 @@ public:
 	User* get_user(std::string);
 	static DB* instance();
 	HashTag* find_or_create_hashtag(std::string);
+	void free_db();
 private:
 	Post* get_post(int);
 	bool is_reported(User*);
@@ -25,8 +26,8 @@ private:
 	std::vector <UserReport*> reports;
 
 	DB();
-	DB(DB const&);
 	~DB();
+	DB(DB const&);
 	void operator=(DB const&);
 	static DB* db;
 };
