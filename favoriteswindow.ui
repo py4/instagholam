@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
+    <width>755</width>
     <height>500</height>
    </rect>
   </property>
@@ -14,16 +14,15 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="horizontalLayoutWidget">
+   <widget class="QTableWidget" name="favorited_by_table">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>301</width>
+      <width>761</width>
       <height>451</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="favorites_layout"/>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -31,7 +30,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>300</width>
+     <width>755</width>
      <height>25</height>
     </rect>
    </property>

@@ -23,7 +23,9 @@ public:
 
 	void request_to_friend(std::string);
 	void approve_friend_request(int);
+	void approve_friend_request(std::string);
 	void disapprove_friend_request(int);
+	void disapprove_friend_request(std::string);
 	void remove_friend(std::string);
 	void report(std::string);
 	void delete_user(std::string);
@@ -43,7 +45,8 @@ public:
 	std::string get_username();
 	std::string get_post(int id);
 	bool is_friend_with(std::string);
-
+	bool has_requested_to(std::string);
+	bool has_requested_to_me(std::string);
 	//SETTER
 	void add_comment(int,std::string);
 	void remove_comment(int);
@@ -58,6 +61,7 @@ public:
 	map<int,string> get_received_requests();
 	std::vector<int> get_friend_latest_liked_posts(std::string);
 	std::vector<int> get_friend_latest_posts(std::string);
+	std::vector<int> get_user_public_posts(std::string);
 	std::vector<string> get_friend_friends(std::string);
 	std::vector<int> show_timelog();
 

@@ -50,6 +50,17 @@ vector <int> User::get_latest_posts()
 	return result;
 }
 
+vector <int> User::get_public_posts()
+{
+	vector<int> result;
+	for(int i = posts.size() - 1; i >= 0; i--)
+		if(posts[i]->is_pub())
+			continue;
+		else
+			result.push_back(posts[i]->get_id());
+	return result;
+}
+
 vector <Post*> User::get_latest_posts_full()
 {
 	vector <Post*> result;

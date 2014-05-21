@@ -60,12 +60,12 @@ void PostWindow::show_comments()
 void PostWindow::show_favorites()
 {
     vector<string> usernames = Api::instance()->get_post_liked_by(id);
-    favoriteswindow* favorites_window = new favoriteswindow;
-    for(int i = 0; i < usernames.size(); i++)
+    favoriteswindow* favorites_window = new favoriteswindow(usernames);
+    /*for(int i = 0; i < usernames.size(); i++)
     {
         string url = Api::instance()->get_user_avatar(usernames[i]);
         favorites_window->add_item(url,usernames[i]);
-    }
+    }*/
     favorites_window->show();
 }
 

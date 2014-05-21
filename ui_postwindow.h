@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'postwindow.ui'
 **
-** Created: Wed May 21 16:58:59 2014
+** Created: Wed May 21 20:11:37 2014
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

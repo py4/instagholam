@@ -28,6 +28,7 @@ private:
 	Post* post_photo(std::string,std::string,std::string, bool = false);
 	std::vector<int> get_latest_posts();
 	std::vector<int> get_latest_liked_posts();
+	std::vector<int> get_public_posts();
 	std::vector<Post*> get_latest_posts_full();
 	std::vector<std::string> get_friends();
 	bool has_requested_to(User*);

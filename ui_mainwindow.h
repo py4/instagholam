@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed May 21 16:37:51 2014
+** Created: Wed May 21 20:15:23 2014
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -26,7 +26,6 @@
 #include <QtGui/QStatusBar>
 #include <QtGui/QTabWidget>
 #include <QtGui/QTableWidget>
-#include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -34,6 +33,7 @@ QT_BEGIN_NAMESPACE
 class Ui_MainWindow
 {
 public:
+    QAction *actionLogout;
     QWidget *centralwidget;
     QStackedWidget *stackedWidget;
     QWidget *login_form;
@@ -58,7 +58,7 @@ public:
     QPushButton *register_button;
     QWidget *home_page;
     QTabWidget *tabWidget;
-    QWidget *tab;
+    QWidget *home_tab;
     QWidget *share_tab;
     QLabel *label_7;
     QCheckBox *share_pub_checkbox;
@@ -77,12 +77,12 @@ public:
     QLineEdit *share_file_name;
     QWidget *profile_tab;
     QTableWidget *profile_table;
-    QWidget *tab_3;
-    QWidget *tab_4;
+    QWidget *friends_tab;
+    QTableWidget *friends_table;
+    QWidget *requests_tab;
     QWidget *people_tab;
-    QWidget *verticalLayoutWidget;
-    QVBoxLayout *people_layout;
-    QWidget *tab_6;
+    QTableWidget *people_table;
+    QWidget *explore_tab;
     QLabel *avatar;
     QMenuBar *menubar;
     QStatusBar *statusbar;
@@ -92,6 +92,8 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(800, 600);
+        actionLogout = new QAction(MainWindow);
+        actionLogout->setObjectName(QString::fromUtf8("actionLogout"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         stackedWidget = new QStackedWidget(centralwidget);
@@ -166,9 +168,9 @@ public:
         tabWidget = new QTabWidget(home_page);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
         tabWidget->setGeometry(QRect(0, 0, 801, 551));
-        tab = new QWidget();
-        tab->setObjectName(QString::fromUtf8("tab"));
-        tabWidget->addTab(tab, QString());
+        home_tab = new QWidget();
+        home_tab->setObjectName(QString::fromUtf8("home_tab"));
+        tabWidget->addTab(home_tab, QString());
         share_tab = new QWidget();
         share_tab->setObjectName(QString::fromUtf8("share_tab"));
         label_7 = new QLabel(share_tab);
@@ -235,24 +237,24 @@ public:
         profile_table->setObjectName(QString::fromUtf8("profile_table"));
         profile_table->setGeometry(QRect(0, 0, 801, 421));
         tabWidget->addTab(profile_tab, QString());
-        tab_3 = new QWidget();
-        tab_3->setObjectName(QString::fromUtf8("tab_3"));
-        tabWidget->addTab(tab_3, QString());
-        tab_4 = new QWidget();
-        tab_4->setObjectName(QString::fromUtf8("tab_4"));
-        tabWidget->addTab(tab_4, QString());
+        friends_tab = new QWidget();
+        friends_tab->setObjectName(QString::fromUtf8("friends_tab"));
+        friends_table = new QTableWidget(friends_tab);
+        friends_table->setObjectName(QString::fromUtf8("friends_table"));
+        friends_table->setGeometry(QRect(0, 0, 801, 461));
+        tabWidget->addTab(friends_tab, QString());
+        requests_tab = new QWidget();
+        requests_tab->setObjectName(QString::fromUtf8("requests_tab"));
+        tabWidget->addTab(requests_tab, QString());
         people_tab = new QWidget();
         people_tab->setObjectName(QString::fromUtf8("people_tab"));
-        verticalLayoutWidget = new QWidget(people_tab);
-        verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(0, 0, 851, 611));
-        people_layout = new QVBoxLayout(verticalLayoutWidget);
-        people_layout->setObjectName(QString::fromUtf8("people_layout"));
-        people_layout->setContentsMargins(0, 0, 0, 0);
+        people_table = new QTableWidget(people_tab);
+        people_table->setObjectName(QString::fromUtf8("people_table"));
+        people_table->setGeometry(QRect(0, 0, 791, 451));
         tabWidget->addTab(people_tab, QString());
-        tab_6 = new QWidget();
-        tab_6->setObjectName(QString::fromUtf8("tab_6"));
-        tabWidget->addTab(tab_6, QString());
+        explore_tab = new QWidget();
+        explore_tab->setObjectName(QString::fromUtf8("explore_tab"));
+        tabWidget->addTab(explore_tab, QString());
         avatar = new QLabel(home_page);
         avatar->setObjectName(QString::fromUtf8("avatar"));
         avatar->setGeometry(QRect(720, 0, 71, 71));
@@ -269,7 +271,7 @@ public:
         retranslateUi(MainWindow);
 
         stackedWidget->setCurrentIndex(2);
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -278,6 +280,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+        actionLogout->setText(QApplication::translate("MainWindow", "Logout", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("MainWindow", "Username", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("MainWindow", "Password", 0, QApplication::UnicodeUTF8));
         sign_in->setText(QApplication::translate("MainWindow", "Sign in", 0, QApplication::UnicodeUTF8));
@@ -288,7 +291,7 @@ public:
         label_5->setText(QApplication::translate("MainWindow", "Username", 0, QApplication::UnicodeUTF8));
         label_6->setText(QApplication::translate("MainWindow", "Password", 0, QApplication::UnicodeUTF8));
         register_button->setText(QApplication::translate("MainWindow", "Register me!", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Home", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(home_tab), QApplication::translate("MainWindow", "Home", 0, QApplication::UnicodeUTF8));
         label_7->setText(QApplication::translate("MainWindow", "Share your moments with your friends! :)", 0, QApplication::UnicodeUTF8));
         share_pub_checkbox->setText(QApplication::translate("MainWindow", "Public?", 0, QApplication::UnicodeUTF8));
         share_button->setText(QApplication::translate("MainWindow", "Share!", 0, QApplication::UnicodeUTF8));
@@ -297,10 +300,10 @@ public:
         share_select_file->setText(QApplication::translate("MainWindow", "Select file", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(share_tab), QApplication::translate("MainWindow", "Share", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(profile_tab), QApplication::translate("MainWindow", "Profile", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Friends", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("MainWindow", "Requests", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(friends_tab), QApplication::translate("MainWindow", "Friends", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(requests_tab), QApplication::translate("MainWindow", "Requests", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(people_tab), QApplication::translate("MainWindow", "People", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_6), QApplication::translate("MainWindow", "Explore", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(explore_tab), QApplication::translate("MainWindow", "Explore", 0, QApplication::UnicodeUTF8));
         avatar->setText(QApplication::translate("MainWindow", "TextLabel", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 

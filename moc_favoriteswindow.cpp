@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'favoriteswindow.h'
 **
-** Created: Wed May 21 16:52:58 2014
+** Created: Wed May 21 20:17:04 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,25 +23,33 @@ static const uint qt_meta_data_favoriteswindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       0,    0, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
        0,       // signalCount
 
+ // slots: signature, parameters, type, tag, flags
+      17,   16,   16,   16, 0x08,
+
        0        // eod
 };
 
 static const char qt_meta_stringdata_favoriteswindow[] = {
-    "favoriteswindow\0"
+    "favoriteswindow\0\0view_friend()\0"
 };
 
 void favoriteswindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    Q_UNUSED(_o);
-    Q_UNUSED(_id);
-    Q_UNUSED(_c);
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        Q_ASSERT(staticMetaObject.cast(_o));
+        favoriteswindow *_t = static_cast<favoriteswindow *>(_o);
+        switch (_id) {
+        case 0: _t->view_friend(); break;
+        default: ;
+        }
+    }
     Q_UNUSED(_a);
 }
 
@@ -76,6 +84,11 @@ int favoriteswindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     _id = QMainWindow::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 1)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 1;
+    }
     return _id;
 }
 QT_END_MOC_NAMESPACE

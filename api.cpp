@@ -162,6 +162,14 @@ vector<int> Api::get_friend_latest_posts(string username)
 	return user->get_latest_posts();
 }
 
+vector <int> Api::get_user_public_posts(string username)
+{
+	User* user = DB::instance()->get_user(username);
+	if(user == NULL)
+		throw UserNotFound();
+	return user->get_public_posts();
+}
+
 vector<int> Api::get_my_latest_liked_posts()
 {
 	if(current_user == NULL)
@@ -386,7 +394,6 @@ void Api::request_to_friend(string username)
 		throw HeRequested();
 	if(current_user->is_friend_with(user))
 		throw AlreadyFriends();
-
 	FriendRequest* request = new FriendRequest(current_user,user);
 	current_user->send_requests.push_back(request);
 	user->received_requests.push_back(request);
@@ -409,6 +416,24 @@ void Api::approve_friend_request(int id)
 	throw FriendRequestNotFound();
 }
 
+void Api::approve_friend_request(string username)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	for(int i = 0; i < current_user->received_requests.size(); i++)
+	{
+		if(current_user->received_requests[i]->from->username == username)
+		{
+			User* user = current_user->received_requests[i]->from;
+			user->friend_request_approved(current_user->received_requests[i]->id);
+			current_user->approve_friend_request(current_user->received_requests[i]->id);
+			cout << "friend request successfully approved" << endl;
+			return;
+		}
+	}
+	throw FriendRequestNotFound();
+}
+
 void Api::disapprove_friend_request(int id)
 {
 	if(current_user == NULL)
@@ -420,6 +445,24 @@ void Api::disapprove_friend_request(int id)
 			User* user = current_user->received_requests[i]->from;
 			user->friend_request_disapproved(id);
 			current_user->disapprove_friend_request(id);
+			cout << "disapproved successfully" << endl;
+			return;
+		}
+	}
+	throw FriendRequestNotFound();
+}
+
+void Api::disapprove_friend_request(string username)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	for(int i = 0; i < current_user->received_requests.size(); i++)
+	{
+		if(current_user->received_requests[i]->from->username == username)
+		{
+			User* user = current_user->received_requests[i]->from;
+			user->friend_request_disapproved(current_user->received_requests[i]->id);
+			current_user->disapprove_friend_request(current_user->received_requests[i]->id);
 			cout << "disapproved successfully" << endl;
 			return;
 		}
@@ -571,6 +614,26 @@ void Api::remove_comment(int comment_id)
 	p_comments.erase(std::remove(p_comments.begin(), p_comments.end(), comment), p_comments.end());
 	delete comment;
 	cout << "removed successfully" << endl;
+}
+
+bool Api::has_requested_to(string username)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	User* user = DB::instance()->get_user(username);
+	if(user == NULL)
+		throw UserNotFound();
+	return current_user->has_requested_to(user);
+}
+
+bool Api::has_requested_to_me(string username)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	User* user = DB::instance()->get_user(username);
+	if(user == NULL)
+		throw UserNotFound();
+	return user->has_requested_to(current_user);
 }
 
 

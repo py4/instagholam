@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Wed May 21 16:59:15 2014
+** Created: Wed May 21 22:11:37 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -40,6 +40,7 @@ static const uint qt_meta_data_MainWindow[] = {
      176,  170,   11,   11, 0x08,
      209,   11,   11,   11, 0x08,
      229,   11,   11,   11, 0x08,
+     241,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -53,6 +54,7 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "on_share_select_file_clicked()\0index\0"
     "on_tabWidget_currentChanged(int)\0"
     "show_clicked_post()\0show_post()\0"
+    "on_actionLogout_triggered()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -70,6 +72,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 6: _t->on_tabWidget_currentChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 7: _t->show_clicked_post(); break;
         case 8: _t->show_post(); break;
+        case 9: _t->on_actionLogout_triggered(); break;
         default: ;
         }
     }
@@ -107,9 +110,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 10;
     }
     return _id;
 }

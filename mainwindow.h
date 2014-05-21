@@ -6,6 +6,7 @@
 #include <QString>
 #include <string>
 #include "parser/XML.h"
+#include <map>
 namespace Ui {
 class MainWindow;
 }
@@ -38,6 +39,8 @@ private slots:
 
     void show_post();
 
+    void on_actionLogout_triggered();
+
 private:
     void set_status(std::string);
     void render_login();
@@ -46,7 +49,9 @@ private:
     void render_share();
     void render_profile();
     void render_people();
+    void render_friends();
     Ui::MainWindow *ui;
+    std::map<std::string,bool> refresh;
     //Api api;
 };
 

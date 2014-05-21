@@ -8,6 +8,9 @@
 #include <QTableWidget>
 #include "clickableimage.h"
 #include "postwindow.h"
+#include "profile_table.h"
+#include "users_table.h"
+#include <QLayoutItem>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -20,6 +23,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->share_file_name->setReadOnly(true);
     ui->avatar_file->setReadOnly(true);
     render_login();
+
+    refresh["home_tab"] = true;
+    refresh["share_tab"] = true;
+    refresh["profile_tab"] = true;
+    refresh["friends_tab"] = true;
+    refresh["requests_tab"] = true;
+    refresh["people_tab"] = true;
+    refresh["explore_tab"] = true;
+
+
 }
 
 MainWindow::~MainWindow()
@@ -34,6 +47,11 @@ void MainWindow::on_sign_in_clicked()
     try {
         Api::instance()->login(username,password);
         render_home();
+        QMenu* menu = new QMenu("Actions");
+        QAction* logout_action = new QAction("logout",menu);
+        menu->addAction(logout_action);
+        connect(logout_action,SIGNAL(triggered()),this,SLOT(on_actionLogout_triggered()));
+        ui->menubar->addMenu(menu);
     } catch (Exception e)
     {
         set_status(e.message);
@@ -56,6 +74,10 @@ void MainWindow::render_signup()
     ui->register_username->setValidator(new QRegExpValidator(rx, this ));
     ui->register_password->setEchoMode(QLineEdit::Password);
     ui->stackedWidget->setCurrentWidget(ui->register_form);
+    ui->register_full_name->clear();
+    ui->register_username->clear();
+    ui->register_password->clear();
+    ui->avatar_file->clear();
 }
 
 void MainWindow::render_home()
@@ -63,7 +85,8 @@ void MainWindow::render_home()
     QPixmap * mypix = new QPixmap(QString::fromStdString(Api::instance()->get_avatar_path()));
     ui->avatar->setPixmap(*mypix);
     ui->stackedWidget->setCurrentWidget(ui->home_page);
-    ui->tabWidget->setCurrentWidget(ui->tab);
+    ui->tabWidget->setCurrentWidget(ui->home_tab);
+    refresh["home_tab"] = false;
     //ui->name_under_avatar->setText(QString::fromStdString(Api::instance()->get_username()));
 }
 
@@ -77,147 +100,54 @@ void MainWindow::render_share()
 
 void MainWindow::render_profile()
 {
-    //ui->profile_table->clearContents();
-    //ui->profile_table->clear();
-
-    /*if ( ui->gridLayout != NULL )
-    {
-        QLayoutItem* item;
-        while ( ( item = ui->gridLayout->takeAt( 0 ) ) != NULL )
-        {
-            delete item->widget();
-            delete item;
-        }
-        delete ui->gridLayout;
-    }*/
-    /*if (ui->profile_layout != NULL )
-        {
-            QLayoutItem* item;
-            while ( ( item = ui->profile_layout->takeAt( 0 ) ) != NULL )
-            {
-                delete item->widget();
-                delete item;
-            }
-            delete ui->profile_layout;
-        }*/
-    //delete ui->gridLayout;
-    //ui->profile_layout = new QVBoxLayout(ui->profile_tab);
     delete ui->profile_table;
-    ui->profile_table = new QTableWidget(ui->profile_tab);
-    ui->profile_table->show();
     vector <int> posts = Api::instance()->get_my_latest_posts();
+    ui->profile_table = new ProfileTable(posts.size(), 3, ui->profile_tab);
+    ui->profile_table->show();
     try {
-    cout << "post size:  " << posts.size() << endl;
-    ui->profile_table->setRowCount(posts.size());
-    ui->profile_table->setColumnCount(3);
-    QStringList m_TableHeader;
-    //m_TableHeader<<"Pic"<<"Title"<<"Created_at" << "Action";
-    //ui->profile_table->setHorizontalHeaderLabels(m_TableHeader);
-    ui->profile_table->resizeColumnsToContents();
-    ui->profile_table->resizeRowsToContents();
-    //ui->profile_table->horizontalHeader()->setStretchLastSection(true);
-    ui->profile_table->horizontalHeader()->hide();
-    ui->profile_table->verticalHeader()->hide();
-    ui->profile_table->resize(800,420);
-    //ui->profile_table->resizeRowsToContents();
-    //ui->profile_table->verticalHeader()->hide();
-    cout << "setting header resize mode..." << endl;
-    ui->profile_table->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    //ui->profile_table->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    ui->profile_table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-    ui->profile_table->setShowGrid(false);
-    ui->profile_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->profile_table->setSelectionBehavior(QAbstractItemView::SelectRows);
-    //ui->profile_table->setSelectionBehavior(QAbstractItemView::NoSelection);
-    ui->profile_table->setSelectionMode(QAbstractItemView::NoSelection);
-    ui->profile_table->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    for(int i = 0; i < posts.size(); i++)
-    {
-        //for(int j = 0; j < 3; i++ and j++)
-        //{
-            if(i >= posts.size())
-                break;
-
-        map<string,string> post_info = Api::instance()->get_post_info(posts[i]);
-        string title = post_info["title"];
-        string url = post_info["photo_path"];
-        string created_at = post_info["created_at"];
-
-        QPixmap * pic = new QPixmap(QString::fromStdString(url));
-        QPixmap* mypix = new QPixmap(pic->scaled(QSize(200,200),  Qt::KeepAspectRatio));
-        //QLabel* photo = new QLabel;
-        //photo->setPixmap(*mypix);
-        ClickableImage* photo = new ClickableImage(posts[i]);
-        photo->setPixmap(*mypix);
-
-        connect(photo,SIGNAL(leftButtonPressed(ClickableImage*)), this, SLOT(show_post()));
-
-
-        QPushButton* view = new QPushButton(QString::fromStdString("View"));
-        view->setFixedSize(50,50);
-
-        ui->profile_table->setItem(i / 3,i % 3,new QTableWidgetItem(""));
-        //ui->profile_table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(title)));
-        //ui->profile_table->setItem(i,2,new QTableWidgetItem(QString::fromStdString(created_at)));
-        //ui->profile_table->setItem(i,3,new QTableWidgetItem(""));
-
-        ui->profile_table->setCellWidget(i / 3,i % 3,photo);
-        //}
-        //ui->profile_table->setCellWidget(i,3,view);
-    }
-    /*for(int i = 0 ; i < posts.size(); i++)
-    {
-        map<string,string> post_info = Api::instance()->get_post_info(posts[i]);
-        string title = post_info["title"];
-        string url = post_info["photo_path"];
-        string created_at = post_info["created_at"];
-
-        QHBoxLayout* layout = new QHBoxLayout;
-
-        QPixmap * pic = new QPixmap(QString::fromStdString(url));
-        QPixmap* mypix = new QPixmap(pic->scaled(QSize(100,100),  Qt::KeepAspectRatio));
-        QLabel* photo = new QLabel;
-        photo->setPixmap(*mypix);
-
-        layout->addWidget(photo);
-        QLabel* l_title = new QLabel(QString::fromStdString(title));
-        layout->addWidget(l_title);
-        QLabel* l_created_at = new QLabel(QString::fromStdString(created_at));
-        layout->addWidget(l_created_at);
-
-        QPushButton* show = new QPushButton(QString::fromStdString("Show"));
-        layout->addWidget(show);
-
-        ui->profile_layout->addLayout(layout);
-        //ui->profile_layout->addWidget(layout);
-    }*/
-    /*for(int i = 0; i < posts.size(); i++)
-    {
-        XML* xml = Api::instance()->get_post(posts[i]);
-        xml->dump();
-        string url = (*xml)["photo_path"]->get_value();
-        string title = (*xml)["title"]->get_value();
-
-        QPixmap * pic = new QPixmap(QString::fromStdString(url));
-        QPixmap* mypix = new QPixmap(pic->scaled(QSize(100,100),  Qt::KeepAspectRatio));
-        ClickableImage* photo = new ClickableImage(posts[i]);
-        photo->setPixmap(*mypix);
-        //connect(photo,SIGNAL(mousePressEvent()),this,SLOT(show_clicked_post()));
-        //photo->property("id").va
-        //photo->property("id").valu
-        ui->gridLayout->addWidget(photo,i / 4, i % 4);
-        delete xml;
-    }*/
+        ProfileTable* p = dynamic_cast<ProfileTable*>(ui->profile_table);
+        p->add_posts(posts);
     } catch (Exception e) {
         set_status(e.message);
     }
     ui->tabWidget->setCurrentWidget(ui->profile_tab);
+    refresh["profile_tab"] = false;
+}
+
+void clearLayout(QLayout* layout)
+{
+    QLayoutItem *item;
+    while((item = layout->takeAt(0))) {
+        if (item->layout()) {
+            clearLayout(item->layout());
+            delete item->layout();
+        }
+        if (item->widget()) {
+            delete item->widget();
+        }
+        //delete item;
+    }
 }
 
 void MainWindow::render_people()
 {
     vector <string> users = Api::instance()->get_users();
-    for(int i = 0; i < users.size(); i++)
+    //clearLayout(ui->people_tab->layout());
+    QLayoutItem *child;
+    //while ( (child = ui->people_tab->layout()->takeAt(0)) != 0) {
+      //         delete child;
+        //}
+    //delete ui->people_tab->layout();
+    //ui->people_tab->setLayout(new UsersLayout(users));
+    //delete ui->people_table;
+
+    ui->people_table = new UsersTable(users,ui->people_tab);
+    ui->people_table->show();
+    UsersTable* p = dynamic_cast<UsersTable*>(ui->people_table);
+    cout << "p:  " << p << endl;
+    p->add_users(users);
+    //ui->people_table = new QTableWidget()
+    /*for(int i = 0; i < users.size(); i++)
     {
         string avatar = Api::instance()->get_user_avatar(users[i]);
         QHBoxLayout* layout = new QHBoxLayout;
@@ -234,7 +164,8 @@ void MainWindow::render_people()
             layout->addWidget(request);
         }
         ui->people_layout->addLayout(layout);
-    }
+    }*/
+    refresh["people_tab"] = false;
 }
 
 void MainWindow::on_select_avatar_clicked()
@@ -252,6 +183,11 @@ void MainWindow::on_register_button_clicked()
     try {
         Api::instance()->sign_up(username, password, full_name, file_path);
         set_status("Successfully registed!");
+        QMenu* menu = new QMenu("Actions");
+        QAction* logout_action = new QAction("logout",menu);
+        menu->addAction(logout_action);
+        connect(logout_action,SIGNAL(triggered()),this,SLOT(on_actionLogout_triggered()));
+        ui->menubar->addMenu(menu);
         render_home();
     } catch (Exception e)
     {
@@ -289,9 +225,32 @@ void MainWindow::on_share_select_file_clicked()
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
     if(index == 2)
-        render_profile();
+    {
+        if(refresh["profile_tab"])
+        {
+            cout << "refreshing profile tab" << endl;
+            render_profile();
+        }
+        refresh["profile_tab"] = true;
+    }
+    if(index == 3)
+    {
+        if(refresh["friends_tab"])
+        {
+            cout << "refreshing friends tab" << endl;
+            render_friends();
+        }
+        refresh["friends_tab"] = true;
+    }
     if(index == 5)
-        render_people();
+    {
+        if(refresh["people_tab"])
+        {
+            cout << "refreshing people tab" << endl;
+            render_people();
+        }
+        refresh["people_tab"] = true;
+    }
 }
 
 void MainWindow::show_clicked_post()
@@ -310,4 +269,27 @@ void MainWindow::show_post()
     post_window->set_hashtags(hashtags);
 
     post_window->show();
+}
+
+void MainWindow::render_friends()
+{
+    vector<string> users = Api::instance()->get_friends();
+    //delete ui->friends_tab->layout();
+    //ui->friends_tab->setLayout(new UsersLayout(users));
+    delete ui->friends_table;
+    ui->friends_table = new UsersTable(users);
+    refresh["friends_tab"] = false;
+}
+
+void MainWindow::on_actionLogout_triggered()
+{
+    refresh["home_tab"] = true;
+    refresh["share_tab"] = true;
+    refresh["profile_tab"] = true;
+    refresh["friends_tab"] = true;
+    refresh["requests_tab"] = true;
+    refresh["people_tab"] = true;
+    refresh["explore_tab"] = true;
+    Api::instance()->logout();
+    render_login();
 }
