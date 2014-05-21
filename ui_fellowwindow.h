@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'fellowwindow.ui'
 **
-** Created: Wed May 21 22:21:05 2014
+** Created: Wed May 21 22:49:55 2014
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -37,6 +37,7 @@ public:
     QLabel *label;
     QPushButton *pushButton2;
     QWidget *friends_tab;
+    QTableWidget *fellow_friends_table;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -67,6 +68,9 @@ public:
         tabWidget->addTab(profile_tab, QString());
         friends_tab = new QWidget();
         friends_tab->setObjectName(QString::fromUtf8("friends_tab"));
+        fellow_friends_table = new QTableWidget(friends_tab);
+        fellow_friends_table->setObjectName(QString::fromUtf8("fellow_friends_table"));
+        fellow_friends_table->setGeometry(QRect(0, 0, 801, 471));
         tabWidget->addTab(friends_tab, QString());
         fellowwindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(fellowwindow);
@@ -79,7 +83,7 @@ public:
 
         retranslateUi(fellowwindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(fellowwindow);

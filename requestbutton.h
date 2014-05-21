@@ -9,6 +9,7 @@ class RequestButton : public QPushButton
 public:
     RequestButton(QWidget *parent = 0);
     RequestButton(std::string,QWidget *parent = 0);
+    RequestButton(int,QWidget* parent = 0);
 //public slots:
 //   QString     getServiceName();
 //    void        setServiceName( QString s );
@@ -17,6 +18,7 @@ public:
 //protected:
 public:
     std::string username;
+    int id;
     //QString     m_sServiceName;
     //float       m_fPrice;
 };

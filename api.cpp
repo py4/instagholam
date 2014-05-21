@@ -196,8 +196,8 @@ vector<string> Api::get_friend_friends(string username)
 	User* user = DB::instance()->get_user(username);
 	if(user == NULL)
 		throw UserNotFound();
-	if(!current_user->is_friend_with(user))
-		throw AccessDenied();
+	//if(!current_user->is_friend_with(user))
+	//	throw AccessDenied();
 	return user->get_friends();	
 }
 

@@ -41,6 +41,9 @@ private slots:
 
     void on_actionLogout_triggered();
 
+    void approve_request();
+    void disapprove_request();
+    
 private:
     void set_status(std::string);
     void render_login();
@@ -50,6 +53,7 @@ private:
     void render_profile();
     void render_people();
     void render_friends();
+    void render_requests();
     Ui::MainWindow *ui;
     std::map<std::string,bool> refresh;
     //Api api;

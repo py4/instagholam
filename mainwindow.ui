@@ -371,7 +371,7 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>0</y>
+          <y>-1</y>
           <width>801</width>
           <height>461</height>
          </rect>
@@ -382,6 +382,16 @@
        <attribute name="title">
         <string>Requests</string>
        </attribute>
+       <widget class="QTableWidget" name="requests_table">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>801</width>
+          <height>441</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="people_tab">
        <attribute name="title">

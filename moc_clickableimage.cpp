@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'clickableimage.h'
 **
-** Created: Wed May 21 20:17:03 2014
+** Created: Wed May 21 22:50:27 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!

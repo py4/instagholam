@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed May 21 20:15:23 2014
+** Created: Wed May 21 23:16:21 2014
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -80,6 +80,7 @@ public:
     QWidget *friends_tab;
     QTableWidget *friends_table;
     QWidget *requests_tab;
+    QTableWidget *requests_table;
     QWidget *people_tab;
     QTableWidget *people_table;
     QWidget *explore_tab;
@@ -241,10 +242,13 @@ public:
         friends_tab->setObjectName(QString::fromUtf8("friends_tab"));
         friends_table = new QTableWidget(friends_tab);
         friends_table->setObjectName(QString::fromUtf8("friends_table"));
-        friends_table->setGeometry(QRect(0, 0, 801, 461));
+        friends_table->setGeometry(QRect(0, -1, 801, 461));
         tabWidget->addTab(friends_tab, QString());
         requests_tab = new QWidget();
         requests_tab->setObjectName(QString::fromUtf8("requests_tab"));
+        requests_table = new QTableWidget(requests_tab);
+        requests_table->setObjectName(QString::fromUtf8("requests_table"));
+        requests_table->setGeometry(QRect(0, 0, 801, 441));
         tabWidget->addTab(requests_tab, QString());
         people_tab = new QWidget();
         people_tab->setObjectName(QString::fromUtf8("people_tab"));

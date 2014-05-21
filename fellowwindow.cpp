@@ -2,6 +2,7 @@
 #include "ui_fellowwindow.h"
 #include "profile_table.h"
 #include "api.h"
+#include "users_table.h"
 using namespace std;
 fellowwindow::fellowwindow(QWidget *parent) :
 QMainWindow(parent),
@@ -23,7 +24,7 @@ ui(new Ui::fellowwindow)
         ui->label->setText(QString::fromStdString("You are friend with him"));
     else if(Api::instance()->has_requested_to(username))
         ui->label->setText(QString::fromStdString("You've sent a request to him"));
-    else if(Api::instance()->has_requested_to(username))
+    else if(Api::instance()->has_requested_to_me(username))
     {
         ui->label->setText(QString::fromStdString("He's sent a request to you"));
         connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(approve_request()));
@@ -38,20 +39,27 @@ ui(new Ui::fellowwindow)
         ui->pushButton->setText("Request to friend");
         connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(request_to_friend()));
     }
+    
     try {
         vector <int> posts;
         if(Api::instance()->is_friend_with(username))
             posts = Api::instance()->get_friend_latest_posts(username);
         else
             posts = Api::instance()->get_user_public_posts(username);
-     delete ui->profile_table;
-     ui->profile_table = new ProfileTable(posts.size(), 3, ui->profile_tab);
-     ProfileTable* p = dynamic_cast<ProfileTable*>(ui->profile_table);
-     p->add_posts(posts);
- } catch (Exception e) {
-        //set_status(e.message);
- }
-    //ui->tabWidget->setCurrentWidget(ui->profile_tab);
+        delete ui->profile_table;
+        ui->profile_table = new ProfileTable(posts.size(), 3, ui->profile_tab);
+        ProfileTable* p = dynamic_cast<ProfileTable*>(ui->profile_table);
+        p->add_posts(posts);
+
+        delete ui->fellow_friends_table;
+        vector<string> users = Api::instance()->get_friend_friends(username);
+        ui->fellow_friends_table = new UsersTable(users,ui->friends_tab);
+        ui->fellow_friends_table->show();
+        UsersTable* p2 = dynamic_cast<UsersTable*>(ui->fellow_friends_table);
+        p2->add_users(users);
+    } catch (Exception e) {
+        ui->statusbar->showMessage(QString::fromStdString(e.message));
+    }
 }
 
 void fellowwindow::approve_request()

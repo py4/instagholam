@@ -10,3 +10,7 @@ RequestButton::RequestButton(string username, QWidget *parent) : QPushButton(par
 	this->username = username;
 }
 
+RequestButton::RequestButton(int id, QWidget *parent) : QPushButton(parent)
+{
+	this->id = id;
+}

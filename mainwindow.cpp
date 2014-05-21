@@ -11,6 +11,7 @@
 #include "profile_table.h"
 #include "users_table.h"
 #include <QLayoutItem>
+#include "requestbutton.h"
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -132,40 +133,84 @@ void clearLayout(QLayout* layout)
 void MainWindow::render_people()
 {
     vector <string> users = Api::instance()->get_users();
-    //clearLayout(ui->people_tab->layout());
     QLayoutItem *child;
-    //while ( (child = ui->people_tab->layout()->takeAt(0)) != 0) {
-      //         delete child;
-        //}
-    //delete ui->people_tab->layout();
-    //ui->people_tab->setLayout(new UsersLayout(users));
-    //delete ui->people_table;
-
     ui->people_table = new UsersTable(users,ui->people_tab);
     ui->people_table->show();
     UsersTable* p = dynamic_cast<UsersTable*>(ui->people_table);
-    cout << "p:  " << p << endl;
     p->add_users(users);
-    //ui->people_table = new QTableWidget()
-    /*for(int i = 0; i < users.size(); i++)
-    {
-        string avatar = Api::instance()->get_user_avatar(users[i]);
-        QHBoxLayout* layout = new QHBoxLayout;
-        QPixmap * pic = new QPixmap(QString::fromStdString(avatar));
-        QPixmap* mypix = new QPixmap(pic->scaled(QSize(100,100),  Qt::KeepAspectRatio));
-        QLabel* photo = new QLabel;
-        photo->setPixmap(*mypix);
-        layout->addWidget(photo);
-        QLabel* username = new QLabel(QString::fromStdString(users[i]));
-        layout->addWidget(username);
-        if(!Api::instance()->is_friend_with(users[i]))
-        {
-            QPushButton* request = new QPushButton(QString::fromStdString("Request"));
-            layout->addWidget(request);
-        }
-        ui->people_layout->addLayout(layout);
-    }*/
     refresh["people_tab"] = false;
+}
+
+void MainWindow::render_requests()
+{
+    map<int,string> requests = Api::instance()->get_received_requests();
+    ui->requests_table->setRowCount(requests.size());
+    ui->requests_table->setColumnCount(3);
+    ui->requests_table->resizeColumnsToContents();
+    ui->requests_table->resizeRowsToContents();
+    ui->requests_table->horizontalHeader()->hide();
+    ui->requests_table->verticalHeader()->hide();
+    ui->requests_table->resize(800,420);
+    ui->requests_table->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    ui->requests_table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    ui->requests_table->setShowGrid(false);
+    ui->requests_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->requests_table->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->requests_table->setSelectionMode(QAbstractItemView::NoSelection);
+    ui->requests_table->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+
+    int i = 0;
+    for(map<int,string>::iterator it = requests.begin(); it != requests.end(); it++,i++)
+    {
+
+        QPixmap * pic = new QPixmap(QString::fromStdString(Api::instance()->get_user_avatar(it->second)));
+        QPixmap* mypix = new QPixmap(pic->scaled(QSize(100,100),  Qt::KeepAspectRatio));
+        QLabel* avatar = new QLabel;
+        avatar->setPixmap(*mypix);
+
+        ui->requests_table->setItem(i,0,new QTableWidgetItem(""));
+        ui->requests_table->setCellWidget(i,0,avatar);
+
+        ui->requests_table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(it->second)));
+
+        QPushButton* approve = new RequestButton(it->first);
+        approve->setText("Approve");
+        connect(approve,SIGNAL(clicked()), this, SLOT(approve_request()));
+
+        QPushButton* disapprove = new RequestButton(it->first);
+        disapprove->setText("Disapprove");
+        connect(disapprove,SIGNAL(clicked()),this, SLOT(disapprove_request()));
+
+        ui->requests_table->setCellWidget(i,2,approve);
+        ui->requests_table->setCellWidget(i,3,disapprove);
+
+        cout << "id:  " << it->first << endl;
+        cout << "from:  " << it->second << endl;
+    }
+}
+
+void MainWindow::approve_request()
+{
+    try {
+        RequestButton* b = dynamic_cast<RequestButton*>(sender());
+        Api::instance()->approve_friend_request(b->id);
+        int rows = ui->requests_table->currentIndex().row();
+        ui->requests_table->removeRow(rows);
+    } catch (Exception e) {
+        set_status(e.message);
+    }
+}
+
+void MainWindow::disapprove_request()
+{
+    try {
+        RequestButton* b = dynamic_cast<RequestButton*>(sender());
+        Api::instance()->disapprove_friend_request(b->id);
+        int rows = ui->requests_table->currentIndex().row();
+        ui->requests_table->removeRow(rows);
+    } catch (Exception e) {
+        set_status(e.message);
+    }
 }
 
 void MainWindow::on_select_avatar_clicked()
@@ -230,8 +275,8 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         {
             cout << "refreshing profile tab" << endl;
             render_profile();
+            refresh["profile_tab"] = false;
         }
-        refresh["profile_tab"] = true;
     }
     if(index == 3)
     {
@@ -239,8 +284,8 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         {
             cout << "refreshing friends tab" << endl;
             render_friends();
+            refresh["friends_tab"] = false;
         }
-        refresh["friends_tab"] = true;
     }
     if(index == 5)
     {
@@ -248,8 +293,17 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         {
             cout << "refreshing people tab" << endl;
             render_people();
+            refresh["people_tab"] = false;
         }
-        refresh["people_tab"] = true;
+    }
+    if(index == 4)
+    {
+        if(refresh["requests_tab"])
+        {
+            cout << "refreshing requests tab" << endl;
+            render_requests();
+            refresh["requests_tab"] = false;
+        }
     }
 }
 
@@ -274,10 +328,11 @@ void MainWindow::show_post()
 void MainWindow::render_friends()
 {
     vector<string> users = Api::instance()->get_friends();
-    //delete ui->friends_tab->layout();
-    //ui->friends_tab->setLayout(new UsersLayout(users));
     delete ui->friends_table;
-    ui->friends_table = new UsersTable(users);
+    ui->friends_table = new UsersTable(users,ui->friends_tab);
+    ui->friends_table->show();
+    UsersTable* p = dynamic_cast<UsersTable*>(ui->friends_table);
+    p->add_users(users);
     refresh["friends_tab"] = false;
 }
 
@@ -292,4 +347,5 @@ void MainWindow::on_actionLogout_triggered()
     refresh["explore_tab"] = true;
     Api::instance()->logout();
     render_login();
+    ui->menubar->clear();
 }
