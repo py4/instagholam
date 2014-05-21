@@ -12,6 +12,7 @@
 #include "users_table.h"
 #include <QLayoutItem>
 #include "requestbutton.h"
+#include "adminwindow.h"
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -43,6 +44,23 @@ MainWindow::~MainWindow()
     DB::instance()->free_db();
 }
 
+void MainWindow::configure_menu()
+{
+    QMenu* menu = new QMenu("Actions");
+    QAction* logout_action = new QAction("logout",menu);
+    menu->addAction(logout_action);
+    connect(logout_action,SIGNAL(triggered()),this,SLOT(on_actionLogout_triggered()));
+
+    if(Api::instance()->am_i_admin())
+    {
+        QAction* admin_action = new QAction("Administration",menu);
+        menu->addAction(admin_action);
+        connect(admin_action, SIGNAL(triggered()),this,SLOT(render_admin_window()));
+    }
+
+    ui->menubar->addMenu(menu);
+}
+
 void MainWindow::on_sign_in_clicked()
 {
     string username = ui->username->text().toStdString();
@@ -50,11 +68,7 @@ void MainWindow::on_sign_in_clicked()
     try {
         Api::instance()->login(username,password);
         render_home();
-        QMenu* menu = new QMenu("Actions");
-        QAction* logout_action = new QAction("logout",menu);
-        menu->addAction(logout_action);
-        connect(logout_action,SIGNAL(triggered()),this,SLOT(on_actionLogout_triggered()));
-        ui->menubar->addMenu(menu);
+        configure_menu();
     } catch (Exception e)
     {
         set_status(e.message);
@@ -243,11 +257,7 @@ void MainWindow::on_register_button_clicked()
     try {
         Api::instance()->sign_up(username, password, full_name, file_path);
         set_status("Successfully registed!");
-        QMenu* menu = new QMenu("Actions");
-        QAction* logout_action = new QAction("logout",menu);
-        menu->addAction(logout_action);
-        connect(logout_action,SIGNAL(triggered()),this,SLOT(on_actionLogout_triggered()));
-        ui->menubar->addMenu(menu);
+        configure_menu();
         render_home();
     } catch (Exception e)
     {
@@ -375,4 +385,10 @@ void MainWindow::on_refresh_button_clicked()
     refresh["people_tab"] = true;
     refresh["explore_tab"] = true;
     render_home();
+}
+
+void MainWindow::render_admin_window()
+{
+    adminwindow* window = new adminwindow();
+    window->show();
 }

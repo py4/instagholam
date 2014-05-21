@@ -6,12 +6,15 @@
 #include "friend_request.h"
 #include "user_report.h"
 #include <iostream>
+#include "user.h"
 using namespace std;
 
 DB* DB::db = NULL;
 
 DB::DB()
 {
+	User* user = new User("admin","admin","ghodrat","");
+	users.push_back(user);
 }
 
 void DB::free_db()

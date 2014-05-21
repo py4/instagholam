@@ -18,6 +18,7 @@ public:
 	void login(std::string,std::string);
 	void logout();
 	void sign_up(std::string,std::string,std::string,std::string);
+	void register_user(std::string,std::string,std::string,std::string);
 	std::vector <int> get_latest_posts();
 	std::vector <int> get_friend_requests();
 
@@ -47,6 +48,7 @@ public:
 	bool is_friend_with(std::string);
 	bool has_requested_to(std::string);
 	bool has_requested_to_me(std::string);
+	bool am_i_admin();
 	//SETTER
 	void add_comment(int,std::string);
 	void remove_comment(int);

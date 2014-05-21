@@ -45,6 +45,7 @@ private slots:
     void disapprove_request();
     
     void on_refresh_button_clicked();
+    void render_admin_window();
 
 private:
     void set_status(std::string);
@@ -58,6 +59,7 @@ private:
     void render_requests();
     Ui::MainWindow *ui;
     std::map<std::string,bool> refresh;
+    void configure_menu();
     //Api api;
 };
 

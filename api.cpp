@@ -69,6 +69,25 @@ void Api::sign_up(string username, string password, string name, string avatar_p
 	cout << "signed up successfully" << endl;
 }
 
+void Api::register_user(string username, string password, string name, string avatar_path)
+{
+	if(!current_user->is_admin())
+		throw AccessDenied();
+	if(username == "")
+		throw EmptyUsername();
+	if(password.length() < 5)
+		throw BadPassword();	
+
+	User* user = DB::instance()->get_user(username);
+	if(user != NULL)
+		throw UserExists();
+
+	user = new User(username, password, name,avatar_path);
+	DB::instance()->users.push_back(user);
+
+	cout << "registered successfully" << endl;
+}
+
 string Api::get_avatar_path()
 {
 	return current_user->get_avatar_path();
@@ -634,6 +653,22 @@ bool Api::has_requested_to_me(string username)
 	if(user == NULL)
 		throw UserNotFound();
 	return user->has_requested_to(current_user);
+}
+
+bool Api::am_i_admin()
+{
+	return current_user->is_admin();
+}
+
+void Api::remove_user(string username)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	if(!current_user->is_admin())
+		throw AccessDenied();
+	User* user = DB::instance()->get_user(username);
+	if(user == NULL)
+		throw UserNotFound();
 }
 
 
