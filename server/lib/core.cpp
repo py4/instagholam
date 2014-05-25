@@ -1,4 +1,4 @@
-#include "api.h"
+#include "core.h"
 #include "user.h"
 #include <string>
 #include <algorithm>
@@ -8,28 +8,29 @@
 #include <iostream>
 #include "comment.h"
 #include "hashtag.h"
+#include "photo.h"
 
 using namespace std;
 
-Api* Api::api = NULL;
+Core* Core::core = NULL;
 
-Api::Api()
+Core::Core()
 {
 	current_user = NULL;
 }
 
-Api* Api::instance()
+Core* Core::instance()
 {
-	if(api == NULL)
+	if(core == NULL)
 	{
-		api = new Api;
-		return api;
+		core = new Core;
+		return core;
 	}
-	return api;
+	return core;
 }
 
 
-void Api::login(string username, string password)
+void Core::login(string username, string password)
 {
 	if(current_user != NULL)
 		throw AlreadyLoggedIn();
@@ -42,7 +43,7 @@ void Api::login(string username, string password)
 	cout << "logged in successfully" << endl;
 }
 
-void Api::logout()
+void Core::logout()
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -50,7 +51,7 @@ void Api::logout()
 	cout << "logged out successfully" << endl;
 }
 
-void Api::sign_up(string username, string password, string name, string avatar_path)
+void Core::sign_up(string username, string password, string name, string avatar_path)
 {
 	if(current_user != NULL)
 		throw AlreadyLoggedIn();
@@ -69,7 +70,7 @@ void Api::sign_up(string username, string password, string name, string avatar_p
 	cout << "signed up successfully" << endl;
 }
 
-void Api::register_user(string username, string password, string name, string avatar_path)
+void Core::register_user(string username, string password, string name, string avatar_path)
 {
 	if(!current_user->is_admin())
 		throw AccessDenied();
@@ -88,17 +89,17 @@ void Api::register_user(string username, string password, string name, string av
 	cout << "registered successfully" << endl;
 }
 
-string Api::get_avatar_path()
+string Core::get_avatar_path()
 {
 	return current_user->get_avatar_path();
 }
 
-string Api::get_username()
+string Core::get_username()
 {
 	return current_user->get_username();
 }
 
-vector<int> Api::get_latest_posts()
+vector<int> Core::get_latest_posts()
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -128,23 +129,23 @@ vector<int> Api::get_latest_posts()
 	return result;
 }
 
-vector<int> Api::show_timelog()
+vector<int> Core::show_timelog()
 {
 	return get_latest_posts();
 }
 
-bool Api::compare_time(time_t& first, time_t& second)
+bool Core::compare_time(time_t& first, time_t& second)
 {
 	return difftime(first,second) > 0;
 }
 
-bool Api::compare_post_time(Post* post1, Post* post2)
+bool Core::compare_post_time(Post* post1, Post* post2)
 {
 	return compare_time(post1->created_at, post2->created_at);
 }
 //TODO: copying files into cache
 //TODO: check image existence/validity
-void Api::post_photo(string title,string CDN_path, string hashtags, bool publicity)
+void Core::post_photo(string title,string CDN_path, string hashtags, bool publicity)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -162,14 +163,14 @@ void Api::post_photo(string title,string CDN_path, string hashtags, bool publici
 	cout << "photo posted successfully" << endl;
 }
 
-vector<int> Api::get_my_latest_posts()
+vector<int> Core::get_my_latest_posts()
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
 	return current_user->get_latest_posts();
 }
 
-vector<int> Api::get_friend_latest_posts(string username)
+vector<int> Core::get_friend_latest_posts(string username)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -181,7 +182,7 @@ vector<int> Api::get_friend_latest_posts(string username)
 	return user->get_latest_posts();
 }
 
-vector <int> Api::get_user_public_posts(string username)
+vector <int> Core::get_user_public_posts(string username)
 {
 	User* user = DB::instance()->get_user(username);
 	if(user == NULL)
@@ -189,14 +190,14 @@ vector <int> Api::get_user_public_posts(string username)
 	return user->get_public_posts();
 }
 
-vector<int> Api::get_my_latest_liked_posts()
+vector<int> Core::get_my_latest_liked_posts()
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
 	return current_user->get_latest_liked_posts();
 }
 
-vector<int> Api::get_friend_latest_liked_posts(string username)
+vector<int> Core::get_friend_latest_liked_posts(string username)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -208,7 +209,7 @@ vector<int> Api::get_friend_latest_liked_posts(string username)
 	return user->get_latest_liked_posts();
 }
 
-vector<string> Api::get_friend_friends(string username)
+vector<string> Core::get_friend_friends(string username)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -220,7 +221,7 @@ vector<string> Api::get_friend_friends(string username)
 	return user->get_friends();	
 }
 
-// bool Api::get_publicity(int id)
+// bool Core::get_publicity(int id)
 // {
 // 	Post* post = DB::instance()->get_post(id);
 // 	if(!current_user->able_to_see(post))
@@ -228,7 +229,7 @@ vector<string> Api::get_friend_friends(string username)
 // 	return post->pub;
 // }
 
-// string Api::get_photo_url(int id)
+// string Core::get_photo_url(int id)
 // {
 // 	Post* post = DB::instance()->get_post(id);
 // 	if(!current_user->able_to_see(post))
@@ -236,7 +237,7 @@ vector<string> Api::get_friend_friends(string username)
 // 	return post->CDN_path;
 // }
 
-// string Api::get_photo_username(int id)
+// string Core::get_photo_username(int id)
 // {
 // 	Post* post = DB::instance()->get_post(id);
 // 	if(!current_user->able_to_see(post))
@@ -244,14 +245,14 @@ vector<string> Api::get_friend_friends(string username)
 // 	return post->user->username;
 // }
 
-// string Api::get_photo_title(int id)
+// string Core::get_photo_title(int id)
 // {
 // 	Post* post = DB::instance()->get_post(id);
 // 	if(!current_user->able_to_see(post))
 // 		throw AccessDenied();
 // 	return post->user->username;
 // }
-string Api::get_post(int id)
+/*string Core::get_post(int id)
 {
 	Post* post = DB::instance()->get_post(id);
  	if(!current_user->able_to_see(post))
@@ -281,9 +282,9 @@ string Api::get_post(int id)
 	xml->current_node->add_node("created_at", post->get_created_at());
 	xml->current_node->add_node("photo_path",post->get_path());
 	return xml->dump();
-}
+}*/
 
-map<string,string> Api::get_post_info(int id)
+map<string,string> Core::get_post_info(int id)
 {
 	Post* post = DB::instance()->get_post(id);
 	if(post == NULL)
@@ -302,7 +303,7 @@ map<string,string> Api::get_post_info(int id)
 	return result;
 }
 
-vector<int> Api::get_post_comments(int id)
+vector<int> Core::get_post_comments(int id)
 {
 	Post* post = DB::instance()->get_post(id);
 	if(post == NULL)
@@ -315,7 +316,7 @@ vector<int> Api::get_post_comments(int id)
 	return result;
 }
 
-vector<string> Api::get_post_hashtags(int id)
+vector<string> Core::get_post_hashtags(int id)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -330,7 +331,7 @@ vector<string> Api::get_post_hashtags(int id)
 	return result;
 }
 
-vector<string> Api::get_post_liked_by(int id)
+vector<string> Core::get_post_liked_by(int id)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -345,7 +346,7 @@ vector<string> Api::get_post_liked_by(int id)
 	return result;
 }
 
-map<string,string> Api::get_comment(int post_id, int comment_id)
+map<string,string> Core::get_comment(int post_id, int comment_id)
 {
 	Post* post = DB::instance()->get_post(post_id);
 	if(post == NULL)
@@ -363,7 +364,7 @@ map<string,string> Api::get_comment(int post_id, int comment_id)
 	return result;
 }
 
-map<int,string> Api::get_sent_requests()
+map<int,string> Core::get_sent_requests()
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -377,7 +378,7 @@ map<int,string> Api::get_sent_requests()
 	return result;
 }
 
-map<int,string> Api::get_received_requests()
+map<int,string> Core::get_received_requests()
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -391,14 +392,14 @@ map<int,string> Api::get_received_requests()
 	return result;
 }
 
-vector<string> Api::get_friends()
+vector<string> Core::get_friends()
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
 	return current_user->get_friends();
 }
 
-void Api::request_to_friend(string username)
+void Core::request_to_friend(string username)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -419,7 +420,7 @@ void Api::request_to_friend(string username)
 	cout << "Successfully requested to him/her" << endl;
 }
 
-void Api::approve_friend_request(int id)
+void Core::approve_friend_request(int id)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -435,7 +436,7 @@ void Api::approve_friend_request(int id)
 	throw FriendRequestNotFound();
 }
 
-void Api::approve_friend_request(string username)
+void Core::approve_friend_request(string username)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -453,7 +454,7 @@ void Api::approve_friend_request(string username)
 	throw FriendRequestNotFound();
 }
 
-void Api::disapprove_friend_request(int id)
+void Core::disapprove_friend_request(int id)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -471,7 +472,7 @@ void Api::disapprove_friend_request(int id)
 	throw FriendRequestNotFound();
 }
 
-void Api::disapprove_friend_request(string username)
+void Core::disapprove_friend_request(string username)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -489,7 +490,7 @@ void Api::disapprove_friend_request(string username)
 	throw FriendRequestNotFound();
 }
 
-void Api::remove_friend(string username)
+void Core::remove_friend(string username)
 {
 	User* user = DB::instance()->get_user(username);
 	if(user == NULL)
@@ -503,23 +504,157 @@ void Api::remove_friend(string username)
 	cout << "removed successfully" << endl;
 }
 
-void Api::report(string username)
+void Core::report(string username)
 {
+	if(current_user == NULL)
+		throw NotLoggedIn();
 	User* user = DB::instance()->get_user(username);
 	if(user == NULL)
 		throw UserNotFound();
-	if(current_user->is_friend_with(user))
-		throw AlreadyFriends();
 	if(current_user->reported_before(user))
 		throw ReportedBefore();
 
 	UserReport* report = new UserReport(current_user,user);
 	DB::instance()->reports.push_back(report);
 	current_user->reports.push_back(report);
+
+	cout << "reported successfully" << endl;
 }
 
-void Api::delete_user(string username)
+void Core::update_user(string username, string password, string full_name, string avatar_path)
 {
+	if(current_user == NULL)
+		throw AccessDenied();
+	if(username == "")
+		throw EmptyUsername();
+	if(password.length() < 5)
+		throw BadPassword();	
+
+	User* user = DB::instance()->get_user(username);
+	if(user != NULL and user != current_user)
+		throw UserExists();
+
+	current_user->username = username;
+	current_user->password = password;
+	current_user->full_name = full_name;
+
+	if(current_user->avatar != NULL)
+	{
+		delete current_user->avatar;
+		current_user->avatar = new Photo(avatar_path);
+	}
+
+	cout << "updated successfully" << endl;
+}
+
+void Core::remove_user_posts(User* user)
+{
+	for(vector<Post*>::iterator it = user->posts.begin(); it != user->posts.end(); it++)
+	{
+		for(vector<Comment*>::iterator jt = (*it)->comments.begin(); jt != (*it)->comments.end(); jt++)
+		{
+			(*jt)->user->comments.erase(std::remove((*jt)->user->comments.begin(), (*jt)->user->comments.end(), *jt), (*jt)->user->comments.end());
+			delete *jt;
+		}
+		cout << "removed post comments" << endl;
+
+		for(vector<User*>::iterator jt = (*it)->liked_by.begin(); jt != (*it)->liked_by.end(); jt++)
+			(*jt)->liked_posts.erase(std::remove((*jt)->liked_posts.begin(), (*jt)->liked_posts.end(), *it), (*jt)->liked_posts.end());
+		cout << "removed this post from users liked lists" << endl;
+
+		delete *it;
+	}
+	user->posts.clear();	
+}
+
+void Core::remove_user_liked_by(User* user)
+{
+	for(vector<Post*>::iterator it = user->liked_posts.begin(); it != user->liked_posts.end(); it++)
+		(*it)->liked_by.erase(std::remove((*it)->liked_by.begin(), (*it)->liked_by.end(), user), (*it)->liked_by.end());
+	user->liked_posts.clear();
+
+	cout << "removed user from liked_by of his favorite posts" << endl;
+}
+
+void Core::remove_user_comments(User* user)
+{
+	for(vector<Comment*>::iterator it = user->comments.begin(); it != user->comments.end(); it++)
+	{
+		(*it)->post->comments.erase(std::remove((*it)->post->comments.begin(), (*it)->post->comments.end(), *it), (*it)->post->comments.end());
+		delete *it;
+	}
+	cout << "removed his comments on posts" << endl;
+}
+
+void Core::remove_user_send_requests(User* user)
+{
+	for(vector<FriendRequest*>::iterator it = user->send_requests.begin(); it != user->send_requests.end(); it++)
+	{
+		for(int i = 0; i < (*it)->to->received_requests.size(); i++)
+		{
+			if((*it)->to->received_requests[i]->from == user)
+			{
+				(*it)->to->received_requests.erase((*it)->to->received_requests.begin() + i);
+				break;
+			}
+		}
+		delete *it;
+	}
+	cout << "removed sent requests" << endl;
+}
+
+void Core::remove_user_received_requests(User* user)
+{
+	for(vector<FriendRequest*>::iterator it = user->received_requests.begin(); it != user->received_requests.end(); it++)
+	{
+		for(int i = 0; i < (*it)->from->send_requests.size(); i++)
+		{
+			if((*it)->from->send_requests[i]->to == user)
+			{
+				(*it)->from->send_requests.erase((*it)->from->send_requests.begin() + i);
+				break;
+			}
+		}
+		delete *it;
+	}
+	cout << "removed received requestts" << endl;	
+}
+
+void Core::remove_user_friends(User* user)
+{
+	for(vector<User*>::iterator it = user->friends.begin(); it != user->friends.end(); it++)
+		(*it)->friends.erase(std::remove((*it)->friends.begin(), (*it)->friends.end(), user),(*it)->friends.end());
+	user->friends.clear();
+
+	cout << "cleated user's friend" << endl;
+}
+
+class Compare
+{
+public:
+	Compare(User* user) : user(user) {}
+	bool operator()(UserReport* report) {
+		return report->get_from() == user;
+	}
+private:
+	User* user;
+};
+
+void Core::remove_user_reports(User* user)
+{
+	DB::instance()->reports.erase(remove_if(DB::instance()->reports.begin(), DB::instance()->reports.end(), Compare(current_user)), DB::instance()->reports.end());
+	for(int i = 0; i < user->reports.size(); i++)
+		delete user->reports[i];
+	user->reports.clear();
+
+	cout << "cleared user reports" << endl;
+}
+
+void Core::delete_user(string username)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+
 	if(!current_user->is_admin())
 		throw AccessDenied();
 	
@@ -528,9 +663,24 @@ void Api::delete_user(string username)
 		throw UserNotFound();
 	if(user == current_user)
 		throw AccessDenied();
+
+	cout << "user avatar deleted" << endl;
+	delete user->avatar;
+
+	remove_user_posts(user);
+	remove_user_liked_by(user);
+	remove_user_comments(user);
+	remove_user_send_requests(user);	
+	remove_user_received_requests(user);
+	remove_user_friends(user);
+	remove_user_reports(user);
+
+	DB::instance()->users.erase(remove(DB::instance()->users.begin(), DB::instance()->users.end(), user),
+		DB::instance()->users.end());
+	delete user;
 }
 
-void Api::like(int id)
+void Core::like(int id)
 {
 	Post* post = DB::instance()->get_post(id);
 	if(current_user == NULL)
@@ -548,7 +698,7 @@ void Api::like(int id)
 	cout << "success fully liked" << endl;
 }
 
-bool Api::is_likable(int id)
+bool Core::is_likable(int id)
 {
 	Post* post = DB::instance()->get_post(id);
 	if(current_user == NULL)
@@ -562,7 +712,7 @@ bool Api::is_likable(int id)
 	return true;
 }
 
-void Api::unlike(int id)
+void Core::unlike(int id)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -582,7 +732,7 @@ void Api::unlike(int id)
 	cout << "unliked successfully" << endl;
 }
 
-vector<string> Api::get_users()
+vector<string> Core::get_users()
 {
 	vector<string> result;
 	for(int i = 0; i < DB::instance()->users.size(); i++)
@@ -590,19 +740,19 @@ vector<string> Api::get_users()
 	return result;
 }
 
-string Api::get_user_avatar(string username)
+string Core::get_user_avatar(string username)
 {
 	User* user = DB::instance()->get_user(username);
 	return user->get_avatar_path();
 }
 
-bool Api::is_friend_with(string username)
+bool Core::is_friend_with(string username)
 {
 	User* user = DB::instance()->get_user(username);
 	return current_user->is_friend_with(user);
 }
 
-void Api::add_comment(int post_id, string content)
+void Core::add_comment(int post_id, string content)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -619,7 +769,7 @@ void Api::add_comment(int post_id, string content)
 	cout << "successfully submited" << endl;
 }
 
-void Api::remove_comment(int comment_id)
+void Core::remove_comment(int comment_id)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -635,7 +785,7 @@ void Api::remove_comment(int comment_id)
 	cout << "removed successfully" << endl;
 }
 
-bool Api::has_requested_to(string username)
+bool Core::has_requested_to(string username)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -645,7 +795,7 @@ bool Api::has_requested_to(string username)
 	return current_user->has_requested_to(user);
 }
 
-bool Api::has_requested_to_me(string username)
+bool Core::has_requested_to_me(string username)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();
@@ -655,12 +805,12 @@ bool Api::has_requested_to_me(string username)
 	return user->has_requested_to(current_user);
 }
 
-bool Api::am_i_admin()
+bool Core::am_i_admin()
 {
 	return current_user->is_admin();
 }
 
-void Api::remove_user(string username)
+void Core::remove_user(string username)
 {
 	if(current_user == NULL)
 		throw NotLoggedIn();

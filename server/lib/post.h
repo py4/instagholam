@@ -13,7 +13,7 @@ class HashTag;
 class Post
 {
 	friend class DB;
-	friend class Api;
+	friend class Core;
 public:
 	Post(bool = false);
 	Post(std::string, bool = false);

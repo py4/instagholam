@@ -5,7 +5,7 @@ class User;
 
 class FriendRequest
 {
-	friend class Api;
+	friend class Core;
 public:
 	FriendRequest();
 	FriendRequest(User*,User*);

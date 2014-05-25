@@ -5,6 +5,7 @@ class User;
 
 class UserReport
 {
+	friend class Api;
 public:
 	UserReport();
 	UserReport(User*,User*);

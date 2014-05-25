@@ -78,6 +78,12 @@ void CLI::start()
 				Api::instance()->add_comment(to_int(params["id"]), params["content"]);
 			else if(params["command"] == "remove_comment")
 				Api::instance()->remove_comment(to_int(params["id"]));
+			else if(params["command"] == "report")
+				Api::instance()->report(params["username"]);
+			else if(params["command"] == "update_user")
+				Api::instance()->update_user(params["username"], params["password"], params["name"], params["avatar_path"]);
+			else if(params["command"] == "delete_user")
+				Api::instance()->delete_user(params["username"]);
 			else if(params["command"] == "quit")
 				break;
 			else {

@@ -14,7 +14,7 @@ class UserReport;
 class User
 {
 	friend class DB;
-	friend class Api;
+	friend class Core;
 public:
 	User();
 	~User();

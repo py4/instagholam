@@ -8,7 +8,7 @@ class User;
 
 class Comment
 {
-	friend class Api;
+	friend class Core;
 public:
 	Comment();
 	Comment(std::string);

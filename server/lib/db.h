@@ -11,7 +11,7 @@ class UserReport;
 
 class DB
 {
-	friend class Api;
+	friend class Core;
 public:
 	User* get_user(std::string);
 	static DB* instance();

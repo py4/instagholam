@@ -1,9 +1,10 @@
 #include "post.h"
-#include "parser.h"
 #include "db.h"
 #include "photo.h"
 #include "comment.h"
+#include "parser.h"
 using namespace std;
+
 int Post::count = 0;
 
 Post::Post(bool publicity)

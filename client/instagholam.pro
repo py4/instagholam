@@ -6,7 +6,8 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += . parser
 INCLUDEPATH += . parser
-
+OBJECTS_DIR=.o
+MOC_DIR=.moc
 # Input
 HEADERS += adminwindow.h \
            api.h \

@@ -5,16 +5,15 @@
 #include "db.h"
 #include <ctime>
 #include <vector>
-#include "parser/XML.h"
 #include <map>
 
 class User;
 class UserReport;
-class Api
+class Core
 {
 public:
-	//Api();
-	static Api* instance();
+	//Core();
+	static Core* instance();
 	void login(std::string,std::string);
 	void logout();
 	void sign_up(std::string,std::string,std::string,std::string);
@@ -29,7 +28,6 @@ public:
 	void disapprove_friend_request(std::string);
 	void remove_friend(std::string);
 	void report(std::string);
-	void delete_user(std::string);
 
 	void post_photo(std::string, std::string);
 	void remove_user(std::string);
@@ -49,22 +47,29 @@ public:
 	bool has_requested_to(std::string);
 	bool has_requested_to_me(std::string);
 	bool am_i_admin();
-	//SETTER
 	void add_comment(int,std::string);
 	void remove_comment(int);
-
+	void update_user(std::string, std::string, std::string, std::string);
+	void remove_user_posts(User*);
+	void remove_user_liked_by(User*);
+	void remove_user_comments(User*);
+	void remove_user_send_requests(User*);
+	void remove_user_received_requests(User*);
+	void remove_user_friends(User*);
+	void remove_user_reports(User*);
+	void delete_user(std::string);
 	//GETTER
 	std::map<std::string,std::string> get_post_info(int);
 	std::vector<int> get_post_comments(int);
 	std::vector<std::string> get_post_hashtags(int);
 	std::vector<std::string> get_post_liked_by(int);
-	map<string,string> get_comment(int, int);
-	map<int,string> get_sent_requests();
-	map<int,string> get_received_requests();
+    std::map<std::string,std::string> get_comment(int, int);
+    std::map<int,std::string> get_sent_requests();
+    std::map<int,std::string> get_received_requests();
 	std::vector<int> get_friend_latest_liked_posts(std::string);
 	std::vector<int> get_friend_latest_posts(std::string);
 	std::vector<int> get_user_public_posts(std::string);
-	std::vector<string> get_friend_friends(std::string);
+	std::vector<std::string> get_friend_friends(std::string);
 	std::vector<int> show_timelog();
 
 private:
@@ -72,10 +77,10 @@ private:
 	static bool compare_time(time_t&, time_t&);
 	static bool compare_post_time(Post*,Post*);
 
-	Api();
-	Api(Api const&);
-	~Api();
-	void operator=(Api const&);
-	static Api* api;
+	Core();
+	Core(Core const&);
+	~Core();
+	void operator=(Core const&);
+	static Core* core;
 };
 #endif

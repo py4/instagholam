@@ -11,10 +11,12 @@ using namespace std;
 
 User::User()
 {
+	avatar = NULL;
 }
 
 User::User(string username, string password, string name, string avatar_path)
 {
+	avatar = NULL;
 	this->username = username;
 	this->password = password;
 	this->full_name = name;
