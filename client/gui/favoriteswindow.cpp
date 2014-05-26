@@ -3,7 +3,7 @@
 #include "requestbutton.h"
 #include <QHBoxLayout>
 #include <QLabel>
-#include "api.h"
+#include "core.h"
 #include "fellowwindow.h"
 #include "users_table.h"
 using namespace std;

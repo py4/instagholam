@@ -1,5 +1,5 @@
 #include <QTableWidget>
-#include "api.h"
+#include "core.h"
 #include <vector>
 class ProfileTable : public QTableWidget
 {

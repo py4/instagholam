@@ -1,10 +1,10 @@
 #ifndef CLI_H_
 #define CLI_H_
 
-#include "db.h"
 #include "exception.h"
 #include <string>
-#include "api.h"
+#include "core.h"
+#include <map>
 
 class CLI
 {
@@ -15,7 +15,7 @@ public:
 	void start();
 private:
 	std::string command;
-	map<string,string> params;
+	std::map<std::string,std::string> params;
 	void ensure_user();
 	void ensure_no_user();
 	void show_post(int);

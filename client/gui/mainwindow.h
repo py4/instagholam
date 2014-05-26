@@ -2,10 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "api.h"
+#include "core.h"
 #include <QString>
 #include <string>
-#include "parser/XML.h"
 #include <map>
 namespace Ui {
 class MainWindow;

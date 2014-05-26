@@ -2,7 +2,7 @@
 #include "ui_postwindow.h"
 #include <iostream>
 #include "commentswindow.h"
-#include "api.h"
+#include "core.h"
 #include "favoriteswindow.h"
 using namespace std;
 PostWindow::PostWindow(QWidget *parent) :
@@ -47,11 +47,11 @@ void PostWindow::set_hashtags(vector<string>& hashtags)
 
 void PostWindow::show_comments()
 {
-    vector<int> comment_ids = Api::instance()->get_post_comments(id);
+    vector<int> comment_ids = Core::instance()->get_post_comments(id);
     commentswindow* comments_window = new commentswindow(id, title, url);
     for(int i = 0; i < comment_ids.size(); i++)
     {
-        map<string,string> comment_info = Api::instance()->get_comment(id, comment_ids[i]);
+        map<string,string> comment_info = Core::instance()->get_comment(id, comment_ids[i]);
         comments_window->add_comment(comment_info["username"], comment_info["content"]);
     }
     comments_window->show();
@@ -59,11 +59,11 @@ void PostWindow::show_comments()
 
 void PostWindow::show_favorites()
 {
-    vector<string> usernames = Api::instance()->get_post_liked_by(id);
+    vector<string> usernames = Core::instance()->get_post_liked_by(id);
     favoriteswindow* favorites_window = new favoriteswindow(usernames);
     /*for(int i = 0; i < usernames.size(); i++)
     {
-        string url = Api::instance()->get_user_avatar(usernames[i]);
+        string url = Core::instance()->get_user_avatar(usernames[i]);
         favorites_window->add_item(url,usernames[i]);
     }*/
     favorites_window->show();
@@ -81,14 +81,14 @@ void PostWindow::on_show_favorites_button_clicked()
 
 void PostWindow::on_liked_button_clicked()
 {
-    if(Api::instance()->is_likable(id))
+    if(Core::instance()->is_likable(id))
     {
-        Api::instance()->like(id);
+        Core::instance()->like(id);
         ui->liked_button->setText("Unlike");
     }
     else
     {
-        Api::instance()->unlike(id);
+        Core::instance()->unlike(id);
         ui->liked_button->setText("Like");
     }
 }

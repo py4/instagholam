@@ -6,6 +6,9 @@
 #include "postwindow.h"
 #include "clickableimage.h"
 #include <iostream>
+#include <vector>
+using namespace std;
+
 ProfileTable::ProfileTable(QWidget *parent) : QTableWidget(parent)
 {
 }
@@ -34,7 +37,7 @@ void ProfileTable::add_posts(vector<int>& posts)
     {
             if(i >= posts.size())
                 break;
-            map<string,string> post_info = Api::instance()->get_post_info(posts[i]);
+            map<string,string> post_info = Core::instance()->get_post_info(posts[i]);
     string title = post_info["title"];
     string url = post_info["photo_path"];
     string created_at = post_info["created_at"];
@@ -56,9 +59,9 @@ void ProfileTable::show_post()
     cout << "show_post" << endl;
     ClickableImage* p = dynamic_cast<ClickableImage*>(sender());
     int post_id = p->id;
-    map<string,string> info = Api::instance()->get_post_info(post_id);
+    map<string,string> info = Core::instance()->get_post_info(post_id);
     PostWindow* post_window = new PostWindow(post_id,info["title"],info["photo_path"],info["username"],info["created_at"]);
-    vector<string> hashtags = Api::instance()->get_post_hashtags(post_id);
+    vector<string> hashtags = Core::instance()->get_post_hashtags(post_id);
     post_window->set_hashtags(hashtags);
 
     post_window->show();

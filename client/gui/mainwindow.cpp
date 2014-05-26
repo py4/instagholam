@@ -12,6 +12,7 @@
 #include "users_table.h"
 #include <QLayoutItem>
 #include "requestbutton.h"
+#include "exception.h"
 #include "adminwindow.h"
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
@@ -39,9 +40,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    cout << "main window freeing db" << endl;
+    //cout << "main window freeing db" << endl;
     delete ui;
-    DB::instance()->free_db();
+    //DB::instance()->free_db();
 }
 
 void MainWindow::configure_menu()
@@ -51,7 +52,7 @@ void MainWindow::configure_menu()
     menu->addAction(logout_action);
     connect(logout_action,SIGNAL(triggered()),this,SLOT(on_actionLogout_triggered()));
 
-    if(Api::instance()->am_i_admin())
+    if(Core::instance()->am_i_admin())
     {
         QAction* admin_action = new QAction("Administration",menu);
         menu->addAction(admin_action);
@@ -66,7 +67,7 @@ void MainWindow::on_sign_in_clicked()
     string username = ui->username->text().toStdString();
     string password = ui->password->text().toStdString();
     try {
-        Api::instance()->login(username,password);
+        Core::instance()->login(username,password);
         render_home();
         configure_menu();
     } catch (Exception e)
@@ -101,13 +102,13 @@ void MainWindow::render_signup()
 
 void MainWindow::render_home()
 {
-    QPixmap * mypix = new QPixmap(QString::fromStdString(Api::instance()->get_avatar_path()));
+    QPixmap * mypix = new QPixmap(QString::fromStdString(Core::instance()->get_avatar_path()));
     ui->avatar->setPixmap(*mypix);
     ui->stackedWidget->setCurrentWidget(ui->home_page);
     ui->tabWidget->setCurrentWidget(ui->home_tab);
 
     delete ui->home_table;
-    vector<int> posts = Api::instance()->get_latest_posts();
+    vector<int> posts = Core::instance()->get_latest_posts();
     ui->home_table = new ProfileTable(posts.size(), 3, ui->home_tab);
     ui->home_table->show();
     try {
@@ -117,7 +118,7 @@ void MainWindow::render_home()
         set_status(e.message);
     }
     refresh["home_tab"] = false;
-    //ui->name_under_avatar->setText(QString::fromStdString(Api::instance()->get_username()));
+    //ui->name_under_avatar->setText(QString::fromStdString(Core::instance()->get_username()));
 }
 
 void MainWindow::render_share()
@@ -131,7 +132,7 @@ void MainWindow::render_share()
 void MainWindow::render_profile()
 {
     delete ui->profile_table;
-    vector <int> posts = Api::instance()->get_my_latest_posts();
+    vector <int> posts = Core::instance()->get_my_latest_posts();
     ui->profile_table = new ProfileTable(posts.size(), 3, ui->profile_tab);
     ui->profile_table->show();
     try {
@@ -161,7 +162,7 @@ void clearLayout(QLayout* layout)
 
 void MainWindow::render_people()
 {
-    vector <string> users = Api::instance()->get_users();
+    vector <string> users = Core::instance()->get_users();
     QLayoutItem *child;
     ui->people_table = new UsersTable(users,ui->people_tab);
     ui->people_table->show();
@@ -172,7 +173,7 @@ void MainWindow::render_people()
 
 void MainWindow::render_requests()
 {
-    map<int,string> requests = Api::instance()->get_received_requests();
+    map<int,string> requests = Core::instance()->get_received_requests();
     ui->requests_table->setRowCount(requests.size());
     ui->requests_table->setColumnCount(3);
     ui->requests_table->resizeColumnsToContents();
@@ -192,7 +193,7 @@ void MainWindow::render_requests()
     for(map<int,string>::iterator it = requests.begin(); it != requests.end(); it++,i++)
     {
 
-        QPixmap * pic = new QPixmap(QString::fromStdString(Api::instance()->get_user_avatar(it->second)));
+        QPixmap * pic = new QPixmap(QString::fromStdString(Core::instance()->get_user_avatar(it->second)));
         QPixmap* mypix = new QPixmap(pic->scaled(QSize(100,100),  Qt::KeepAspectRatio));
         QLabel* avatar = new QLabel;
         avatar->setPixmap(*mypix);
@@ -222,7 +223,7 @@ void MainWindow::approve_request()
 {
     try {
         RequestButton* b = dynamic_cast<RequestButton*>(sender());
-        Api::instance()->approve_friend_request(b->id);
+        Core::instance()->approve_friend_request(b->id);
         int rows = ui->requests_table->currentIndex().row();
         ui->requests_table->removeRow(rows);
     } catch (Exception e) {
@@ -234,7 +235,7 @@ void MainWindow::disapprove_request()
 {
     try {
         RequestButton* b = dynamic_cast<RequestButton*>(sender());
-        Api::instance()->disapprove_friend_request(b->id);
+        Core::instance()->disapprove_friend_request(b->id);
         int rows = ui->requests_table->currentIndex().row();
         ui->requests_table->removeRow(rows);
     } catch (Exception e) {
@@ -255,7 +256,7 @@ void MainWindow::on_register_button_clicked()
     string password = ui->register_password->text().toStdString();
     string file_path = ui->avatar_file->text().toStdString();
     try {
-        Api::instance()->sign_up(username, password, full_name, file_path);
+        Core::instance()->sign_up(username, password, full_name, file_path);
         set_status("Successfully registed!");
         configure_menu();
         render_home();
@@ -278,7 +279,7 @@ void MainWindow::on_share_button_clicked()
     bool publicity = ui->share_pub_checkbox->isChecked();
     string hashtags = ui->share_hashtags->text().toStdString();
     try {
-        Api::instance()->post_photo(title,file,hashtags,publicity);
+        Core::instance()->post_photo(title,file,hashtags,publicity);
         set_status("Successfully posted!");
         render_share();
     } catch (Exception e) {
@@ -342,9 +343,9 @@ void MainWindow::show_post()
     cout << "show_post" << endl;
     ClickableImage* p = dynamic_cast<ClickableImage*>(sender());
     int post_id = p->id;
-    map<string,string> info = Api::instance()->get_post_info(post_id);
+    map<string,string> info = Core::instance()->get_post_info(post_id);
     PostWindow* post_window = new PostWindow(post_id,info["title"],info["photo_path"],info["username"],info["created_at"]);
-    vector<string> hashtags = Api::instance()->get_post_hashtags(post_id);
+    vector<string> hashtags = Core::instance()->get_post_hashtags(post_id);
     post_window->set_hashtags(hashtags);
 
     post_window->show();
@@ -352,7 +353,7 @@ void MainWindow::show_post()
 
 void MainWindow::render_friends()
 {
-    vector<string> users = Api::instance()->get_friends();
+    vector<string> users = Core::instance()->get_friends();
     delete ui->friends_table;
     ui->friends_table = new UsersTable(users,ui->friends_tab);
     ui->friends_table->show();
@@ -370,7 +371,7 @@ void MainWindow::on_actionLogout_triggered()
     refresh["requests_tab"] = true;
     refresh["people_tab"] = true;
     refresh["explore_tab"] = true;
-    Api::instance()->logout();
+    Core::instance()->logout();
     render_login();
     ui->menubar->clear();
 }

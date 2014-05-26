@@ -1,5 +1,5 @@
 #include "users_table.h"
-#include "api.h"
+#include "core.h"
 #include <QPixmap>
 #include "requestbutton.h"
 #include <QLabel>
@@ -36,7 +36,7 @@ void UsersTable::add_users(vector<string>& users)
     for(int i = 0; i < users.size(); i++)
     {
         //QHBoxLayout* layout = new QHBoxLayout;
-        QPixmap * pic = new QPixmap(QString::fromStdString(Api::instance()->get_user_avatar(users[i])));
+        QPixmap * pic = new QPixmap(QString::fromStdString(Core::instance()->get_user_avatar(users[i])));
         QPixmap* mypix = new QPixmap(pic->scaled(QSize(100,100),  Qt::KeepAspectRatio));
         QLabel* avatar = new QLabel;
         avatar->setPixmap(*mypix);
@@ -49,7 +49,7 @@ void UsersTable::add_users(vector<string>& users)
         cout << "added " << users[i] << endl;
         //layout->addWidget(avatar);
         //layout->addWidget(username);
-        if(users[i] != Api::instance()->get_username())
+        if(users[i] != Core::instance()->get_username())
         {
             QPushButton* view = new RequestButton(users[i]);
             view->setText("View Profile");

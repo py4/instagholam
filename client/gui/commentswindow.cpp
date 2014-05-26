@@ -3,7 +3,7 @@
 #include <string>
 #include <QHBoxLayout>
 #include <QTextEdit>
-#include "api.h"
+#include "core.h"
 #include <iostream>
 using namespace std;
 commentswindow::commentswindow(QWidget *parent) :
@@ -44,7 +44,7 @@ commentswindow::~commentswindow()
 void commentswindow::on_submit_comment_clicked()
 {
     string comment = ui->new_comment_content->toPlainText().toStdString();
-    Api::instance()->add_comment(id,comment);
-    add_comment(Api::instance()->get_username(), comment);
+    Core::instance()->add_comment(id,comment);
+    add_comment(Core::instance()->get_username(), comment);
     cout << "added!" << endl;
 }
