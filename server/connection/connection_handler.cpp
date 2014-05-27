@@ -111,6 +111,24 @@ void ConnectionHandler::run()
 				call_delete_user();
 			if(func == "like")
 				call_like();
+			if(func == "is_likable")
+				call_is_likable();
+			if(func == "unlike")
+				call_unlike();
+			if(func == "get_users")
+				call_get_users();
+			if(func == "get_user_avatar")
+				call_get_user_avatar();
+			if(func == "is_friend_with")
+				call_is_friend_with();
+			if(func == "add_comment")
+				call_add_comment();
+			if(func == "remove_comment")
+				call_remove_comment();
+			if(func == "has_requested_to")
+				call_has_requested_to();
+			if(func == "has_requested_to_me")
+				call_has_requested_to_me();
 
 		} catch (Exception e) {
 			send_exp(e);
@@ -398,47 +416,63 @@ void ConnectionHandler::call_like()
 	send_suc();
 }
 
+void ConnectionHandler::call_is_likable()
+{
+	core->is_likable(atoi(params["id"].c_str()));
+	send_suc();
+}
 
+void ConnectionHandler::call_unlike()
+{
+	core->unlike(atoi(params["id"].c_str()));
+	send_suc();
+}
+
+void ConnectionHandler::call_get_users()
+{
+	vector<string> result = core->get_users();
+	send_data(encode(result));	
+}
+
+void ConnectionHandler::call_get_user_avatar()
+{
+	string result = core->get_user_avatar(params["username"]);
+	send_data(result);
+}
+
+void ConnectionHandler::call_is_friend_with()
+{
+	bool result = core->is_friend_with(params["username"]);
+	send_data(result ? "true" : "false");
+}
+
+void ConnectionHandler::call_add_comment()
+{
+	int post_id = atoi(params["post_id"]);
+	core->add_comment(post_id,params["content"]);
+	send_suc();
+}
+
+void ConnectionHandler::call_remove_comment()
+{
+	int comment_id = atoi(params["comment_id"]);
+	core->remove_comment(comment_id);
+	send_suc();
+}
+
+void ConnectionHandler::call_has_requested_to()
+{
+	bool result = core->has_requested_to(params["username"])
+	send_data(result ? "true" : "false");
+}
+
+void ConnectionHandler::call_has_requested_to_me()
+{
+	bool result = core->has_requested_to_me(params["username"]);
+	send_data(result ? "true" : "false");
+}
 /*
 
-void Core::like(int id)
-{
-}
-
-bool Core::is_likable(int id)
-{
-}
-
-void Core::unlike(int id)
-{
-
-}
-
-vector<string> Core::get_users()
-{
-
-}
-
-string Core::get_user_avatar(string username)
-{
-}
-
-bool Core::is_friend_with(string username)
-{
-
-}
-
-void Core::add_comment(int post_id, string content)
-{
-}
-
-void Core::remove_comment(int comment_id)
-{
-}
-
-bool Core::has_requested_to(string username)
-{
-}
 
 bool Core::has_requested_to_me(string username)
 {

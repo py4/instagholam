@@ -554,41 +554,100 @@ void Core::like(int id)
 
 bool Core::is_likable(int id)
 {
+	map<string,string> params;
+	params["id"] = to_string(id);
+	send_req("is_likable",params);
+
+	string data = receive_data();
+	cout << "boolean data:  " << data << endl;
+	if(data == "true")
+		return true;
+	else
+		return false;
 }
 
 void Core::unlike(int id)
 {
-
+	map<string,string> params;
+	params["id"] = to_string(id);
+	send_req("unlike",params);
+	simple_receive();
 }
 
 vector<string> Core::get_users()
 {
+	send_req("get_users",Map<string,string>);
 
+	string data = receive_data();
+	vector<string> result = decode < vector<string> > (data);
+
+	return result;
 }
 
 string Core::get_user_avatar(string username)
 {
+	map<string,string> params;
+	params["username"] = username;
+	send_req("get_user_avatar",params);
+
+	string data = receive_data();
+	return data;
 }
 
 bool Core::is_friend_with(string username)
 {
+	map<string,string> params;
+	params["username"] = username;
+	send_req("is_friend_with",params);
 
+	string result = receive_data();
+	if(result == "true")
+		return true;
+	else
+		return false;
 }
 
 void Core::add_comment(int post_id, string content)
 {
+	map<string,string> params;
+	params["post_id"] = to_string(post_id);
+	params["content"] = to_string(content);
+	send_req("add_comment",params);
+	simple_receive();
 }
 
 void Core::remove_comment(int comment_id)
 {
+	map<string,string> params;
+	params["comment_id"] = to_string(comment_id);
+	send_req("remove_comment",params);
+	simple_receive();
 }
 
 bool Core::has_requested_to(string username)
 {
+	map<string,string> params;
+	params["username"] = to_string(username);
+	send_req("has_requested_to",params);
+
+	string result = receive_data();
+	if(result == "true")
+		return true;
+	else
+		return false;
 }
 
 bool Core::has_requested_to_me(string username)
 {
+	map<string,string> params;
+	params["username"] = to_string(username);
+	send_req("has_requested_to_me", params);
+
+	string result = receive_data();
+	if(result == "true")
+		return true;
+	else
+		return false;
 }
 
 bool Core::am_i_admin()
