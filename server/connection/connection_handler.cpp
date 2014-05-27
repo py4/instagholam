@@ -129,6 +129,10 @@ void ConnectionHandler::run()
 				call_has_requested_to();
 			if(func == "has_requested_to_me")
 				call_has_requested_to_me();
+			if(func == "am_i_admin")
+				call_am_i_admin();
+			if(func == "remove_user")
+				call_remove_user();
 
 		} catch (Exception e) {
 			send_exp(e);
@@ -448,21 +452,21 @@ void ConnectionHandler::call_is_friend_with()
 
 void ConnectionHandler::call_add_comment()
 {
-	int post_id = atoi(params["post_id"]);
+	int post_id = atoi(params["post_id"].c_str());
 	core->add_comment(post_id,params["content"]);
 	send_suc();
 }
 
 void ConnectionHandler::call_remove_comment()
 {
-	int comment_id = atoi(params["comment_id"]);
+	int comment_id = atoi(params["comment_id"].c_str());
 	core->remove_comment(comment_id);
 	send_suc();
 }
 
 void ConnectionHandler::call_has_requested_to()
 {
-	bool result = core->has_requested_to(params["username"])
+	bool result = core->has_requested_to(params["username"]);
 	send_data(result ? "true" : "false");
 }
 
@@ -471,17 +475,15 @@ void ConnectionHandler::call_has_requested_to_me()
 	bool result = core->has_requested_to_me(params["username"]);
 	send_data(result ? "true" : "false");
 }
-/*
 
-
-bool Core::has_requested_to_me(string username)
+void ConnectionHandler::call_am_i_admin()
 {
+	bool result = core->am_i_admin();
+	send_data(result ? "true" : "false");
 }
 
-bool Core::am_i_admin()
+void ConnectionHandler::call_remove_user()
 {
+	core->remove_user(params["username"]);
+	send_suc();
 }
-
-void Core::remove_user(string username)
-{
-} */
