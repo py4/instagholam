@@ -22,7 +22,7 @@ public:
 	static void init();
 	static void send(std::string);
 	static std::string receive();
-private:
+//private:
 	static int client_fd;
 	ClientHandler();
 	~ClientHandler();

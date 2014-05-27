@@ -12,8 +12,9 @@ class UserReport;
 class Core
 {
 public:
-	//Core();
-	static Core* instance();
+	Core();
+	~Core();
+	//static Core* instance();
 	void login(std::string,std::string);
 	void logout();
 	void sign_up(std::string,std::string,std::string,std::string);
@@ -77,10 +78,10 @@ private:
 	static bool compare_time(time_t&, time_t&);
 	static bool compare_post_time(Post*,Post*);
 
-	Core();
-	Core(Core const&);
-	~Core();
-	void operator=(Core const&);
-	static Core* core;
+	//Core();
+	//Core(Core const&);
+	//~Core();
+	//void operator=(Core const&);
+	//static Core* core;
 };
 #endif

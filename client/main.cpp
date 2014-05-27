@@ -3,11 +3,13 @@
 //#include "parser.h"
 #include "mainwindow.h"
 #include <qapplication.h>
-//#include "cli.h"
+#include "cli.h"
+
+#include "json.h"
 using namespace std;
 int main(int argc, char* argv[])
 {
-	/*if(argc != 1 and (string(argv[1]) != "--cli") and (string(argv[1]) != "--gui"))
+	if(argc != 1 and (string(argv[1]) != "--cli") and (string(argv[1]) != "--gui"))
 	{
 		cerr << "undefined parameters" << endl;
 		return 0;
@@ -30,8 +32,9 @@ int main(int argc, char* argv[])
 		window.show();
 		return a.exec();
 	}
-	return 0;	*/
-
+	ClientHandler::send("quit");
+	close(ClientHandler::client_fd);
+	return 0;
 	//TODO: destructor
 	
 }

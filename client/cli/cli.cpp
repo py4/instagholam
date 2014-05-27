@@ -55,6 +55,8 @@ void CLI::start()
 			}
 			else if(params["command"] == "show_my_profile")
 				show_my_profile();			
+			else if(params["command"] == "get_friend_latest_posts")
+				Core::instance()->get_friend_latest_posts(params["username"]);
 			else if(params["command"] == "show_friend_profile")
 				show_friend_profile(params["username"]);
 			else if(params["command"] == "request_to_friend")

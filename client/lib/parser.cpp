@@ -80,7 +80,7 @@ void set_params(map<string,string>& params, string command)
 		keys[1] = "title"; keys[2] = "CDN_path"; keys[3] = "hashtags", keys[4] = "publicity";
 		set_hash_params(params,keys,5,command);
 	} else if(temp == "show_friend_profile" or temp == "remove_friend" or temp == "request_to_friend" or temp == "report" or
-		temp == "delete_user") {
+		temp == "delete_user" or temp == "get_friend_latest_posts") {
 		keys[1] = "username";
 		set_hash_params(params,keys,2,command);
 	} else if(temp == "disapprove_friend_request" or temp == "approve_friend_request" or temp == "like_post" or

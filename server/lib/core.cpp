@@ -12,14 +12,14 @@
 
 using namespace std;
 
-Core* Core::core = NULL;
+//Core* Core::core = NULL;
 
 Core::Core()
 {
 	current_user = NULL;
 }
 
-Core* Core::instance()
+/*Core* Core::instance()
 {
 	if(core == NULL)
 	{
@@ -27,7 +27,7 @@ Core* Core::instance()
 		return core;
 	}
 	return core;
-}
+} */
 
 
 void Core::login(string username, string password)

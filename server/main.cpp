@@ -1,7 +1,8 @@
 #include <iostream>
+#include "server.h"
 using namespace std;
 int main()
 {
-    cout << "this is server!" << endl;
+	Server server;
     return 0;
 }

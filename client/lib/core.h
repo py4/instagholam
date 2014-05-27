@@ -67,5 +67,9 @@ private:
 	Core(Core const&);
 	void operator=(Core const&);
 	static Core* core;
+
+	void send(std::string);
+	void simple_receive();
+	std::string receive_data();
 };
 #endif

@@ -1,7 +1,7 @@
 #include "client_handler.h"
 using namespace std;
 
-static int client_fd = 0;
+int ClientHandler::client_fd = 0;
 
 void ClientHandler::init()
 {
@@ -26,6 +26,8 @@ ClientHandler::ClientHandler()
 
 ClientHandler::~ClientHandler()
 {
+	cout << "here" << endl;
+	send("quit");
 	close(client_fd);
 }
 
@@ -35,6 +37,7 @@ void ClientHandler::send(string content)
 	memcpy(buf,content.c_str(), content.size());
 	buf[content.size()] = 0;
 	int n = write(client_fd, buf, strlen(buf));
+	sleep(1);
 	if(n < 0)
 		throw "error in writing!\t";
 	delete[] buf;
@@ -43,7 +46,7 @@ void ClientHandler::send(string content)
 std::string ClientHandler::receive()
 {
 	char* buf = new char[BUF_SIZE];
-	int n = read(client_fd, buf, sizeof(buf));
+	int n = read(client_fd, buf, BUF_SIZE);
 	buf[n < BUF_SIZE - 1 ? n : BUF_SIZE - 1] = '\0';
 
 	if(n < 0)
