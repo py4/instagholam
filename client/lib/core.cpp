@@ -361,7 +361,7 @@ vector<string> Core::get_post_hashtags(int id)
 	json.set_params(params);
 
 	send(json.dump());
-	stringr data = receive_data();
+	string data = receive_data();
 
 	vector<string> result = decode < vector<string> > (data);
 	return result;
@@ -369,67 +369,187 @@ vector<string> Core::get_post_hashtags(int id)
 
 vector<string> Core::get_post_liked_by(int id)
 {
+	Json json;
+	json.AddMember("function", "get_post_liked_by");
+	map<string,string> params;
+	params["id"] = to_string(id);
+	json.set_params(params);
 
+	send(json.dump());
+	string data = receive_data();
+
+	vector<string> result = decode < vector<string> > (data);
+	return result;
 }
 
 map<string,string> Core::get_comment(int post_id, int comment_id)
 {
+	Json json;
+	json.AddMember("function","get_comment");
+	map<string,string> params;
+	params["post_id"] = to_string(post_id);
+	params["comment_id"] = to_string(comment_id);
+	json.set_params(params);
 
+	send(json.dump());
+	string data = receive_data();
+
+	map<string,string> result = decode < map<string,string> > (data);
+
+	return result;
 }
 
 map<int,string> Core::get_sent_requests()
 {
+	Json json;
+	json.AddMember("function","get_sent_requests");
+	send(json.dump());
+	string data = receive_data();
 
+	map<int, string> result = decode < map<int, string> > (data);
+
+	return result;
 }
 
 map<int,string> Core::get_received_requests()
 {
+	Json json;
+	json.AddMember("function","get_sent_requests");
+	send(json.dump());
 
+	string data = receive_data();
+
+	map<int, string> result = decode < map<int, string> > (data);
+
+	return result;
 }
 
 vector<string> Core::get_friends()
 {
+	Json json;
+	json.AddMember("function","get_friends");
+	send(json.dump());
+
+	string data = receive_data();
+
+	vector<string> result = decode < vector<string> > (data);
+
+	return result;
 }
 
 void Core::request_to_friend(string username)
 {
+	Json json;
+	json.AddMember("function", "request_to_friend");
+	send(json.dump());
+	simple_receive();
 }
 
 void Core::approve_friend_request(int id)
 {
+	Json json;
+	json.AddMember("function","approve_friend_request_with_id");
+	send(json.dump());
+	simple_receive();
 }
 
 void Core::approve_friend_request(string username)
 {
+	Json json;
+	json.AddMember("function","approve_friend_request_with_username");
+	map<string,string> params;
+	params["username"] = username;
+	json.set_params(params);
+	send(json.dump());
+	simple_receive();
 }
 
 void Core::disapprove_friend_request(int id)
 {
+	Json json;
+	json.AddMember("function","disapprove_friend_request_with_id");
+	map<string,string> params;
+	params["id"] = to_string(id);
+	json.set_params(params);
+	send(json.dump());
+	simple_receive();
 }
 
 void Core::disapprove_friend_request(string username)
 {
+	Json json;
+	json.AddMember("function","disapprove_friend_request_with_username");
+	map<string,string> params;
+	params["username"] = username;
+	json.set_params(params);
+	send(json.dump());
+	simple_receive();
 }
 
 void Core::remove_friend(string username)
 {
+	Json json;
+	json.AddMember("function","remove_friend");
+	map<string,string> params;
+	params["username"] = username;
+	json.set_params(params);
+	send(json.dump());
+	simple_receive();
 }
 
 void Core::report(string username)
 {
+	Json json;
+	json.AddMember("function","report");
+	map<string,string> params;
+	params["username"] = username;
+	json.set_params(params);
+	send(json.dump());
+	simple_receive();
 }
 
 void Core::update_user(string username, string password, string full_name, string avatar_path)
 {
+	Json json;
+	json.AddMember("function","update_user");
+	map<string,string> params;
+	params["username"] = username;
+	params["password"] = password;
+	params["full_name"] = full_name;
+	params["avatar_path"] = avatar_path;
+
+	json.set_params(params);
+	send(json.dump());
+	simple_receive();
 }
 
 
 void Core::delete_user(string username)
 {
+	Json json;
+	json.AddMember("function","delete_user");
+	map<string,string> params;
+	params["username"] = username;
+
+	json.set_params(params);
+	send(json.dump());
+	simple_receive();
+}
+
+void Core::send_req(string func, map<string,string>& params)
+{
+	Json json;
+	json.AddMember("function",func.c_str());
+	json.set_params(params);
+	Core::instance()->send(json.dump());
 }
 
 void Core::like(int id)
 {
+	map<string,string> params;
+	params["id"] = to_string(id);
+	send_req("like",params);
+	simple_receive();
 }
 
 bool Core::is_likable(int id)

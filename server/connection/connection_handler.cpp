@@ -44,42 +44,77 @@ void ConnectionHandler::run()
 		set_params(root);
 
 		string func = root["function"].GetString();
-		if(func == "login")
-			call_login();
-		if(func == "sign_up")
-			call_signup();
-		if(func == "logout")
-			call_logout();
-		if(func == "register_user")
-			call_register();
-		if(func == "get_avatar_path")
-			call_get_avatar_path();
-		if(func == "get_username")
-			call_get_username();
-		if(func == "get_latest_posts")
-			call_get_latest_posts();
-		if(func == "show_timelog")
-			call_show_timelog();
-		if(func == "post_photo")
-			call_post_photo();
-		if(func == "get_my_latest_posts")
-			call_get_my_latest_posts();
-		if(func == "get_friend_latest_posts")
-			call_get_friend_latest_posts();
-		if(func == "get_user_public_posts")
-			call_get_user_public_posts();
-		if(func == "get_my_latest_liked_posts")
-			call_get_my_latest_liked_posts();
-		if(func == "get_friend_latest_liked_posts")
-			call_get_friend_latest_liked_posts();
-		if(func == "get_friend_friends")
-			call_get_friend_friends();
-		if(func == "get_post_info")
-			call_get_post_info();
-		if(func == "get_post_comments")
-			call_get_post_comments();
-		if(func == "get_post_hashtags")
-			call_get_post_hashtags();
+		try {
+			if(func == "login")
+				call_login();
+			if(func == "sign_up")
+				call_signup();
+			if(func == "logout")
+				call_logout();
+			if(func == "register_user")
+				call_register();
+			if(func == "get_avatar_path")
+				call_get_avatar_path();
+			if(func == "get_username")
+				call_get_username();
+			if(func == "get_latest_posts")
+				call_get_latest_posts();
+			if(func == "show_timelog")
+				call_show_timelog();
+			if(func == "post_photo")
+				call_post_photo();
+			if(func == "get_my_latest_posts")
+				call_get_my_latest_posts();
+			if(func == "get_friend_latest_posts")
+				call_get_friend_latest_posts();
+			if(func == "get_user_public_posts")
+				call_get_user_public_posts();
+			if(func == "get_my_latest_liked_posts")
+				call_get_my_latest_liked_posts();
+			if(func == "get_friend_latest_liked_posts")
+				call_get_friend_latest_liked_posts();
+			if(func == "get_friend_friends")
+				call_get_friend_friends();
+			if(func == "get_post_info")
+				call_get_post_info();
+			if(func == "get_post_comments")
+				call_get_post_comments();
+			if(func == "get_post_hashtags")
+				call_get_post_hashtags();
+			if(func == "get_post_liked_by")
+				call_get_post_liked_by();
+			if(func == "get_comment")
+				call_get_comment();
+			if(func == "get_sent_requests")
+				call_get_sent_requests();
+			if(func == "get_received_requests")
+				call_get_received_requests();
+			if(func == "get_friends")
+				call_get_friends();
+			if(func == "request_to_friend")
+				call_request_to_friend();
+			if(func == "approve_friend_request_with_id")
+				call_approve_friend_request_with_id();
+			if(func == "approve_friend_request_with_username")
+				call_approve_friend_request_with_username();
+			if(func == "disapprove_friend_request_with_id")
+				call_disapprove_friend_request_with_id();
+			if(func == "disapprove_friend_request_with_username")
+				call_disapprove_friend_request_with_username();
+			if(func == "remove_friend")
+				call_remove_friend();
+			if(func == "report")
+				call_report();
+			if(func == "update_user")
+				call_update_user();
+			if(func == "delete_user")
+				call_delete_user();
+			if(func == "like")
+				call_like();
+
+		} catch (Exception e) {
+			send_exp(e);
+		}
 		//cout << "function:  " << root["Function"].GetString() << endl;
 		//cout << "username:  " << root["username"].GetString() << endl;
 		//cout << "password:  " << root["password"].GetString() << endl;
@@ -106,14 +141,14 @@ void ConnectionHandler::send(string content)
 string ConnectionHandler::receive()
 {
 	char* buf = new char[BUF_SIZE];
-	int n = read(client_fd, buf, BUF_SIZE);//sizeof(buf));
-buf[n < BUF_SIZE - 1 ? n : BUF_SIZE - 1] = '\0';
+	int n = read(client_fd, buf, BUF_SIZE);
+	buf[n < BUF_SIZE - 1 ? n : BUF_SIZE - 1] = '\0';
 
-if(n < 0)
-	throw "error in reading!\t";
-else
-	return string(buf);
-delete[] buf;
+	if(n < 0)
+		throw "error in reading!\t";
+	else
+		return string(buf);
+	delete[] buf;
 }
 
 void ConnectionHandler::set_params(rapidjson::Document& document)
@@ -121,8 +156,10 @@ void ConnectionHandler::set_params(rapidjson::Document& document)
 	if(document["params"].GetType() == 0)
 		return;
 	for (Value::ConstValueIterator itr = document["params"].Begin(); itr != document["params"].End(); ++itr)
+	{
 		for(Value::ConstMemberIterator m = itr->MemberBegin(); m != itr->MemberEnd(); ++m)
 			params[m->name.GetString()] = m->value.GetString();
+	}
 }
 
 void ConnectionHandler::send_exp(Exception& e)
@@ -148,260 +185,221 @@ void ConnectionHandler::send_data(string data)
 
 void ConnectionHandler::call_login()
 {
-	try {
-		core->login(params["username"],params["password"]);
-		send_suc();
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	core->login(params["username"],params["password"]);
+	send_suc();
 }
 
 void ConnectionHandler::call_logout()
 {
-	try {
-		core->logout();
-		send_suc();
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	
+	core->logout();
+	send_suc();
 }
 
 void ConnectionHandler::call_signup()
 {
-	try {
-		core->sign_up(params["username"], params["password"], params["name"], params["avatar_path"]);
-		send_suc();
-	} catch (Exception e) {
-		send_exp(e);
-	}
+
+	core->sign_up(params["username"], params["password"], params["name"], params["avatar_path"]);
+	send_suc();
 }
 
 void ConnectionHandler::call_register()
 {
-	try {
-		core->register_user(params["username"], params["password"], params["name"], params["avatar_path"]);
-		send_suc();
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	core->register_user(params["username"], params["password"], params["name"], params["avatar_path"]);
+	send_suc();
 }
 
 void ConnectionHandler::call_get_avatar_path()
 {
-	try {
-		string result = core->get_avatar_path();
-		send_data(result);
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	
+	string result = core->get_avatar_path();
+	send_data(result);
 }
 
 void ConnectionHandler::call_get_username()
 {
-	try {
-		string result = core->get_username();
-		send_data(result);
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	string result = core->get_username();
+	send_data(result);
 }
 
 void ConnectionHandler::call_get_latest_posts()
 {
-	try {
-		vector <int> result = core->get_latest_posts();
-		send_data(encode(result));
-	} catch (Exception e) {
-		send_exp(e);
-	}
+
+	vector <int> result = core->get_latest_posts();
+	send_data(encode(result));
 }
 
 void ConnectionHandler::call_show_timelog()
 {
-	try {
-		vector<int> result = core->show_timelog();
-		send_data(encode(result));
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	vector<int> result = core->show_timelog();
+	send_data(encode(result));
 }
 
 void ConnectionHandler::call_post_photo()
 {
-	try {
-		bool pub = false;
-		if(params["publicity"] == "true")
-			pub = true;
-		core->post_photo(params["title"],params["CDN_path"], params["hashtags"], pub);
-		send_suc();
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	
+	bool pub = false;
+	if(params["publicity"] == "true")
+		pub = true;
+	core->post_photo(params["title"],params["CDN_path"], params["hashtags"], pub);
+	send_suc();
 }
+
 
 void ConnectionHandler::call_get_my_latest_posts()
 {
-	try {
-		vector<int> result = core->get_my_latest_posts();
-		send_data(encode(result));
-	} catch ( Exception e) {
-		send_exp(e);
-	}
+	vector<int> result = core->get_my_latest_posts();
+	send_data(encode(result));
 }
 
 void ConnectionHandler::call_get_friend_latest_posts()
 {
-	try {
-		vector<int> result = core->get_friend_latest_posts(params["username"]);
-		send_data(encode(result));
-	} catch ( Exception e) {
-		send_exp(e);
-	}
+	vector<int> result = core->get_friend_latest_posts(params["username"]);
+	send_data(encode(result));
 }
 
 void ConnectionHandler::call_get_user_public_posts()
 {
-	try {
-		vector<int> result = core->get_user_public_posts(params["username"]);
-		send_data(encode(result));
-	} catch ( Exception e) {
-		send_exp(e);
-	}
+	vector<int> result = core->get_user_public_posts(params["username"]);
+	send_data(encode(result));
 }
 
 void ConnectionHandler::call_get_my_latest_liked_posts()
 {
-	try {
-		vector<int> result = core->get_my_latest_liked_posts();
-		send_data(encode(result));
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	vector<int> result = core->get_my_latest_liked_posts();
+	send_data(encode(result));
 }
 
 void ConnectionHandler::call_get_friend_latest_liked_posts()
 {
-	try {
-		vector<int> result = core->get_friend_latest_liked_posts(params["username"]);
-		send_data(encode(result));
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	vector<int> result = core->get_friend_latest_liked_posts(params["username"]);
+	send_data(encode(result));
 }
 
 void ConnectionHandler::call_get_friend_friends()
 {
-	try {
-		vector<string> result = core->get_friend_friends(params["username"]);
-		send_data(encode(result));
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	vector<string> result = core->get_friend_friends(params["username"]);
+	send_data(encode(result));
 }
 
 void ConnectionHandler::call_get_post_info()
 {
-	try {
-		int id = atoi(params["id"].c_str());
-		map<string,string> result = core->get_post_info(id);
-		send_data(encode(result));
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	int id = atoi(params["id"].c_str());
+	map<string,string> result = core->get_post_info(id);
+	send_data(encode(result));
 }
 
 void ConnectionHandler::call_get_post_comments()
 {
-	try {
-		int id = atoi(params["id"].c_str());
-		vector<int> result = core->get_post_comments(id);
-		send_data(encode(result));
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	int id = atoi(params["id"].c_str());
+	vector<int> result = core->get_post_comments(id);
+	send_data(encode(result));
 }
 
 void ConnectionHandler::call_get_post_hashtags()
 {
-	try {
-		int id = atoi(params["id"].c_str());
-		vector<string> result = core->get_post_hashtags(id);
-		send_data(encode(result));
-	} catch (Exception e) {
-		send_exp(e);
-	}
+	int id = atoi(params["id"].c_str());
+	vector<string> result = core->get_post_hashtags(id);
+	send_data(encode(result));
+}
+
+void ConnectionHandler::call_get_post_liked_by()
+{
+	int id = atoi(params["id"].c_str());
+	vector<string> result = core->get_post_liked_by(id);
+	send_data(encode(result));
+}
+
+void ConnectionHandler::call_get_comment()
+{
+	int post_id = atoi(params["post_id"].c_str());
+	int comment_id = atoi(params["comment_id"].c_str());
+	map<string,string> result = core->get_comment(post_id, comment_id);
+	send_data(encode(result));
+}
+
+void ConnectionHandler::call_get_sent_requests()
+{
+	map<int,string> result = core->get_sent_requests();
+	send_data(encode(result));
+}
+
+void ConnectionHandler::call_get_received_requests()
+{
+	map<int, string> result = core->get_received_requests();
+	send_data(encode(result));
+}
+
+void ConnectionHandler::call_get_friends()
+{
+	vector<string> result = core->get_friends();
+	send_data(encode(result));
+}
+
+void ConnectionHandler::call_request_to_friend()
+{
+	core->request_to_friend(params["username"]);
+	send_suc();
+}
+
+void ConnectionHandler::call_approve_friend_request_with_id()
+{
+	int id = atoi(params["id"].c_str());
+	core->approve_friend_request(id);
+	send_suc();
+}
+
+void ConnectionHandler::call_approve_friend_request_with_username()
+{
+	core->approve_friend_request(params["username"]);
+	send_suc();
+}
+
+void ConnectionHandler::call_disapprove_friend_request_with_id()
+{
+	int id = atoi(params["id"].c_str());
+	core->disapprove_friend_request(id);
+	send_suc();
+}
+
+void ConnectionHandler::call_disapprove_friend_request_with_username()
+{
+	core->disapprove_friend_request(params["username"]);
+	send_suc();
+}
+
+void ConnectionHandler::call_remove_friend()
+{
+	core->remove_friend(params["username"]);
+	send_suc();
+}
+
+void ConnectionHandler::call_report()
+{
+	core->report(params["username"]);
+	send_suc();
+}
+
+void ConnectionHandler::call_update_user()
+{
+	core->update_user(params["username"],params["password"],params["full_name"], params["avatar_path"]);
+	send_suc();
+}
+
+void ConnectionHandler::call_delete_user()
+{
+	core->delete_user(params["username"]);
+	send_suc();
+}
+
+void ConnectionHandler::call_like()
+{
+	core->like(atoi(params["id"].c_str()));
+	send_suc();
 }
 
 
 /*
-
-
-
-vector<string> Core::get_post_hashtags(int id)
-{
-
-}
-
-vector<string> Core::get_post_liked_by(int id)
-{
-
-}
-
-map<string,string> Core::get_comment(int post_id, int comment_id)
-{
-
-}
-
-map<int,string> Core::get_sent_requests()
-{
-
-}
-
-map<int,string> Core::get_received_requests()
-{
-
-}
-
-vector<string> Core::get_friends()
-{
-}
-
-void Core::request_to_friend(string username)
-{
-}
-
-void Core::approve_friend_request(int id)
-{
-}
-
-void Core::approve_friend_request(string username)
-{
-}
-
-void Core::disapprove_friend_request(int id)
-{
-}
-
-void Core::disapprove_friend_request(string username)
-{
-}
-
-void Core::remove_friend(string username)
-{
-}
-
-void Core::report(string username)
-{
-}
-
-void Core::update_user(string username, string password, string full_name, string avatar_path)
-{
-}
-
-
-void Core::delete_user(string username)
-{
-}
 
 void Core::like(int id)
 {
