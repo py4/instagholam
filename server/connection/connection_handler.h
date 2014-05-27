@@ -70,7 +70,7 @@ private:
 	void call_has_requested_to_me();
 	void call_am_i_admin();
 	void call_remove_user();
-	
+	void call_is_reportable();
 	Core* core;
 	};
 #endif

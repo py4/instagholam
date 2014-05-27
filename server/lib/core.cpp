@@ -513,6 +513,8 @@ void Core::report(string username)
 		throw UserNotFound();
 	if(current_user->reported_before(user))
 		throw ReportedBefore();
+	if(user == current_user)
+		throw CannotReportYourself();
 
 	UserReport* report = new UserReport(current_user,user);
 	DB::instance()->reports.push_back(report);
@@ -821,16 +823,16 @@ void Core::remove_user(string username)
 		throw UserNotFound();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+bool Core::is_reportable(string username)
+{
+	if(current_user == NULL)
+		throw NotLoggedIn();
+	User* user = DB::instance()->get_user(username);
+	if(user == NULL)
+		throw UserNotFound();
+	if(current_user == user)
+		return false;
+	if(user->is_admin())
+		return false;
+	return true;
+}

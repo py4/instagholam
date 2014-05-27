@@ -142,5 +142,11 @@ public:
 	NotLikedBefore() : Exception("You've not liked this before") {}
 };
 
+class CannotReportYourself : public Exception
+{
+public:
+	CannotReportYourself() : Exception("Cannot report yourself!") {}
+};
+
 
 #endif

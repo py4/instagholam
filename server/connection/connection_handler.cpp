@@ -133,6 +133,8 @@ void ConnectionHandler::run()
 				call_am_i_admin();
 			if(func == "remove_user")
 				call_remove_user();
+			if(func == "is_reportable")
+				call_is_reportable();
 
 		} catch (Exception e) {
 			send_exp(e);
@@ -306,6 +308,7 @@ void ConnectionHandler::call_get_friend_friends()
 
 void ConnectionHandler::call_get_post_info()
 {
+	cout << "here!" << endl;
 	int id = atoi(params["id"].c_str());
 	map<string,string> result = core->get_post_info(id);
 	send_data(encode(result));
@@ -486,4 +489,10 @@ void ConnectionHandler::call_remove_user()
 {
 	core->remove_user(params["username"]);
 	send_suc();
+}
+
+void ConnectionHandler::call_is_reportable()
+{
+	bool result = core->is_reportable(params["username"]);
+	send_data(result ? "true" : "false");
 }

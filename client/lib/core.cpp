@@ -87,7 +87,7 @@ void Core::simple_receive()
 
 		if(root["error"].GetType())
 			throw Exception(root["error"].GetString());
-		else
+		else if(root["success"].GetType())
 			cout << response << endl;
 
 	} catch (const char* e) {
@@ -105,7 +105,7 @@ string Core::receive_data()
 
 		if(root["error"].GetType())
 			throw Exception(root["error"].GetString());
-		else
+		else if(root["success"].GetType())
 			cout << response << endl;
 
 		return root["data"].GetString();
@@ -288,6 +288,7 @@ map<string,string> Core::get_post_info(int id)
 
 	string data = receive_data();
 	map<string, string> result = decode<map<string,string> >(data);
+	cout << "result size:  " << result.size() << endl;
 	return result;
 }
 
@@ -333,7 +334,7 @@ map<string,string> Core::get_comment(int post_id, int comment_id)
 	map<string,string> params;
 	params["post_id"] = to_string(post_id);
 	params["comment_id"] = to_string(comment_id);
-	send_req("get_post_comments",params);
+	send_req("get_comment",params);
 
 	string data = receive_data();
 	map<string,string> result = decode < map<string,string> > (data);
@@ -577,4 +578,17 @@ void Core::remove_user(string username)
 	params["username"] = username;
 	send_req("remove_user", params);
 	simple_receive();
+}
+
+bool Core::is_reportable(string username)
+{
+	map<string,string> params;
+	params["username"] = username;
+	send_req("is_reportable", params);
+
+	string result = receive_data();
+	if(result == "true")
+		return true;
+	else
+		return false;
 }

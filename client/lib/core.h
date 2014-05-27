@@ -60,7 +60,7 @@ public:
 	std::vector<int> get_user_public_posts(std::string);
 	std::vector<std::string> get_friend_friends(std::string);
 	std::vector<int> show_timelog();
-	
+	bool is_reportable(std::string);
 private:
 	Core();
 	~Core();
