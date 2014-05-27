@@ -28,6 +28,7 @@ void set_book_params(map<string,string>&,string);
 void set_add_to_shelf_params(map<string,string>&, string);
 std::vector <std::string> get_hashtags(std::string);
 int to_int(std::string);
+std::string to_string(int);
 //void set_login_params(map<string,string>&,string);
 
 

@@ -84,7 +84,7 @@ void set_params(map<string,string>& params, string command)
 		keys[1] = "username";
 		set_hash_params(params,keys,2,command);
 	} else if(temp == "disapprove_friend_request" or temp == "approve_friend_request" or temp == "like_post" or
-		temp == "unlike_post" or temp == "remove_comment") {
+		temp == "unlike_post" or temp == "remove_comment" or temp == "get_post_info") {
 		keys[1] = "id";
 		set_hash_params(params,keys,2,command);
 	} else if(temp == "comment") {
@@ -185,6 +185,15 @@ int to_int(string line)
 {
 	stringstream stream(line);
 	int result;
+	stream >> result;
+	return result;
+}
+
+string to_string(int num)
+{
+	stringstream stream;
+	stream << num;
+	string result;
 	stream >> result;
 	return result;
 }

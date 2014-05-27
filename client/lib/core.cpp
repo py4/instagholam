@@ -3,9 +3,11 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/map.hpp>
 #include "json.h"
 #include "exception.h"
 #include <sstream>
+#include "parser.h"
 using namespace std;
 
 template<typename Archive>
@@ -19,11 +21,11 @@ void serialize(Archive& ar, std::vector<std::string>& objs, const unsigned versi
 }
 
 template <typename T>
-vector<T> decode(string encoded)
+T decode(string encoded)
 {
 	stringstream ss(encoded);
 	boost::archive::text_iarchive ar(ss);
-	vector<T> b;
+	T b;
 	ar & b;
 	return b;
 }
@@ -202,7 +204,7 @@ vector<int> Core::get_latest_posts()
 	json.AddMember("function","get_latest_posts");
 	send(json.dump());
 	string data = receive_data();
-	vector<int> result = decode<int>(data);
+	vector<int> result = decode <vector<int> >(data);
 	return result;
 }
 
@@ -212,7 +214,7 @@ vector<int> Core::show_timelog()
 	json.AddMember("function","show_timelog");
 	send(json.dump());
 	string data = receive_data();
-	vector<int> result = decode<int>(data);
+	vector<int> result = decode< vector<int> >(data);
 	return result;
 }
 
@@ -256,7 +258,7 @@ vector<int> Core::get_my_latest_posts()
 	json.AddMember("function","get_my_latest_posts");
 	send(json.dump());
 	string data = receive_data();
-	vector<int> result = decode<int>(data);
+	vector<int> result = decode< vector<int> >(data);
 	return result;
 }
 
@@ -269,7 +271,7 @@ vector<int> Core::get_friend_latest_posts(string username)
  	json.set_params(params);
  	send(json.dump());
  	string data = receive_data();
-	vector<int> result = decode<int>(data);
+	vector<int> result = decode< vector<int> >(data);
 	return result;
 }
 
@@ -282,7 +284,7 @@ vector <int> Core::get_user_public_posts(string username)
 	json.set_params(params);
 	send(json.dump());
 	string data = receive_data();
-	vector<int> result = decode<int>(data);
+	vector<int> result = decode< vector<int> >(data);
 	return result;
 }
 
@@ -292,7 +294,7 @@ vector<int> Core::get_my_latest_liked_posts()
 	json.AddMember("function","get_my_latest_liked_posts");
 	send(json.dump());
 	string data = receive_data();
-	vector<int> result = decode<int>(data);
+	vector<int> result = decode< vector<int> >(data);
 	return result;
 }
 
@@ -300,9 +302,12 @@ vector<int> Core::get_friend_latest_liked_posts(string username)
 {
 	Json json;
 	json.AddMember("function","get_friend_latest_liked_posts");
+	map<string,string> params;
+	params["username"] = username;
+	json.set_params(params);
 	send(json.dump());
 	string data = receive_data();
-	vector<int> result = decode<int>(data);
+	vector<int> result = decode< vector<int> >(data);
 	return result;
 }
 
@@ -310,24 +315,56 @@ vector<string> Core::get_friend_friends(string username)
 {
 	Json json;
 	json.AddMember("function","get_friend_friends");
+	map<string,string> params;
+	params["username"] = username;
+	json.set_params(params);
 	send(json.dump());
 	string data = receive_data();
-	vector<string> result = decode<string>(data);
+	vector<string> result = decode<vector<string> >(data);
 	return result;
-}
+}	
 
 map<string,string> Core::get_post_info(int id)
 {
+	Json json;
+	json.AddMember("function","get_post_info");
+	map<string,string> params;
+	params["id"] = to_string(id);
+	json.set_params(params);
+
+	send(json.dump());
+	string data = receive_data();
+	map<string, string> result = decode<map<string,string> >(data);
+	return result;
 }
 
 vector<int> Core::get_post_comments(int id)
 {
+	Json json;
+	json.AddMember("function","get_post_comments");
+	map<string,string> params;
+	params["id"] = to_string(id);
+	json.set_params(params);
 
+	send(json.dump());
+	string data = receive_data();
+	vector<int> result = decode< vector<int> > (data);
+	return result;
 }
 
 vector<string> Core::get_post_hashtags(int id)
 {
+	Json json;
+	json.AddMember("function", "get_post_hashtags");
+	map<string,string> params;
+	params["id"] = to_string(id);
+	json.set_params(params);
 
+	send(json.dump());
+	stringr data = receive_data();
+
+	vector<string> result = decode < vector<string> > (data);
+	return result;
 }
 
 vector<string> Core::get_post_liked_by(int id)

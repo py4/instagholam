@@ -9,32 +9,20 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/map.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <sstream>
 using namespace std;
 using namespace rapidjson;
 
-template<typename Archive>
-void serialize(Archive& ar, std::vector<int>& objs, const unsigned version) {
-  ar & objs;
-}
-
-template<typename Archive>
-void serialize(Archive& ar, std::vector<std::string>& objs, const unsigned version) {
-  ar & objs;
-}
-
 template<typename T>
-std::string encode(vector<T>& vec)
+std::string encode(T& t)
 {
 	stringstream ss;
 	boost::archive::text_oarchive oa(ss);
-	oa << vec;
+	oa << t;
 	return ss.str();
 }
-
-
-
 
 ConnectionHandler::ConnectionHandler(int fd)
 {
@@ -86,6 +74,12 @@ void ConnectionHandler::run()
 			call_get_friend_latest_liked_posts();
 		if(func == "get_friend_friends")
 			call_get_friend_friends();
+		if(func == "get_post_info")
+			call_get_post_info();
+		if(func == "get_post_comments")
+			call_get_post_comments();
+		if(func == "get_post_hashtags")
+			call_get_post_hashtags();
 		//cout << "function:  " << root["Function"].GetString() << endl;
 		//cout << "username:  " << root["username"].GetString() << endl;
 		//cout << "password:  " << root["password"].GetString() << endl;
@@ -305,21 +299,43 @@ void ConnectionHandler::call_get_friend_friends()
 	}
 }
 
+void ConnectionHandler::call_get_post_info()
+{
+	try {
+		int id = atoi(params["id"].c_str());
+		map<string,string> result = core->get_post_info(id);
+		send_data(encode(result));
+	} catch (Exception e) {
+		send_exp(e);
+	}
+}
+
+void ConnectionHandler::call_get_post_comments()
+{
+	try {
+		int id = atoi(params["id"].c_str());
+		vector<int> result = core->get_post_comments(id);
+		send_data(encode(result));
+	} catch (Exception e) {
+		send_exp(e);
+	}
+}
+
+void ConnectionHandler::call_get_post_hashtags()
+{
+	try {
+		int id = atoi(params["id"].c_str());
+		vector<string> result = core->get_post_hashtags(id);
+		send_data(encode(result));
+	} catch (Exception e) {
+		send_exp(e);
+	}
+}
+
 
 /*
-vector<string> Core::get_friend_friends(string username)
-{
 
-}
 
-map<string,string> Core::get_post_info(int id)
-{
-}
-
-vector<int> Core::get_post_comments(int id)
-{
-
-}
 
 vector<string> Core::get_post_hashtags(int id)
 {
