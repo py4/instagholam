@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include "cvector.h"
 
 class User;
 class Post;
@@ -20,10 +21,10 @@ public:
 private:
 	Post* get_post(int);
 	bool is_reported(User*);
-	std::vector <User*> users;
-	std::vector <Post*> posts;
-	std::vector <HashTag*> hashtags;
-	std::vector <UserReport*> reports;
+	cvector<User*> users;
+	cvector<Post*> posts;
+	cvector<HashTag*> hashtags;
+	cvector<UserReport*> reports;
 
 	DB();
 	~DB();

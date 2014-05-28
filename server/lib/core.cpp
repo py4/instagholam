@@ -84,8 +84,6 @@ void Core::register_user(string username, string password, string name, string a
 		throw UserExists();
 
 	user = new User(username, password, name,avatar_path);
-	DB::instance()->users.push_back(user);
-
 	cout << "registered successfully" << endl;
 }
 

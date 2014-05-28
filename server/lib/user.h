@@ -2,7 +2,7 @@
 #define USER_H_
 #include <vector>
 #include <string>
-
+#include "cvector.h"
 #define latest_count 5
 
 class Post;
@@ -26,11 +26,11 @@ public:
 
 private:
 	Post* post_photo(std::string,std::string,std::string, bool = false);
-	std::vector<int> get_latest_posts();
-	std::vector<int> get_latest_liked_posts();
-	std::vector<int> get_public_posts();
-	std::vector<Post*> get_latest_posts_full();
-	std::vector<std::string> get_friends();
+	cvector<int> get_latest_posts();
+	cvector<int> get_latest_liked_posts();
+	cvector<int> get_public_posts();
+	cvector<Post*> get_latest_posts_full();
+	cvector<std::string> get_friends();
 	bool has_requested_to(User*);
 	bool is_friend_with(User*);
 	bool able_to_see(int);
@@ -53,12 +53,12 @@ private:
 	std::string password;
 	std::string full_name;
 	Photo* avatar;
-	std::vector <Post*> posts;
-	std::vector <Post*> liked_posts;
-	std::vector <Comment*> comments;
-	std::vector <FriendRequest*> send_requests;
-	std::vector <FriendRequest*> received_requests;
-	std::vector <User*> friends;
-	std::vector <UserReport*> reports;
+	cvector <Post*> posts;
+	cvector <Post*> liked_posts;
+	cvector <Comment*> comments;
+	cvector <FriendRequest*> send_requests;
+	cvector <FriendRequest*> received_requests;
+	cvector <User*> friends;
+	cvector <UserReport*> reports;
 };
 #endif

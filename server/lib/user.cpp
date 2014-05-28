@@ -44,18 +44,18 @@ string User::get_avatar_path()
 	return avatar->get_path();
 }
 
-vector <int> User::get_latest_posts()
+cvector <int> User::get_latest_posts()
 {
-	vector <int> result;
+	cvector <int> result;
 	//for(int i = posts.size() - 1; posts.size() - i <= latest_count and i >= 0; i--)
 	for(int i = posts.size() - 1; i >= 0; i--)
 		result.push_back(posts[i]->get_id());
 	return result;
 }
 
-vector <int> User::get_public_posts()
+cvector <int> User::get_public_posts()
 {
-	vector<int> result;
+	cvector<int> result;
 	for(int i = posts.size() - 1; i >= 0; i--)
 		if(posts[i]->is_pub())
 			result.push_back(posts[i]->get_id());
@@ -64,17 +64,17 @@ vector <int> User::get_public_posts()
 	return result;
 }
 
-vector <Post*> User::get_latest_posts_full()
+cvector <Post*> User::get_latest_posts_full()
 {
-	vector <Post*> result;
+	cvector <Post*> result;
 	for(int i = posts.size() - 1; i >= 0; i--)
 		result.push_back(posts[i]);
 	return result;
 }
 
-vector <int> User::get_latest_liked_posts()
+cvector <int> User::get_latest_liked_posts()
 {
-	vector <int> result;
+	cvector <int> result;
 	//for(int i = liked_posts.size() - 1; liked_posts.size() - i < latest_count and i > 0; i++)
 	for(int i = liked_posts.size() - 1; i >= 0; i--)
 		result.push_back(liked_posts[i]->get_id());
@@ -99,9 +99,9 @@ string User::get_full_name()
 	return full_name;
 }
 
-vector<string> User::get_friends()
+cvector<string> User::get_friends()
 {
-	vector<string> result;
+	cvector<string> result;
 	for(int i = 0; i < friends.size(); i++)
 		result.push_back(friends[i]->get_username());
 	
