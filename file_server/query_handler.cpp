@@ -128,7 +128,52 @@ void QueryHandler::handle_upload(rapidjson::Document& document)
 		cout << e << endl;
 		return;
 	}
+}
 
+bool QueryHandler::exist_in_CDN(string file_name)
+{
+	if(FILE* file = fopen(("CDN/"+file_name).c_str(), "r"))
+	{
+		fclose(file);
+		return true;
+	}
+	else
+		return false;
+
+}
+
+void QueryHandler::upload_to_client(string file_name)
+{
+	cout << "================= Uploading image to client ==================" << endl;
+	char buf[1000];
+	FILE* local_file = fopen(("CDN/"+file_name).c_str(), "rb");
+	int read_bytes = 0;
+	if(local_file == 0)
+		throw "File not found";
+	int sum = 0;
+	while((read_bytes = fread(buf,1,500,local_file)) > 0)
+	{
+		printf("read %d bytes\n",read_bytes);
+		int written_bytes = write(query_fd, buf, read_bytes);
+		sum += written_bytes;
+		printf("wrote %d bytes to server\n", written_bytes);
+	}
+	cout << "Uploading is done => written bytes:  " << sum << endl;
+	cout << "=======================================" << endl; 
+}
+
+void QueryHandler::handle_download(rapidjson::Document& document)
+{
+	set_params(document);
+	string file_name = params["file_name"];
+	if(exist_in_CDN(file_name))
+	{
+		send_with_key("message","accepted");
+		sleep(1);
+		upload_to_client(file_name);
+	} else {
+		send_with_key("message","requested image not found");
+	}
 }
 
 void QueryHandler::send_with_key(string key, string data)

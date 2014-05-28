@@ -66,6 +66,8 @@ public:
 
 	int connect_to_file_server();
 	void upload_photo(int,std::string);
+	std::string download_from_CDN(std::string);
+	bool exist_in_cache(std::string);
 private:
 	Core();
 	~Core();

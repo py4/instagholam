@@ -84,12 +84,15 @@ void set_params(map<string,string>& params, string command)
 		keys[1] = "username";
 		set_hash_params(params,keys,2,command);
 	} else if(temp == "disapprove_friend_request" or temp == "approve_friend_request" or temp == "like_post" or
-		temp == "unlike_post" or temp == "remove_comment" or temp == "get_post_info") {
+		temp == "unlike_post" or temp == "remove_comment" or temp == "get_post_info" or temp == "is_likable") {
 		keys[1] = "id";
 		set_hash_params(params,keys,2,command);
 	} else if(temp == "comment") {
 		keys[1] = "id"; keys[2] = "content";
 		set_hash_params(params,keys,3,command);
+	} else if(temp == "download") {
+		keys[1] = "file_name";
+		set_hash_params(params,keys,2,command);
 	}
 }
 

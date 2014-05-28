@@ -378,6 +378,59 @@ vector<string> Core::get_friend_friends(string username)
 	string data = receive_data();
 	vector<string> result = decode<vector<string> >(data);
 	return result;
+}
+
+bool Core::exist_in_cache(string file_name)
+{
+	if(FILE* file = fopen(("cache/"+file_name).c_str(), "r"))
+	{
+		fclose(file);
+		return true;
+	}
+	else
+		return false;
+
+}
+
+string Core::download_from_CDN(string file_name)
+{
+	cout << "=========== Downloading from CDN============" << endl;
+	if(exist_in_cache(file_name))
+		return "cache/"+file_name;
+	else {
+		map<string,string> params;
+		params["file_name"] = file_name;
+		send_req("download",params,file_server_fd);
+
+		string result = receive_with_key("message",file_server_fd);
+
+		if(result == "accepted")
+		{
+			char buf[1000];
+			int numbytes = 0;
+			int sum = 0;
+			while((numbytes = read(file_server_fd, buf, 500)) > 0)
+			{
+				buf[numbytes < 500 ? numbytes : 500] = '\0';
+				FILE* fp = fopen(("cache/" + file_name).c_str(),"ab");
+				printf("read %d bytes from user socket\n",numbytes);
+				int written_bytes = fwrite(buf,1,numbytes,fp);
+				sum += written_bytes;
+				printf("wrote %d bytes to disk\n",written_bytes);
+				fclose(fp);
+				if(numbytes < 500)
+				{
+					cout << "wrote less than 100 bytes, I think it's done" << endl;
+					cout << "downloaded bytes:  " << sum << endl;
+					break;
+				}
+			}
+			return "cache/"+file_name;
+		} else {
+			cerr << "Failed to download file from CDN" << endl;
+			return "";
+		}
+	}
 }	
 
 map<string,string> Core::get_post_info(int id)
@@ -389,7 +442,10 @@ map<string,string> Core::get_post_info(int id)
 
 	string data = receive_data();
 	map<string, string> result = decode<map<string,string> >(data);
-	cout << "result size:  " << result.size() << endl;
+	
+	cout << "===== changing CDN_path locally ====" << endl;
+	cout << "default CDN_path:  " << result["photo_path"] << endl;
+	result["photo_path"] = download_from_CDN(result["photo_path"]);
 	return result;
 }
 

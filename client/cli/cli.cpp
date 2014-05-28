@@ -55,6 +55,10 @@ void CLI::start()
 			}
 			else if(params["command"] == "show_my_profile")
 				show_my_profile();			
+			else if(params["command"] == "get_post_info")
+				show_post(to_int(params["id"]));
+			else if(params["command"] == "is_likable")
+				Core::instance()->is_likable(to_int(params["id"]));
 			else if(params["command"] == "show_friend_profile")
 				show_friend_profile(params["username"]);
 			else if(params["command"] == "is_reportable")
@@ -85,6 +89,8 @@ void CLI::start()
 				Core::instance()->update_user(params["username"], params["password"], params["name"], params["avatar_path"]);
 			else if(params["command"] == "delete_user")
 				Core::instance()->delete_user(params["username"]);
+			else if(params["command"] == "download")
+				cout << Core::instance()->download_from_CDN(params["file_name"]);
 			else if(params["command"] == "quit")
 				break;
 			else {

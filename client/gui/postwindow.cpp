@@ -83,7 +83,9 @@ void PostWindow::on_liked_button_clicked()
 {
     if(Core::instance()->is_likable(id))
     {
+        cout << ">>>>>> calling like <<<<<<<" << endl;
         Core::instance()->like(id);
+        cout << ">>>>>> call finished <<<<<<<" << endl;
         ui->liked_button->setText("Unlike");
     }
     else

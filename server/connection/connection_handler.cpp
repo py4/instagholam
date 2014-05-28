@@ -64,6 +64,14 @@ void ConnectionHandler::run()
 	{
 		cout << "[ConnectionHandler] waiting for new command" << endl;
 		string result = receive();
+		if(result == "")
+		{
+			cout << ">>>>> Closing " << client_fd << " because of empty query <<<<" << endl;
+			close(client_fd);
+			cout << ">>>> file_server with fd " << file_server_fd << " because of empty query <<<<" << endl; 
+			close(file_server_fd);
+			return;
+		}
 		cout << "Command received from " << client_fd << endl;
 		if(result == "quit")
 			break;
@@ -478,8 +486,8 @@ void ConnectionHandler::call_like()
 
 void ConnectionHandler::call_is_likable()
 {
-	core->is_likable(atoi(params["id"].c_str()));
-	send_suc();
+	bool result = core->is_likable(atoi(params["id"].c_str()));
+	send_data(result ? "true" : "false");
 }
 
 void ConnectionHandler::call_unlike()

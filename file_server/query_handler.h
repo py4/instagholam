@@ -25,6 +25,12 @@ public:
 		{
 			std::cout << "[QueryHandler] waiting for new query" << std::endl;
 			query  = receive();
+			if(query == "")
+			{
+				std::cout << ">>>>>> Closing " << query_fd << " because of empty query" << std::endl;
+				close(query_fd);
+				break;
+			}
 			if(query == "quit")
 			{
 				close(query_fd);
@@ -43,6 +49,8 @@ public:
 				handle_upload(root);
 			} else if(func == "generate_temp_token") {
 				handle_generate_temp_token(root);
+			} else if(func == "download") {
+				handle_download(root);
 			}
 		}
 		std::cout << "[QueryHandler] closing query fd " << query_fd << std::endl;
@@ -62,6 +70,10 @@ public:
 
 	void handle_generate_temp_token(rapidjson::Document&);
 	void handle_upload(rapidjson::Document&);
+	void upload_to_client(std::string);
+	void handle_download(rapidjson::Document&);
 	void send_with_key(std::string data, std::string);
+
+	bool exist_in_CDN(std::string);
 };
 #endif
