@@ -12,6 +12,8 @@
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <sstream>
+#include "server.h"
+
 using namespace std;
 using namespace rapidjson;
 
@@ -24,16 +26,41 @@ std::string encode(T& t)
 	return ss.str();
 }
 
-ConnectionHandler::ConnectionHandler(int fd)
+ConnectionHandler::ConnectionHandler(Server* server, int fd)
 {
 	core = new Core;
 	client_fd = fd;
+	this->server = server;
+	try {
+		init_file_server_com();
+	} catch (string e) {
+		cerr << e << endl;
+		return;
+	}
 }
+
+void ConnectionHandler::init_file_server_com()
+{
+	file_server_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	int iSetOption = 1;
+	setsockopt(file_server_fd, SOL_SOCKET, SO_REUSEADDR, (char*)&iSetOption, sizeof(iSetOption));
+	struct sockaddr_in serv_addr;
+	serv_addr.sin_family = AF_INET;
+	serv_addr.sin_addr.s_addr = inet_addr(FILE_SERVER_IP);
+	serv_addr.sin_port = htons(FILE_SERVER_PORT);
+
+	if(connect(file_server_fd, (struct sockaddr*)& serv_addr, sizeof(serv_addr)) == -1)
+		throw string("Could not connect to the file server");
+	else
+		cout << "connected to file_server with fd " << file_server_fd << endl;
+}
+
 
 void ConnectionHandler::run()
 {
 	while (true)
 	{
+		cout << "[ConnectionHandler] waiting for new command" << endl;
 		string result = receive();
 		cout << "result:  " << result << endl;
 		if(result == "quit")
@@ -153,13 +180,7 @@ void ConnectionHandler::run()
 
 void ConnectionHandler::send(string content)
 {
-	char* buf = new char[content.size() + 1];
-	memcpy(buf,content.c_str(), content.size());
-	buf[content.size()] = 0;
-	int n = write(client_fd, buf, strlen(buf));
-	if(n < 0)
-		throw "error in writing!\t";
-	delete[] buf;
+	server->send(client_fd, content);
 }
 
 string ConnectionHandler::receive()
@@ -177,13 +198,7 @@ string ConnectionHandler::receive()
 
 void ConnectionHandler::set_params(rapidjson::Document& document)
 {
-	if(document["params"].GetType() == 0)
-		return;
-	for (Value::ConstValueIterator itr = document["params"].Begin(); itr != document["params"].End(); ++itr)
-	{
-		for(Value::ConstMemberIterator m = itr->MemberBegin(); m != itr->MemberEnd(); ++m)
-			params[m->name.GetString()] = m->value.GetString();
-	}
+	params = get_params(document);
 }
 
 void ConnectionHandler::send_exp(Exception& e)
@@ -200,11 +215,19 @@ void ConnectionHandler::send_suc()
 	send(json.dump());
 }
 
-void ConnectionHandler::send_data(string data)
+void ConnectionHandler::send_with_key(string data, string key)
 {
 	Json json;
-	json.AddMember("data",data.c_str());
+	json.AddMember(key.c_str(), data.c_str());
 	send(json.dump());
+}
+
+void ConnectionHandler::send_data(string data)
+{
+	send_with_key(data,"data");
+	// Json json;
+	// json.AddMember("data",data.c_str());
+	// send(json.dump());
 }
 
 void ConnectionHandler::call_login()
@@ -261,12 +284,33 @@ void ConnectionHandler::call_show_timelog()
 
 void ConnectionHandler::call_post_photo()
 {
-	
 	bool pub = false;
 	if(params["publicity"] == "true")
 		pub = true;
-	core->post_photo(params["title"],params["CDN_path"], params["hashtags"], pub);
+	//core->post_photo(params["title"],params["CDN_path"], params["hashtags"], pub);
+
+	Json json;
+	map<string,string> auth_params;
+	auth_params["auth_token"] = AUTH_TOKEN;
+	json.AddMember("function","generate_temp_token");
+	json.set_params(auth_params);
+	server->send(file_server_fd, json.dump());
+	string user_token = server->receive(file_server_fd);
+	cout << "result from temp token:  " << user_token << endl;
+
+	send_with_key(user_token,"user_token");
+
+	string CDN_path = receive();
+	if(CDN_path == "quit")
+	{
+		cout << "quiting from call post photo" << endl;
+		return;
+	}
+	cout << "Server received CDN_paht:  " << CDN_path << endl;
+	core->post_photo(params["title"], CDN_path, params["hashtags"], pub);
+	cout << "[ConnectionHandler] sending success to client" << endl;
 	send_suc();
+	cout << "[ConnectionHandler] success was sent to client" << endl;
 }
 
 

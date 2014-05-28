@@ -22,12 +22,14 @@ FileServer::FileServer()
 	if (listen(fd, MAX_CONNECTIONS) == -1)
 		printf("Listening Error!\n"); 
 	printf("File server started on port %d\n",SERVER_PORT);
+
+	auth_token = "abcdef";
 }
 
 string FileServer::receive()
 {
 	char* buf = new char[BUF_SIZE];
-	int n = read(client_fd, buf, BUF_SIZE);
+	int n = read(fd, buf, BUF_SIZE);
 	buf[n < BUF_SIZE - 1 ? n : BUF_SIZE - 1] = '\0';
 
 	if(n < 0)
@@ -42,23 +44,48 @@ void FileServer::init()
 {
 	while(true)
 	{
-		string query = receive();
-		if(query == "quit")
-			break;
-
 		struct sockaddr_in client_addr;
 		socklen_t client_addr_size = sizeof(client_addr);
 		int query_fd = accept(fd, (struct sockaddr *) &client_addr, &client_addr_size);
-		handlers.push_back(QueryHandler(query_fd, query));
-		cout << "starting thread " << threads.size() << endl;
-		threads.push_back(new Thread);
-		threads.back()->start(handlers.back());
+
+		QueryHandler* handler = new QueryHandler(this,query_fd);
+		Thread* t = new Thread;
+		t->start(*handler);
+		//handlers.push_back(QueryHandler(this,query_fd));
+		//cerr << "starting query handler thread " << threads.size() << " with fd of " << query_fd << endl;
+		//threads.push_back(new Thread);
+		//cout << "i'm runnig handler with fd " << handlers.back().query_fd << endl;
+		//threads.back()->start(handlers.back());
+		cerr << "after start" << endl;
 	}
 
-	for(int i = 0; i < threads.size(); i++)
+	/*for(int i = 0; i < threads.size(); i++)
 	{
 		threads[i]->join();
 		cout << "deleting thread " << i << endl;
 		delete threads[i];
-	}
+	} */
+}
+
+bool FileServer::authenticate(string auth_hash)
+{
+	return auth_hash == auth_token;
+}
+
+string FileServer::generate_temp_token(string auth_hash)
+{
+	if(!authenticate(auth_hash))
+		throw string("Access Denied");
+
+	string token = QUuid::createUuid().toString().toStdString();
+	temp_tokens.push_back(token);
+	return token;
+}
+
+bool FileServer::authenticate_user(string auth_hash)
+{
+	for(int i = 0; i < temp_tokens.size(); i++)
+		if(temp_tokens[i] == auth_hash)
+			return true;
+	return false;
 }

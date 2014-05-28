@@ -35,3 +35,23 @@ void Json::set_params(map<string,string> params)
 
 	root.AddMember("params",param,root.GetAllocator());
 }
+
+map<string,string> get_params(rapidjson::Document& root)
+{
+	map<string,string> params;
+	if(root["params"].GetType() == 0)
+		return params;
+
+	for (Value::ConstValueIterator itr = root["params"].Begin(); itr != root["params"].End(); ++itr)
+	{
+		for(Value::ConstMemberIterator m = itr->MemberBegin(); m != itr->MemberEnd(); ++m)
+			params[m->name.GetString()] = m->value.GetString();
+	}
+
+	return params;
+}
+
+/*map<string,string> Json::get_params()
+{
+	return get_params(root);
+}*/

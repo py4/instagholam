@@ -8,6 +8,12 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 #include <string>
+#include "rapidjson/internal/pow10.h"
+#include "rapidjson/internal/stack.h"
+#include "rapidjson/internal/strfunc.h"
+#include <map>
+
+std::map<std::string,std::string> get_params(rapidjson::Document& root);
 
 class Json
 {
@@ -20,7 +26,8 @@ public:
 	}
 	std::string dump();
 	rapidjson::Document parse(std::string);
-private:
 	rapidjson::Document root;
+	void set_params(std::map<std::string, std::string>);
+	//std::map<std::string,std::string> get_params();
 };
 #endif

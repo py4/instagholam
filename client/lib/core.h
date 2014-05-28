@@ -4,6 +4,8 @@
 #include "client_handler.h"
 #include <map>
 #include <vector>
+#define FILE_SERVER_PORT 3330
+#define FILE_SERVER_IP "127.0.0.1"
 
 class Core
 {
@@ -61,17 +63,22 @@ public:
 	std::vector<std::string> get_friend_friends(std::string);
 	std::vector<int> show_timelog();
 	bool is_reportable(std::string);
+
+	int connect_to_file_server();
+	void upload_photo(int,std::string);
 private:
 	Core();
 	~Core();
 	Core(Core const&);
 	void operator=(Core const&);
 	static Core* core;
-
-	void send_req(std::string);
-	void send_req(std::string, std::map<std::string, std::string>&);
-	void send(std::string);
-	void simple_receive();
-	std::string receive_data();
+	int file_server_fd;
+	void send_req(std::string, int = -1);
+	void send_req(std::string, std::map<std::string, std::string>&, int = -1);
+	void send(std::string, int = -1);
+	void simple_receive(int = -1);
+	std::string simple_receive_data(int = -1);
+	std::string receive_with_key(std::string, int = -1);
+	std::string receive_data(int = -1);
 };
 #endif

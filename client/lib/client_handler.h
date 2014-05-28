@@ -20,8 +20,8 @@ class ClientHandler
 {
 public:
 	static void init();
-	static void send(std::string);
-	static std::string receive();
+	static void send(std::string, int = -1);
+	static std::string receive(int = -1);
 //private:
 	static int client_fd;
 	ClientHandler();

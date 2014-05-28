@@ -6,6 +6,12 @@ using namespace Poco;
 
 Server::Server()
 {
+	// try {
+	// 	init_file_server_com();
+	// } catch (string e) {
+	// 	cerr << e << endl;
+	// 	return;
+	// }
 	fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (fd==-1) {
     	perror("Create socket");
@@ -27,7 +33,32 @@ Server::Server()
 		socklen_t client_addr_size = sizeof(client_addr);
 		int client_fd = accept(fd, (struct sockaddr *) &client_addr, &client_addr_size);
 		cout << "New client accepted with id " << client_fd << endl;
-		connections.push_back(ConnectionHandler(client_fd));
+		connections.push_back(ConnectionHandler(this,client_fd));
 		threads[i].start(connections[i]);
 	}
+}
+
+void Server::send(int fd_i, string content)
+{
+	char* buf = new char[content.size() + 1];
+	memcpy(buf,content.c_str(), content.size());
+	buf[content.size()] = 0;
+	int n = write(fd_i, buf, strlen(buf));
+	cout << "[Server] sent:  " << content << endl;
+	if(n < 0)
+		throw "error in writing!\t";
+	delete[] buf;
+}
+
+string Server::receive(int fd_i)
+{
+	char* buf = new char[BUF_SIZE];
+	int n = read(fd_i, buf, BUF_SIZE);
+	buf[n < BUF_SIZE - 1 ? n : BUF_SIZE - 1] = '\0';
+	cout << "SERVER receiving from " << fd_i << endl;
+	if(n < 0)
+		throw "error in reading!\t";
+	else
+		return string(buf);
+	delete[] buf;
 }

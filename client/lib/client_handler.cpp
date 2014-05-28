@@ -31,24 +31,25 @@ ClientHandler::~ClientHandler()
 	close(client_fd);
 }
 
-void ClientHandler::send(string content)
+void ClientHandler::send(string content, int fd)
 {
 	char* buf = new char[content.size() + 1];
 	memcpy(buf,content.c_str(), content.size());
 	buf[content.size()] = 0;
-	int n = write(client_fd, buf, strlen(buf));
+	int n = write(fd == -1 ? client_fd : fd, buf, strlen(buf));
 	sleep(1);
 	if(n < 0)
 		throw "error in writing!\t";
 	delete[] buf;
 }
 
-std::string ClientHandler::receive()
+std::string ClientHandler::receive(int fd)
 {
 	char* buf = new char[BUF_SIZE];
-	int n = read(client_fd, buf, BUF_SIZE);
+	cout << "[ClientHandler] receiving from fd " << fd << endl;
+	int n = read(fd == -1 ? client_fd : fd, buf, BUF_SIZE);
 	buf[n < BUF_SIZE - 1 ? n : BUF_SIZE - 1] = '\0';
-
+	cout << buf << endl;
 	if(n < 0)
 		throw "error in reading!\t";
 	else

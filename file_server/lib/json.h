@@ -12,6 +12,9 @@
 #include "rapidjson/internal/stack.h"
 #include "rapidjson/internal/strfunc.h"
 #include <map>
+
+std::map<std::string,std::string> get_params(rapidjson::Document& root);
+
 class Json
 {
 public:
@@ -25,5 +28,6 @@ public:
 	rapidjson::Document parse(std::string);
 	rapidjson::Document root;
 	void set_params(std::map<std::string, std::string>);
+	//std::map<std::string,std::string> get_params();
 };
 #endif

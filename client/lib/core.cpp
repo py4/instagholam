@@ -12,12 +12,12 @@ using namespace std;
 
 template<typename Archive>
 void serialize(Archive& ar, std::vector<int>& objs, const unsigned version) {
-  ar & objs;
+	ar & objs;
 }
 
 template<typename Archive>
 void serialize(Archive& ar, std::vector<std::string>& objs, const unsigned version) {
-  ar & objs;
+	ar & objs;
 }
 
 template <typename T>
@@ -36,6 +36,8 @@ Core::Core()
 {
 	try {
 		ClientHandler::init();
+		cout << "Client is connecting to file server..." << endl;
+		file_server_fd = connect_to_file_server();
 	} catch (const char* e) {
 		cerr << e << endl;
 		return;
@@ -52,36 +54,36 @@ Core* Core::instance()
 	return core;
 }
 
-void Core::send_req(string func, map<string,string>& params)
+void Core::send_req(string func, map<string,string>& params, int fd)
 {
 	Json json;
 	json.AddMember("function",func.c_str());
 	json.set_params(params);
-	Core::instance()->send(json.dump());
+	Core::instance()->send(json.dump(), fd);
 }
 
-void Core::send_req(string func)
+void Core::send_req(string func, int fd)
 {
 	Json json;
 	json.AddMember("function",func.c_str());
-	Core::instance()->send(json.dump());
+	Core::instance()->send(json.dump(), fd);
 }
 
-void Core::send(string request)
+void Core::send(string request, int fd)
 {
 	try {
-		cout << "sending:  " << request << endl;
-		ClientHandler::send(request);
+		cout << "sending to " << fd << ":  " << request << endl;
+		ClientHandler::send(request, fd);
 	} catch (const char* e) {
 		cerr << e << endl;
 		return;
 	}
 }
 
-void Core::simple_receive()
+void Core::simple_receive(int fd)
 {
 	try {
-		string response = ClientHandler::receive();
+		string response = ClientHandler::receive(fd);
 		rapidjson::Document root;
 		root.Parse<0>(response.c_str());
 
@@ -96,10 +98,10 @@ void Core::simple_receive()
 	}
 }
 
-string Core::receive_data()
+string Core::receive_data(int fd)
 {
 	try {
-		string response = ClientHandler::receive();
+		string response = ClientHandler::receive(fd);
 		rapidjson::Document root;
 		root.Parse<0>(response.c_str());
 
@@ -114,6 +116,54 @@ string Core::receive_data()
 		cerr << e << endl;
 		return "";
 	}
+}
+
+string Core::simple_receive_data(int fd)
+{
+	try {
+		string response = ClientHandler::receive(fd);
+		return response;
+	} catch (const char* e) {
+		cerr << e << endl;
+		return "";
+	}
+}
+
+string Core::receive_with_key(string key, int fd)
+{
+	try {
+		string response = ClientHandler::receive(fd);
+		rapidjson::Document root;
+		root.Parse<0>(response.c_str());
+		if(root[key.c_str()].GetType())
+			return root[key.c_str()].GetString();
+		else
+		{
+			cerr << "Key not found" << endl;
+			return "";
+		}
+	} catch (const char* e) {
+		cerr << e << endl;
+		return "";
+	}
+}
+
+int Core::connect_to_file_server()
+{
+	int file_server_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	int iSetOption = 1;
+	setsockopt(file_server_fd, SOL_SOCKET, SO_REUSEADDR, (char*)&iSetOption, sizeof(iSetOption));
+	struct sockaddr_in serv_addr;
+	serv_addr.sin_family = AF_INET;
+	serv_addr.sin_addr.s_addr = inet_addr(FILE_SERVER_IP);
+	serv_addr.sin_port = htons(FILE_SERVER_PORT);
+
+	if(connect(file_server_fd, (struct sockaddr*)& serv_addr, sizeof(serv_addr)) == -1)
+		throw string("I'm client and Could not connect to the file server");
+	else
+		cout << "I'm client and connected to file_server with fd " << file_server_fd << endl;
+
+	return file_server_fd;
 }
 
 
@@ -198,17 +248,68 @@ vector<int> Core::show_timelog()
 	return result;
 }
 
-void Core::post_photo(string title,string CDN_path, string hashtags, bool publicity)
+void Core::upload_photo(int file_server_fd, string local_path)
 {
+	char buf[1000];
+	FILE* local_file = fopen(local_path.c_str(), "rb");
+	int read_bytes = 0;
+	cerr << "[Client] uploading photo to " << file_server_fd << endl;
+	if(local_file == 0)
+		throw Exception("File not found");
+	cout << "[Core][upload_photo] before while" << endl;
+	while((read_bytes = fread(buf,1,100,local_file)) > 0)
+	{
+		printf("read %d bytes\n",read_bytes);
+		int written_bytes = write(file_server_fd, buf, read_bytes);
+		printf("wrote %d bytes to server\n", written_bytes);
+	}
+}
+
+void Core::post_photo(string title,string local_path, string hashtags, bool publicity)
+{
+	string CDN_path;
 	Json json;
 	map<string,string> params;
 	params["title"] = title;
-	params["CDN_path"] = CDN_path;
+	//params["CDN_path"] = CDN_path;
 	params["hashtags"] = hashtags;
 	params["publicity"] = publicity ? "true" : "false";
 	send_req("post_photo", params);
 
+	cout << "waitint to receive user token from server" << endl;
+	string token = receive_with_key("user_token");
+	cout << "User received token:  " << token << endl;
+
+	cout << "Client connecting to file server" << endl;
+	params.clear();
+	params["user_token"] = token;
+	params["file_name"] = local_path;
+	send_req("upload",params,file_server_fd);
+
+	string result = receive_with_key("message", file_server_fd);
+	cerr << "here" << endl;
+	try {
+		if(result == "accepted")
+		{
+			upload_photo(file_server_fd, local_path);
+			cout << "[Client] uploading photo finished" << endl;
+			CDN_path = simple_receive_data(file_server_fd);
+			cout << "[Client] receive from file server CDN_path:  " << CDN_path << endl;
+		}
+		else
+			throw Exception("Could not upload photo");
+	} catch (Exception e) {
+		send("quit",file_server_fd);
+		send("quit");
+		//close(file_server_fd);
+		throw;
+	}
+
+	cout << "sending CDN_path to server" << endl;
+	send(CDN_path);
+	cout << "CDN_path sent to server. waiting for answer" << endl;
 	simple_receive();
+	cout << "Answer received and we are done" << endl;
 }
 
 vector<int> Core::get_my_latest_posts()
@@ -226,9 +327,9 @@ vector<int> Core::get_friend_latest_posts(string username)
 	Json json;
 	map<string,string> params;
 	params["username"] = username;
- 	send_req("get_friend_latest_posts",params);
+	send_req("get_friend_latest_posts",params);
 
- 	string data = receive_data();
+	string data = receive_data();
 	vector<int> result = decode< vector<int> >(data);
 	return result;
 }

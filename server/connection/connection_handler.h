@@ -7,11 +7,15 @@
 #include "json.h"
 #include "exception.h"
 #include "core.h"
+
 #define BUF_SIZE 2000
+
+class Server;
+
 class ConnectionHandler : public Poco::Runnable {
 public:
 	ConnectionHandler();
-	ConnectionHandler(int);
+	ConnectionHandler(Server*, int);
 	virtual void run();
 
 private:
@@ -19,11 +23,14 @@ private:
 	void send(std::string);
 	std::string receive();
 	int client_fd;
+	int file_server_fd;
 	std::map <std::string, std::string> params;
-
+	void init_file_server_com();
+	
 	void send_exp(Exception&);
 	void send_suc();
 	void send_data(std::string);
+	void send_with_key(std::string, std::string);
 	void call_login();
 	void call_logout();
 	void call_signup();
@@ -72,5 +79,6 @@ private:
 	void call_remove_user();
 	void call_is_reportable();
 	Core* core;
+	Server* server;
 	};
 #endif
