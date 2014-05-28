@@ -12,10 +12,12 @@
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <sstream>
+#include <Poco/Thread.h>
 #include "server.h"
 
 using namespace std;
 using namespace rapidjson;
+//using namespace Poco;
 
 template<typename T>
 std::string encode(T& t)
@@ -62,14 +64,18 @@ void ConnectionHandler::run()
 	{
 		cout << "[ConnectionHandler] waiting for new command" << endl;
 		string result = receive();
-		cout << "result:  " << result << endl;
+		cout << "Command received from " << client_fd << endl;
 		if(result == "quit")
 			break;
 
 		rapidjson::Document root;
 		root.Parse<0>(result.c_str());
-		set_params(root);
-
+		Poco::Mutex mutex;
+		mutex.lock();
+		cout << "before" << endl;
+		get_params(params,root);
+		cout << "after" << endl;
+		mutex.unlock();
 		string func = root["function"].GetString();
 		try {
 			if(func == "login")
@@ -164,6 +170,7 @@ void ConnectionHandler::run()
 				call_is_reportable();
 
 		} catch (Exception e) {
+			cerr << "here88888 exewf" << endl;
 			send_exp(e);
 		}
 		//cout << "function:  " << root["Function"].GetString() << endl;
@@ -185,7 +192,9 @@ void ConnectionHandler::send(string content)
 
 string ConnectionHandler::receive()
 {
-	char* buf = new char[BUF_SIZE];
+	return server->receive(client_fd);
+
+	/*char* buf = new char[BUF_SIZE];
 	int n = read(client_fd, buf, BUF_SIZE);
 	buf[n < BUF_SIZE - 1 ? n : BUF_SIZE - 1] = '\0';
 
@@ -193,7 +202,7 @@ string ConnectionHandler::receive()
 		throw "error in reading!\t";
 	else
 		return string(buf);
-	delete[] buf;
+	delete[] buf; */
 }
 
 void ConnectionHandler::set_params(rapidjson::Document& document)
@@ -245,8 +254,7 @@ void ConnectionHandler::call_logout()
 
 void ConnectionHandler::call_signup()
 {
-
-	core->sign_up(params["username"], params["password"], params["name"], params["avatar_path"]);
+ 	core->sign_up(params["username"], params["password"], params["name"], params["avatar_path"]);
 	send_suc();
 }
 
@@ -284,6 +292,7 @@ void ConnectionHandler::call_show_timelog()
 
 void ConnectionHandler::call_post_photo()
 {
+	cout << "[ConnectionHandler][call_post_photo] start" << endl;
 	bool pub = false;
 	if(params["publicity"] == "true")
 		pub = true;

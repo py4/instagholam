@@ -33,6 +33,8 @@ ClientHandler::~ClientHandler()
 
 void ClientHandler::send(string content, int fd)
 {
+	cout << "================== Client sending to " << fd << " ==================" << endl;
+	cout << "content:  " << content << endl;
 	char* buf = new char[content.size() + 1];
 	memcpy(buf,content.c_str(), content.size());
 	buf[content.size()] = 0;
@@ -40,16 +42,18 @@ void ClientHandler::send(string content, int fd)
 	sleep(1);
 	if(n < 0)
 		throw "error in writing!\t";
+	cout << "=======================================================" << endl;
 	delete[] buf;
 }
 
 std::string ClientHandler::receive(int fd)
 {
+	cout << "========================== Client receving from " << fd << endl;
 	char* buf = new char[BUF_SIZE];
-	cout << "[ClientHandler] receiving from fd " << fd << endl;
 	int n = read(fd == -1 ? client_fd : fd, buf, BUF_SIZE);
 	buf[n < BUF_SIZE - 1 ? n : BUF_SIZE - 1] = '\0';
-	cout << buf << endl;
+	cout << "content:  " << buf << endl;
+	cout << "=================================================" << endl;
 	if(n < 0)
 		throw "error in reading!\t";
 	else

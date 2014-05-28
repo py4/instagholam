@@ -14,7 +14,7 @@
 #include <map>
 
 std::map<std::string,std::string> get_params(rapidjson::Document& root);
-
+void get_params(std::map<std::string,std::string>&, rapidjson::Document&);
 class Json
 {
 public:

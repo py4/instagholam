@@ -33,18 +33,26 @@ Server::Server()
 		socklen_t client_addr_size = sizeof(client_addr);
 		int client_fd = accept(fd, (struct sockaddr *) &client_addr, &client_addr_size);
 		cout << "New client accepted with id " << client_fd << endl;
-		connections.push_back(ConnectionHandler(this,client_fd));
-		threads[i].start(connections[i]);
+		ConnectionHandler* h = new ConnectionHandler(this,client_fd);
+		Thread* t = new Thread;
+
+		t->start(*h);
+		//connections.push_back(ConnectionHandler(this,client_fd));
+		//threads[i].start(connections[i]);
 	}
+
+	cout << "OOOOOOOOOOOOOOHHHHHHHHH THHHHHHHHATT WAAAAAAAAASSSSSSSS HHHHHHHHEEEEEEEEERRRRRRRREEEEEEE" << endl;
 }
 
 void Server::send(int fd_i, string content)
 {
+	cout << "=============== Server sending to " << fd_i << " ===========================" << endl;
 	char* buf = new char[content.size() + 1];
 	memcpy(buf,content.c_str(), content.size());
 	buf[content.size()] = 0;
 	int n = write(fd_i, buf, strlen(buf));
 	cout << "[Server] sent:  " << content << endl;
+	cout << "==========================================" << endl;
 	if(n < 0)
 		throw "error in writing!\t";
 	delete[] buf;
@@ -52,11 +60,13 @@ void Server::send(int fd_i, string content)
 
 string Server::receive(int fd_i)
 {
+	cout << "======================= server receiving from " << fd_i << " ==========================" << endl;
 	char* buf = new char[BUF_SIZE];
 	int n = read(fd_i, buf, BUF_SIZE);
 	buf[n < BUF_SIZE - 1 ? n : BUF_SIZE - 1] = '\0';
-	cout << "SERVER receiving from " << fd_i << endl;
-	if(n < 0)
+	cout << "content:  " << buf << endl;
+	cout << "=====================================================" << endl;
+	if(n < 0) 
 		throw "error in reading!\t";
 	else
 		return string(buf);

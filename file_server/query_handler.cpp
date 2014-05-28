@@ -22,13 +22,13 @@ string QueryHandler::download_from_client(string _file_name)
 	cout << "========== downling from client ==========" << endl; 
 	QFileInfo fi(_file_name.c_str());
 	string suffix = fi.suffix().toStdString();
-	string file_name = "CDN/" + QUuid::createUuid().toString().toStdString() + "." + suffix;
+	string file_name = QUuid::createUuid().toString().toStdString() + "." + suffix;
 	char buf[100];
 	int numbytes = 0;
 	while((numbytes = read(query_fd, buf, 100)) > 0)
 	{
 		buf[numbytes < 100 ? numbytes : 100] = '\0';
-		FILE* fp = fopen(file_name.c_str(),"ab");
+		FILE* fp = fopen(("CDN/" + file_name).c_str(),"ab");
 		printf("read %d bytes from user socket\n",numbytes);
 		int written_bytes = fwrite(buf,1,numbytes,fp);
 		printf("wrote %d bytes to disk\n",written_bytes);

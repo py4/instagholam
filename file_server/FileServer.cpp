@@ -47,7 +47,7 @@ void FileServer::init()
 		struct sockaddr_in client_addr;
 		socklen_t client_addr_size = sizeof(client_addr);
 		int query_fd = accept(fd, (struct sockaddr *) &client_addr, &client_addr_size);
-
+		cerr << "new query handler thread with fd " << query_fd << "started" << endl;
 		QueryHandler* handler = new QueryHandler(this,query_fd);
 		Thread* t = new Thread;
 		t->start(*handler);
@@ -56,7 +56,6 @@ void FileServer::init()
 		//threads.push_back(new Thread);
 		//cout << "i'm runnig handler with fd " << handlers.back().query_fd << endl;
 		//threads.back()->start(handlers.back());
-		cerr << "after start" << endl;
 	}
 
 	/*for(int i = 0; i < threads.size(); i++)

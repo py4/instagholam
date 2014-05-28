@@ -1,4 +1,5 @@
 #include "json.h"
+#include <iostream>
 using namespace std;
 using namespace rapidjson;
 Json::Json()
@@ -43,12 +44,21 @@ map<string,string> get_params(rapidjson::Document& root)
 		return params;
 
 	for (Value::ConstValueIterator itr = root["params"].Begin(); itr != root["params"].End(); ++itr)
-	{
 		for(Value::ConstMemberIterator m = itr->MemberBegin(); m != itr->MemberEnd(); ++m)
 			params[m->name.GetString()] = m->value.GetString();
-	}
 
+	cout << "preparing to return" << endl;
 	return params;
+}
+
+void get_params(map<string,string>& params, rapidjson::Document& root)
+{
+	if(root["params"].GetType() == 0)
+		return;
+
+	for (Value::ConstValueIterator itr = root["params"].Begin(); itr != root["params"].End(); ++itr)
+		for(Value::ConstMemberIterator m = itr->MemberBegin(); m != itr->MemberEnd(); ++m)
+			params[m->name.GetString()] = m->value.GetString();
 }
 
 /*map<string,string> Json::get_params()
